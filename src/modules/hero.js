@@ -17,8 +17,7 @@ export function initHero({ reduced }) {
   const video = section.querySelector('.hero-video');
   const content = section.querySelector('.hero-content');
   const mark = section.querySelector('.hero-mark');
-  const bloom = section.querySelector('.hero-bloom');
-  const white = section.querySelector('.hero-white');
+  const fade = section.querySelector('.hero-fade');
 
   const small = matchMedia('(max-width: 767px)').matches;
   // H.264 MP4 everywhere it decodes (Safari/iOS need it); VP9 WebM for
@@ -58,7 +57,7 @@ export function initHero({ reduced }) {
     scrollTrigger: {
       trigger: section,
       start: 'top top',
-      end: () => `+=${window.innerHeight * (small ? 1.3 : 1.9)}`,
+      end: () => `+=${window.innerHeight * (small ? 1 : 1.6)}`,
       pin: true,
       scrub: 0.6, // light smoothing on top of Lenis
       anticipatePin: 1,
@@ -67,19 +66,19 @@ export function initHero({ reduced }) {
   });
 
   // Timeline (0 → 1 = whole pinned scroll):
-  //   0.00–0.85  video plays through
-  //   0.35–0.75  watermark drifts up and fades
-  //   0.55–0.80  copy lifts and fades
-  //   0.66–1.00  "overexposure": the frame blows out like a camera on a bright
-  //              light: exposure ramps, a bloom spreads from the lens, then
-  //              the frame resolves to pure white, the About section's
-  //              background, so the hand-off is seamless.
-  tl.to(state, { p: 1, duration: 0.85, onUpdate: seek }, 0)
-    .to(mark, { yPercent: -60, autoAlpha: 0, duration: 0.4, ease: 'power1.in' }, 0.35)
-    .to(content, { yPercent: -14, autoAlpha: 0, duration: 0.25, ease: 'power1.in' }, 0.55)
-    .fromTo(video, { filter: 'brightness(1) saturate(1)' }, { filter: 'brightness(1.7) saturate(0.55)', duration: 0.34, ease: 'power2.in' }, 0.66)
-    .fromTo(bloom, { autoAlpha: 0, scale: 0.5 }, { autoAlpha: 1, scale: 2.4, duration: 0.26, ease: 'power2.in' }, 0.7)
-    .fromTo(white, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.14, ease: 'power1.inOut' }, 0.86);
+  //   0.00–1.00  video plays through
+  //   0.30–0.70  watermark drifts up and fades
+  //   0.55–1.00  white gradient pulls up from the bottom edge; the CTAs and
+  //              stat card dissolve into it while the top of the frame stays
+  //              visible. The hero ends with a white bottom edge, so About
+  //              (white) follows straight on with no blank screen.
+  //   0.60–1.00  copy eases up a little, so the headline stays clear while the
+  //              buttons sink into the fade (as in the Figma frame)
+  tl.to(state, { p: 1, duration: 1, onUpdate: seek }, 0)
+    .to(mark, { yPercent: -60, autoAlpha: 0, duration: 0.4, ease: 'power1.in' }, 0.3)
+    // y: 0 clears the CSS translate-y-full that GSAP folds into its own transform
+    .fromTo(fade, { y: 0, yPercent: 100 }, { y: 0, yPercent: 0, duration: 0.45, ease: 'power2.out' }, 0.55)
+    .to(content, { yPercent: -6, duration: 0.4, ease: 'power1.inOut' }, 0.6);
 }
 
 function loadVideo(video, src) {
