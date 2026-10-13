@@ -17,6 +17,8 @@ export function initHero({ reduced }) {
   const video = section.querySelector('.hero-video');
   const content = section.querySelector('.hero-content');
   const mark = section.querySelector('.hero-mark');
+  const bloom = section.querySelector('.hero-bloom');
+  const white = section.querySelector('.hero-white');
 
   const small = matchMedia('(max-width: 767px)').matches;
   // H.264 MP4 everywhere it decodes (Safari/iOS need it); VP9 WebM for
@@ -56,7 +58,7 @@ export function initHero({ reduced }) {
     scrollTrigger: {
       trigger: section,
       start: 'top top',
-      end: () => `+=${window.innerHeight * (small ? 1 : 1.6)}`,
+      end: () => `+=${window.innerHeight * (small ? 1.3 : 1.9)}`,
       pin: true,
       scrub: 0.6, // light smoothing on top of Lenis
       anticipatePin: 1,
@@ -64,9 +66,20 @@ export function initHero({ reduced }) {
     },
   });
 
-  tl.to(state, { p: 1, duration: 1, onUpdate: seek }, 0)
-    .to(mark, { rotate: 12, yPercent: -18, duration: 1 }, 0)
-    .to(content, { yPercent: -12, autoAlpha: 0, duration: 0.3, ease: 'power1.in' }, 0.7);
+  // Timeline (0 → 1 = whole pinned scroll):
+  //   0.00–0.85  video plays through
+  //   0.35–0.75  watermark drifts up and fades
+  //   0.55–0.80  copy lifts and fades
+  //   0.66–1.00  "overexposure": the frame blows out like a camera on a bright
+  //              light: exposure ramps, a bloom spreads from the lens, then
+  //              the frame resolves to pure white, the About section's
+  //              background, so the hand-off is seamless.
+  tl.to(state, { p: 1, duration: 0.85, onUpdate: seek }, 0)
+    .to(mark, { yPercent: -60, autoAlpha: 0, duration: 0.4, ease: 'power1.in' }, 0.35)
+    .to(content, { yPercent: -14, autoAlpha: 0, duration: 0.25, ease: 'power1.in' }, 0.55)
+    .fromTo(video, { filter: 'brightness(1) saturate(1)' }, { filter: 'brightness(1.7) saturate(0.55)', duration: 0.34, ease: 'power2.in' }, 0.66)
+    .fromTo(bloom, { autoAlpha: 0, scale: 0.5 }, { autoAlpha: 1, scale: 2.4, duration: 0.26, ease: 'power2.in' }, 0.7)
+    .fromTo(white, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.14, ease: 'power1.inOut' }, 0.86);
 }
 
 function loadVideo(video, src) {
@@ -108,5 +121,5 @@ function intro(section) {
       },
       0.9,
     )
-    .from('.hero-mark', { autoAlpha: 0, scale: 0.85, rotate: -10, duration: 1.8 }, 0.5);
+    .from('.hero-mark', { autoAlpha: 0, yPercent: 12, duration: 1.8 }, 0.5);
 }

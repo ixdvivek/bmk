@@ -42,34 +42,45 @@ export function initBrands({ reduced }) {
 
   const cards = [...track.children];
 
-  // Filtering
+  // Filtering — a sequenced swap instead of one big Flip:
+  //   1. cards that no longer match fade + sink out (in place, so nothing
+  //      flashes or stretches across the blue background)
+  //   2. layout changes; cards that stay glide to their new slots (Flip)
+  //   3. newly matching cards rise in
+  const matches = (c, id) => id === 'all' || c.dataset.categories.split(' ').includes(id);
+  const isShown = (c) => c.style.display !== 'none';
+  let swap;
+
   filterBar.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-filter]');
     if (!btn || btn.getAttribute('aria-pressed') === 'true') return;
     filterBar.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
     const id = btn.dataset.filter;
 
-    const state = Flip.getState(cards);
-    let shown = 0;
-    cards.forEach((c) => {
-      const match = id === 'all' || c.dataset.categories.split(' ').includes(id);
-      c.style.display = match ? '' : 'none';
-      if (match) shown++;
-    });
-    empty.classList.toggle('hidden', shown > 0);
-    track.scrollTo({ left: 0 });
+    swap?.progress(1); // finish any swap in flight before starting the next
+    const leaving = cards.filter((c) => isShown(c) && !matches(c, id));
+    const staying = cards.filter((c) => isShown(c) && matches(c, id));
+    const entering = cards.filter((c) => !isShown(c) && matches(c, id));
+    const nothing = staying.length + entering.length === 0;
 
-    if (reduced) return updateArrows();
-    Flip.from(state, {
-      duration: 0.7,
-      ease: 'power3.inOut',
-      scale: true,
-      absolute: true,
-      onEnter: (els) => gsap.fromTo(els, { autoAlpha: 0, scale: 0.9 }, { autoAlpha: 1, scale: 1, duration: 0.6, delay: 0.15 }),
-      onLeave: (els) => gsap.to(els, { autoAlpha: 0, scale: 0.9, duration: 0.4 }),
-      onComplete: updateArrows,
-    });
-    if (shown === 0) gsap.fromTo(empty, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 });
+    const relayout = () => {
+      const state = Flip.getState(staying);
+      leaving.forEach((c) => (c.style.display = 'none'));
+      entering.forEach((c) => (c.style.display = ''));
+      empty.classList.toggle('hidden', !nothing);
+      track.scrollTo({ left: 0 });
+      updateArrows();
+      if (reduced) return gsap.set([...entering, ...leaving], { clearProps: 'opacity,visibility,transform' });
+      Flip.from(state, { duration: 0.7, ease: 'power3.inOut' });
+      gsap.fromTo(entering, { autoAlpha: 0, y: 32 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'expo.out', stagger: 0.07, delay: 0.12 });
+      if (nothing) gsap.fromTo(empty, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8 });
+    };
+
+    if (reduced || !leaving.length) return relayout();
+    swap = gsap
+      .timeline()
+      .to(leaving, { autoAlpha: 0, y: 16, duration: 0.28, ease: 'power2.in', stagger: 0.03 })
+      .add(relayout);
   });
 
   // Carousel arrows
