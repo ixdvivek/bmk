@@ -79,7 +79,7 @@
           preload="auto"
           aria-hidden="true"
         ></video>
-        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent"></div>
+        <div class="hero-shade pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent"></div>
         <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 to-transparent md:from-black/15"></div>
 
         <!-- decorative brand mark (Figma: Logo 538×538, 10% opacity) -->
@@ -133,8 +133,8 @@
         <!-- Scroll-out fade (Figma node 41:18061): a white gradient pulls up from the
              bottom as the video ends, so the hero hands off to About with no blank screen. -->
         <div
-          class="hero-fade pointer-events-none absolute inset-x-0 bottom-0 h-[38%] translate-y-full"
-          style="background: linear-gradient(to bottom, rgb(255 255 255 / 0) 0%, rgb(255 255 255 / 0.55) 30%, rgb(255 255 255 / 0.92) 52%, #fff 64%)"
+          class="hero-fade pointer-events-none absolute inset-x-0 -bottom-1 h-[calc(34%+4px)] translate-y-full"
+          style="background: linear-gradient(to bottom, rgb(255 255 255 / 0.000) 0.0%, rgb(255 255 255 / 0.004) 5.7%, rgb(255 255 255 / 0.023) 11.4%, rgb(255 255 255 / 0.062) 17.1%, rgb(255 255 255 / 0.122) 22.9%, rgb(255 255 255 / 0.201) 28.6%, rgb(255 255 255 / 0.298) 34.3%, rgb(255 255 255 / 0.406) 40.0%, rgb(255 255 255 / 0.522) 45.7%, rgb(255 255 255 / 0.639) 51.4%, rgb(255 255 255 / 0.750) 57.1%, rgb(255 255 255 / 0.849) 62.9%, rgb(255 255 255 / 0.929) 68.6%, rgb(255 255 255 / 0.981) 74.3%, rgb(255 255 255 / 1.000) 80.0%, #fff 100%)"
           aria-hidden="true"
         ></div>
       </section>

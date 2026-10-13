@@ -18,6 +18,7 @@ export function initHero({ reduced }) {
   const content = section.querySelector('.hero-content');
   const mark = section.querySelector('.hero-mark');
   const fade = section.querySelector('.hero-fade');
+  const shade = section.querySelector('.hero-shade');
 
   const small = matchMedia('(max-width: 767px)').matches;
   // H.264 MP4 everywhere it decodes (Safari/iOS need it); VP9 WebM for
@@ -68,17 +69,21 @@ export function initHero({ reduced }) {
   // Timeline (0 → 1 = whole pinned scroll):
   //   0.00–1.00  video plays through
   //   0.30–0.70  watermark drifts up and fades
-  //   0.55–1.00  white gradient pulls up from the bottom edge; the CTAs and
+  //   0.52–0.90  white gradient pulls up from the bottom edge; the CTAs and
   //              stat card dissolve into it while the top of the frame stays
   //              visible. The hero ends with a white bottom edge, so About
   //              (white) follows straight on with no blank screen.
-  //   0.60–1.00  copy eases up a little, so the headline stays clear while the
-  //              buttons sink into the fade (as in the Figma frame)
+  //              Proportions follow the Figma frame: the blend starts ~⅔ down
+  //              the hero, half-covers the buttons, and is solid only in the
+  //              bottom ~7%, so the paragraph and first button stay readable.
   tl.to(state, { p: 1, duration: 1, onUpdate: seek }, 0)
     .to(mark, { yPercent: -60, autoAlpha: 0, duration: 0.4, ease: 'power1.in' }, 0.3)
     // y: 0 clears the CSS translate-y-full that GSAP folds into its own transform
-    .fromTo(fade, { y: 0, yPercent: 100 }, { y: 0, yPercent: 0, duration: 0.45, ease: 'power2.out' }, 0.55)
-    .to(content, { yPercent: -6, duration: 0.4, ease: 'power1.inOut' }, 0.6);
+    // Finishes at 0.9, not 1.0, so scrub smoothing can't leave a sliver of
+    // video under it when the pin releases.
+    .fromTo(fade, { y: 0, yPercent: 100 }, { y: 0, yPercent: 0, duration: 0.38, ease: 'power1.out' }, 0.52)
+    // The dark bottom shading clears as the white rises, so the blend stays clean, not grey
+    .to(shade, { autoAlpha: 0, duration: 0.3, ease: 'power1.inOut' }, 0.5);
 }
 
 function loadVideo(video, src) {
