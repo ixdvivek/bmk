@@ -1,1 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"/>
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="435.792" height="538.001" viewBox="0 0 435.792 538.001" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 1">
+<path id="Grey frame" d="M435.792 137.872L320.54 254.35L306.427 240.087L407.567 137.872L306.427 35.6565L320.54 21.3939L435.792 137.872Z" fill="white"/>
+<path id="Grey frame_2" d="M435.792 400.129L320.54 516.607L306.427 502.345L407.567 400.129L306.427 297.914L320.54 283.651L435.792 400.129Z" fill="white"/>
+<path id="Grey frame_3" d="M9.08082e-05 269.023L115.252 385.501L129.364 371.238L28.2251 269.023L129.364 166.807L115.252 152.545L9.08082e-05 269.023Z" fill="white"/>
+<path id="Blue frame" d="M313.484 14.2626L191.176 137.872L313.484 261.481H285.259L162.951 137.872L285.259 14.2626H313.484Z" fill="white"/>
+<path id="Blue frame_2" d="M313.484 276.52L191.176 400.129L313.484 523.739H285.259L162.951 400.129L285.259 276.52H313.484Z" fill="white"/>
+<path id="Blue frame_3" d="M122.308 145.413L244.616 269.023L122.308 392.632H150.533L272.841 269.023L150.533 145.413H122.308Z" fill="white"/>
+<path id="Grey grad" d="M393.454 137.872L304.645 227.626V48.1177L393.454 137.872Z" fill="white"/>
+<path id="Grey grad_2" d="M393.454 400.129L304.645 489.884V310.375L393.454 400.129Z" fill="white"/>
+<path id="Grey grad_3" d="M230.504 269.023L141.695 358.777V179.268L230.504 269.023Z" fill="white"/>
+<path id="Blue grad" d="M205.288 137.872L294.097 48.1177L294.097 227.626L205.288 137.872Z" fill="white"/>
+<path id="Blue grad_2" d="M205.288 400.129L294.097 310.375L294.097 489.884L205.288 400.129Z" fill="white"/>
+<path id="Blue grad_3" d="M42.3376 269.023L131.147 179.268L131.147 358.777L42.3376 269.023Z" fill="white"/>
+</g>
+</svg>

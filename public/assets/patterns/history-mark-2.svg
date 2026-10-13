@@ -1,1 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"/>
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="264.067" height="326.001" viewBox="0 0 264.067 326.001" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 1">
+<path id="Grey frame" d="M194.231 13.3189L263.716 83.5433L194.231 153.768L186.031 145.481L247.316 83.5433L186.031 21.606L194.231 13.3189Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Grey frame_2" d="M194.231 172.233L263.716 242.458L194.231 312.682L186.031 304.395L247.316 242.458L186.031 180.52L194.231 172.233Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Grey frame_3" d="M69.8365 92.7894L0.351259 163.014L69.8365 233.238L78.0363 224.951L16.751 163.014L78.0363 101.076L69.8365 92.7894Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Blue frame" d="M172.955 8.89353L189.354 8.89422L115.491 83.5433L189.354 158.192H172.955L99.0912 83.5433L172.955 8.89353Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Blue frame_2" d="M172.955 167.808L189.354 167.809L115.491 242.458L189.354 317.107H172.955L99.0912 242.458L172.955 167.808Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Blue frame_3" d="M91.1119 88.364L74.7129 88.3647L148.576 163.014L74.7129 237.663H91.1126L164.976 163.014L91.1119 88.364Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Grey grad" d="M238.06 83.5433L184.847 137.323V29.764L238.06 83.5433Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Grey grad_2" d="M238.06 242.458L184.847 296.237V188.678L238.06 242.458Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Grey grad_3" d="M139.321 163.014L86.1079 216.793V109.234L139.321 163.014Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Blue grad" d="M124.746 83.5433L177.959 29.764L177.959 137.323L124.746 83.5433Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Blue grad_2" d="M124.746 242.458L177.959 188.678L177.959 296.237L124.746 242.458Z" stroke="#1F487D" stroke-width="0.5"/>
+<path id="Blue grad_3" d="M26.0067 163.014L79.2199 109.234L79.2199 216.793L26.0067 163.014Z" stroke="#1F487D" stroke-width="0.5"/>
+</g>
+</svg>
