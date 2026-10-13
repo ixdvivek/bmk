@@ -148,7 +148,8 @@ export function initMap({ reduced }) {
   const fill = (loc) => {
     el.entity.textContent = loc.entity;
     el.city.textContent = loc.city;
-    el.address.textContent = loc.address;
+    el.address.textContent = loc.address || '';
+    el.address.hidden = !loc.address;
     el.summary.textContent = loc.summary;
     el.link.href = loc.href;
     el.icon.innerHTML = loc.icon

@@ -1,8 +1,7 @@
 // Group entities shown on the presence map.
 // x / y are the pin centres from Figma, as % of the 1200×620 map frame.
-// Only Kuala Lumpur's copy and icon come from the design; the other three
-// entries are PLACEHOLDER copy, inferred from the timeline and footer.
-// Replace with the real entity details before launch.
+// Copy and icons from the Figma location cards (Section 1, node 41:18060).
+// `address` is optional: only shown when set.
 export const locations = [
   {
     id: 'london',
@@ -10,20 +9,20 @@ export const locations = [
     y: 31.9,
     entity: 'BMK Europe Ltd.',
     city: 'London, United Kingdom',
-    address: 'London, United Kingdom',
-    summary: 'European distribution and brand partnerships.',
-    icon: null,
+    address: '',
+    summary: 'European operations and brand management office.',
+    icon: 'assets/icons/loc-london.svg',
     href: '#contact',
   },
   {
     id: 'dubai',
     x: 60.42,
     y: 47.1,
-    entity: 'BMK Gulf FZE',
+    entity: 'BMK Middle East FZE',
     city: 'Dubai, UAE',
-    address: 'Jebel Ali Free Zone, Dubai, UAE',
-    summary: 'Group headquarters and MENA distribution hub.',
-    icon: null,
+    address: '',
+    summary: 'MENA region trade and distribution entity - United Arab Emirates.',
+    icon: 'assets/icons/loc-dubai.svg',
     href: '#contact',
   },
   {
@@ -41,11 +40,11 @@ export const locations = [
     id: 'singapore',
     x: 77.33,
     y: 62.74,
-    entity: 'BMK Singapore',
+    entity: 'BMK Asia Pte. Ltd.',
     city: 'Singapore',
-    address: 'Singapore',
-    summary: 'ASEAN sourcing and regional distribution.',
-    icon: null,
+    address: '',
+    summary: 'Distribution and logistics hub for Southeast Asia.',
+    icon: 'assets/icons/loc-singapore.svg',
     href: '#contact',
   },
 ];
