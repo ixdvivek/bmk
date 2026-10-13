@@ -15,6 +15,7 @@
   --color-star: #ffc107;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -120,11 +121,14 @@
   width: calc((100% - 0px) / 1.15);
 }
 .brand-inner {
-  @apply flex w-full flex-col items-end gap-16 rounded-xl bg-white p-8 text-black transition-[transform,box-shadow] duration-500 ease-out-expo;
+  @apply flex w-full flex-col items-end gap-16 rounded-xl bg-white p-8 text-black;
+  transition:
+    transform 0.8s var(--ease-soft),
+    box-shadow 0.8s var(--ease-soft);
 }
 @media (min-width: 640px) {
   .brand-card {
-    width: calc((100% - 24px) / 2);
+    width: calc((100% - 16px) / 2); /* gap-4 below lg */
   }
 }
 @media (min-width: 1024px) {
@@ -137,16 +141,37 @@
   box-shadow: 0 24px 40px -12px rgb(0 0 0 / 0.35);
 }
 .brand-card .brand-logo {
-  @apply h-11 w-[120px] object-contain object-right transition-transform duration-500 ease-out-expo;
+  @apply h-11 w-[120px] object-contain object-right;
+  transition: transform 0.8s var(--ease-soft);
 }
 .brand-card:hover .brand-logo {
-  transform: scale(1.06);
+  transform: scale(1.05);
 }
+/* CTA: a dark fill sweeps in from the left (clip-path, GPU-friendly) while the
+   label and border cross-fade; the arrow glides on the same curve. */
 .brand-cta {
-  @apply flex w-full items-center justify-between rounded-full border border-black/30 px-6 py-[14px] text-sm leading-5 transition-colors duration-300;
+  @apply relative isolate flex w-full items-center justify-between overflow-hidden rounded-full border border-black/30 px-6 py-[14px] text-sm leading-5;
+  transition:
+    color 0.6s var(--ease-soft),
+    border-color 0.6s var(--ease-soft);
+}
+.brand-cta::before {
+  content: '';
+  @apply absolute inset-0 -z-10 rounded-full bg-ink;
+  clip-path: inset(0 100% 0 0 round 999px);
+  transition: clip-path 0.7s var(--ease-soft);
+}
+.brand-cta .btn-icon {
+  transition: transform 0.7s var(--ease-soft);
 }
 .brand-card:hover .brand-cta {
-  @apply border-ink bg-ink text-white;
+  @apply border-ink text-white;
+}
+.brand-card:hover .brand-cta::before {
+  clip-path: inset(0 0% 0 0 round 999px);
+}
+.brand-card:hover .brand-cta .btn-icon {
+  transform: translateX(4px);
 }
 
 /* Timeline milestones */

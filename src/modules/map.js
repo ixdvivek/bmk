@@ -129,13 +129,6 @@ export function initMap({ reduced }) {
       <span class="pin-dot"></span>
       <span class="pointer-events-none absolute bottom-full left-1/2 mb-1 -translate-x-1/2 translate-y-1 rounded-full bg-ink px-3 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">${loc.city}</span>`;
     btn.addEventListener('click', () => select(i));
-    // Hover-to-preview with a short intent delay so sweeping across doesn't flicker
-    let t;
-    btn.addEventListener('pointerenter', (e) => {
-      if (e.pointerType !== 'mouse') return;
-      t = setTimeout(() => select(i), 140);
-    });
-    btn.addEventListener('pointerleave', () => clearTimeout(t));
     pinLayer.appendChild(btn);
     return btn;
   });
@@ -163,17 +156,95 @@ export function initMap({ reduced }) {
       : `<span class="grid size-16 place-items-center rounded-full bg-fog"><span class="size-3 rounded-full bg-accent"></span></span>`;
   };
 
+  // ── Desktop popover placement ───────────────────────────────────────
+  // xl+: the card is positioned beside the selected pin (right side when it
+  // fits, otherwise left), vertically centred on the pin and kept inside the
+  // section. Below xl the card stays in the normal flow under the map.
+  const section = root.closest('section');
+  const heading = section.querySelector('#presence-title')?.parentElement;
+  const desktop = matchMedia('(min-width: 1280px)');
+  const GAP = 40; // clears neighbouring pins (KL ↔ Singapore are 20px apart)
+  const EDGE = 24;
+
+  const place = () => {
+    if (current < 0) return;
+    if (!desktop.matches) {
+      card.style.left = card.style.top = card.style.transformOrigin = '';
+      return;
+    }
+    const s = section.getBoundingClientRect();
+    const p = pins[current].getBoundingClientRect();
+    const px = p.left + p.width / 2 - s.left;
+    const py = p.top + p.height / 2 - s.top;
+    const w = card.offsetWidth;
+    const h = card.offsetHeight;
+    const clampY = (y) => gsap.utils.clamp(EDGE, s.height - h - EDGE, y);
+
+    // Things the card must not cover: the other pins and the heading block.
+    const pad = 16;
+    const others = pins
+      .filter((_, k) => k !== current)
+      .map((b) => b.getBoundingClientRect())
+      .map((r) => ({ l: r.left - s.left - pad, t: r.top - s.top - pad, r: r.right - s.left + pad, b: r.bottom - s.top + pad }));
+    const hr = heading?.getBoundingClientRect();
+    if (hr) others.push({ l: hr.left - s.left, t: hr.top - s.top, r: hr.right - s.left, b: hr.bottom - s.top });
+    const hits = (x, y) => others.some((o) => x < o.r && x + w > o.l && y < o.b && y + h > o.t);
+
+    // Candidates in order of preference: right of the pin, then left; card
+    // centred on the pin, then hanging below it, then sitting above it.
+    const xs = [px + GAP, px - GAP - w].filter((x) => x >= EDGE && x + w <= s.width - EDGE);
+    const ys = [py - h / 2, py - 48, py - h + 48].map(clampY);
+    let x = xs[0] ?? px + GAP;
+    let y = ys[0];
+    search: for (const cx of xs) {
+      for (const cy of ys) {
+        if (!hits(cx, cy)) {
+          x = cx;
+          y = cy;
+          break search;
+        }
+      }
+    }
+    const originX = x > px ? '0%' : '100%';
+    card.style.left = `${Math.round(x)}px`;
+    card.style.top = `${Math.round(y)}px`;
+    // Grow out of the pin's side of the card
+    card.style.transformOrigin = `${originX} ${gsap.utils.clamp(0, 100, ((py - y) / h) * 100)}%`;
+  };
+  new ResizeObserver(place).observe(section);
+  desktop.addEventListener('change', place);
+
   function select(i, { animate = true } = {}) {
     i = (i + locations.length) % locations.length;
     if (i === current) return;
     const dir = i > current ? 1 : -1;
     current = i;
     pins.forEach((p, k) => p.setAttribute('aria-pressed', String(k === i)));
-    if (!animate || reduced) return fill(locations[i]);
 
+    if (!animate || reduced) {
+      fill(locations[i]);
+      place();
+      return;
+    }
+
+    if (desktop.matches) {
+      // Card tucks away, jumps to the new pin, then pulls up beside it.
+      gsap.killTweensOf(card);
+      gsap
+        .timeline()
+        .to(card, { autoAlpha: 0, y: 10, scale: 0.97, duration: 0.2, ease: 'power2.in' })
+        .add(() => {
+          fill(locations[i]);
+          place();
+        })
+        .fromTo(card, { autoAlpha: 0, y: 28, scale: 0.96 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.75, ease: 'expo.out' });
+      return;
+    }
+
+    // Mobile: unchanged, content slides within the card.
     const parts = [el.icon, el.body];
     gsap
-      .timeline({ overwrite: true })
+      .timeline()
       .to(parts, { x: -16 * dir, autoAlpha: 0, duration: 0.22, ease: 'power2.in', stagger: 0.03 })
       .add(() => fill(locations[i]))
       .fromTo(parts, { x: 16 * dir }, { x: 0, autoAlpha: 1, duration: 0.6, stagger: 0.05 });

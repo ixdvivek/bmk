@@ -47,22 +47,24 @@
             aria-label="Open menu"
           >
             <span class="relative block h-3 w-5" aria-hidden="true">
-              <span class="menu-bar absolute top-0 left-0 h-px w-full bg-ink transition-transform duration-300"></span>
-              <span class="menu-bar absolute bottom-0 left-0 h-px w-full bg-ink transition-transform duration-300"></span>
+              <span class="menu-bar absolute top-0 left-0 h-px w-full bg-ink"></span>
+              <span class="menu-bar absolute bottom-0 left-0 h-px w-full bg-ink"></span>
             </span>
           </button>
         </div>
       </nav>
-      <div id="mobile-menu" class="hidden lg:hidden" hidden>
-        <ul class="flex flex-col gap-1 px-1 pt-4 pb-3 text-lg">
-          <li><a class="block py-2 font-semibold" href="#top">Home</a></li>
-          <li><a class="block py-2" href="#about">About Us</a></li>
-          <li><a class="block py-2" href="#brands">Brands &amp; Products</a></li>
-          <li><a class="block py-2" href="#faq">FAQ</a></li>
-          <li><a class="block py-2" href="#contact">Contact Us</a></li>
+      <div id="mobile-menu" class="h-0 overflow-hidden lg:hidden" inert>
+        <div class="menu-rule mx-1 mt-3 h-px origin-left bg-ink/10"></div>
+        <ul class="flex flex-col px-1 pt-2 pb-3 text-[22px] leading-tight tracking-[-0.02em]">
+          <li class="menu-item"><a class="block py-2.5 font-semibold" href="#top">Home</a></li>
+          <li class="menu-item"><a class="block py-2.5" href="#about">About Us</a></li>
+          <li class="menu-item"><a class="block py-2.5" href="#brands">Brands &amp; Products</a></li>
+          <li class="menu-item"><a class="block py-2.5" href="#faq">FAQ</a></li>
+          <li class="menu-item"><a class="block py-2.5" href="#contact">Contact Us</a></li>
         </ul>
       </div>
     </header>
+    <div id="menu-backdrop" class="pointer-events-none fixed inset-0 z-40 bg-ink/25 opacity-0 backdrop-blur-[3px] lg:hidden" aria-hidden="true"></div>
 
     <main id="main">
       <!-- ── Hero: scroll-scrubbed video ──────────────────────────────── -->
@@ -127,6 +129,14 @@
             </div>
           </div>
         </div>
+
+        <!-- Scroll-out "overexposure" layers (driven in src/modules/hero.js) -->
+        <div
+          class="hero-bloom pointer-events-none absolute inset-0 opacity-0"
+          style="background: radial-gradient(circle at 62% 42%, #fff 0%, rgb(255 255 255 / 0.85) 28%, rgb(255 255 255 / 0) 62%)"
+          aria-hidden="true"
+        ></div>
+        <div class="hero-white pointer-events-none absolute inset-0 bg-white opacity-0" aria-hidden="true"></div>
       </section>
 
       <!-- ── About ───────────────────────────────────────────────────── -->
@@ -180,16 +190,17 @@
         <div class="map relative mx-auto mt-10 w-[calc(100%-24px)] xl:mt-0 xl:w-3/4" data-map>
           <div class="relative aspect-[1200/620]">
             <canvas class="map-canvas absolute inset-0 size-full" aria-hidden="true"></canvas>
-            <div class="map-pins absolute inset-0" role="group" aria-label="Group entities">
+            <div class="map-pins absolute inset-0 z-20" role="group" aria-label="Group entities">
               <!-- pins injected from src/data/locations.js -->
             </div>
           </div>
         </div>
 
         <!-- Location card (Figma: 360×352, top-right) -->
-        <div class="shell mt-8 xl:pointer-events-none xl:absolute xl:inset-x-0 xl:top-[140px] xl:mt-0 xl:flex xl:justify-end">
+        <!-- Mobile: card sits under the map. xl+: it becomes a popover placed beside the clicked pin (src/modules/map.js). -->
+        <div class="shell mt-8 xl:pointer-events-none xl:absolute xl:inset-0 xl:z-10 xl:mt-0 xl:max-w-none xl:p-0" data-card-layer>
           <article
-            class="location-card pointer-events-auto flex w-full max-w-[360px] flex-col gap-16 rounded-xl bg-white p-6 drop-shadow-[0_20px_10px_rgba(0,0,0,0.08)] xl:-mr-px"
+            class="location-card pointer-events-auto flex w-full max-w-[360px] flex-col gap-16 rounded-xl bg-white p-6 drop-shadow-[0_20px_10px_rgba(0,0,0,0.08)] xl:absolute xl:top-0 xl:left-0 xl:w-[360px]"
             aria-live="polite"
             data-location-card
           >
@@ -240,7 +251,7 @@
 
           <div class="relative">
             <ul
-              class="brand-track -my-4 flex snap-x snap-mandatory gap-6 overflow-x-auto py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              class="brand-track -my-4 flex snap-x snap-mandatory gap-6 overflow-x-auto py-4 [scrollbar-width:none] max-lg:-mx-[clamp(20px,7.5vw,120px)] max-lg:scroll-px-[clamp(20px,7.5vw,120px)] max-lg:px-[clamp(20px,7.5vw,120px)] max-lg:gap-4 [&::-webkit-scrollbar]:hidden"
               data-brand-track
               data-lenis-prevent-wheel
             ></ul>
@@ -462,7 +473,10 @@
 
       <div class="bg-navy">
         <div class="shell flex flex-col gap-4 py-10 text-[13px] leading-5 text-white/40 md:h-32 md:flex-row md:items-center md:justify-between md:py-0">
-          <p>© BMK Group. All Rights Reserved.</p>
+          <p>
+            © BMK Group. All Rights Reserved. Website made by
+            <a href="https://phitany.com/" target="_blank" rel="noopener" class="underline decoration-white/30 underline-offset-4 transition-colors duration-300 hover:text-white hover:decoration-white">Phitany</a>
+          </p>
           <ul class="flex flex-wrap gap-5">
             <li><a class="hover:text-white" href="#">Privacy Policy</a></li>
             <li><a class="hover:text-white" href="#">Cookie Policy</a></li>

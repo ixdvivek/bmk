@@ -81,7 +81,8 @@ export function initTimeline({ reduced }) {
         },
       })
       .to(track, { x: () => -distance(), duration: 1 }, 0)
-      .to(marks, { yPercent: (i) => -25 - i * 10, rotate: (i) => (i % 2 ? 6 : -6), duration: 1, stagger: 0 }, 0);
+      // Watermarks drift up and fade out as the timeline is scrolled through
+      .to(marks, { yPercent: (i) => -45 - i * 8, autoAlpha: 0, duration: 0.7, ease: 'power1.in', stagger: 0.05 }, 0.3);
 
     return () => gsap.set(track, { x: 0 });
   });
@@ -96,7 +97,7 @@ export function initTimeline({ reduced }) {
   });
   gsap.from(marks, {
     autoAlpha: 0,
-    scale: 0.7,
+    yPercent: 20,
     stagger: 0.12,
     duration: 2,
     scrollTrigger: { trigger: section, start: 'top 70%', once: true },
