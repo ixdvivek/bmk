@@ -1,0 +1,46 @@
+{
+  "_note": "Figma MCP asset URLs (file EDDo2rLxEFm1BakC92zCS6). They expire ~7 days after 2026-10-13. Re-export from Figma if a download returns 403/404.",
+  "assets": {
+    "public/assets/logo/bmk.svg": "https://www.figma.com/api/mcp/asset/029c4a4b-d78b-47d4-9302-754fa34250d0.svg",
+    "public/assets/logo/bmk-white.svg": "https://www.figma.com/api/mcp/asset/6d1e9a9a-e9ca-48a6-ae98-f2bd766e3682.svg",
+    "public/assets/patterns/hero-mark.svg": "https://www.figma.com/api/mcp/asset/7db53b49-5683-4193-a370-c2ad22cfe0ce.svg",
+    "public/assets/patterns/history-mark-1.svg": "https://www.figma.com/api/mcp/asset/754de648-688e-4ed5-8a2d-dad142c11366.svg",
+    "public/assets/patterns/history-mark-2.svg": "https://www.figma.com/api/mcp/asset/6b8542ea-d321-449f-88f1-f2abf527ad4f.svg",
+
+    "public/assets/icons/badge-globe.svg": "https://www.figma.com/api/mcp/asset/c5ff78d7-d4f2-44cf-9024-e59237e677fc.svg",
+    "public/assets/icons/arrow-orange.svg": "https://www.figma.com/api/mcp/asset/dc394f1e-8b3b-412b-8976-3d85d6633c94.svg",
+    "public/assets/icons/arrow-white.svg": "https://www.figma.com/api/mcp/asset/5c5f6eb9-5c3c-4643-b4ba-feb963722a38.svg",
+    "public/assets/icons/arrow-dark.svg": "https://www.figma.com/api/mcp/asset/547903b5-5ef2-43d7-ad28-d06976f20da6.svg",
+    "public/assets/icons/arrow-light.svg": "https://www.figma.com/api/mcp/asset/cc8fd15c-d0c4-411f-9ea8-480fb0727bb2.svg",
+    "public/assets/icons/star.svg": "https://www.figma.com/api/mcp/asset/9fd51a91-ed69-46f9-b7f9-accb141f5fe2.svg",
+    "public/assets/icons/verified.svg": "https://www.figma.com/api/mcp/asset/065ffcea-9026-441c-80b9-076fe3f96527.svg",
+    "public/assets/icons/petronas.svg": "https://www.figma.com/api/mcp/asset/1a0ddd0b-495d-46ec-92ed-a61a56441214.svg",
+
+    "public/assets/icons/milestone-2005.svg": "https://www.figma.com/api/mcp/asset/f61175c0-8030-4678-a265-fd8aa07bfaeb.svg",
+    "public/assets/icons/milestone-2008.svg": "https://www.figma.com/api/mcp/asset/5906f941-d59b-400c-aaa1-350c67e720b4.svg",
+    "public/assets/icons/milestone-2012.svg": "https://www.figma.com/api/mcp/asset/e93c223b-956f-40e8-b296-f1712ce3b615.svg",
+    "public/assets/icons/milestone-2015.svg": "https://www.figma.com/api/mcp/asset/53f1cee2-ebc1-4adc-a09c-29e7d3204451.svg",
+    "public/assets/icons/milestone-2018.svg": "https://www.figma.com/api/mcp/asset/108581ca-acbf-40b5-a152-86264aec06b2.svg",
+    "public/assets/icons/milestone-2022.svg": "https://www.figma.com/api/mcp/asset/106203c8-3076-40a5-a2f5-52f019064e9b.svg",
+
+    "public/assets/icons/location.svg": "https://www.figma.com/api/mcp/asset/838cb3a0-fd3c-4f87-8f44-48752fddf95b.svg",
+    "public/assets/icons/call.svg": "https://www.figma.com/api/mcp/asset/b2c86d12-a867-4090-8b6e-2ec4c9f628ba.svg",
+    "public/assets/icons/email.svg": "https://www.figma.com/api/mcp/asset/614514a7-a159-44e9-89a2-a885a386d69f.svg",
+    "public/assets/icons/facebook.svg": "https://www.figma.com/api/mcp/asset/8f4a8bfc-156c-4ae8-9ee0-dd6719c0f88b.svg",
+    "public/assets/icons/instagram.svg": "https://www.figma.com/api/mcp/asset/8841f3d4-0fa7-4dfc-ab34-9946a5570bdc.svg",
+    "public/assets/icons/linkedin.svg": "https://www.figma.com/api/mcp/asset/8a942733-0339-4d76-9676-c25559655967.svg",
+    "public/assets/icons/x.svg": "https://www.figma.com/api/mcp/asset/766da3d6-7f91-4e54-9a3f-61cfd098f741.svg",
+
+    "public/assets/brands/nikon.svg": "https://www.figma.com/api/mcp/asset/08439f01-ccc2-49b8-b35d-06a77cb04d05.svg",
+    "public/assets/brands/sony.svg": "https://www.figma.com/api/mcp/asset/295000c5-bcec-467c-8496-90aa043be229.svg",
+    "public/assets/brands/canon.svg": "https://www.figma.com/api/mcp/asset/e3fc46b4-4404-48fc-ab7c-b63ea8564837.svg",
+    "public/assets/brands/leica.svg": "https://www.figma.com/api/mcp/asset/bb78e5bc-46b0-4a39-a33d-d834bda86ed9.svg",
+
+    "public/assets/images/about.png": "https://www.figma.com/api/mcp/asset/6baa9609-7846-415c-b62f-ef8e00b17aca.png",
+    "public/assets/images/milestone-2008.png": "https://www.figma.com/api/mcp/asset/34e077b1-5c31-4e7b-b62f-70a86bd710ed.png",
+    "public/assets/images/enquiry-distribution.png": "https://www.figma.com/api/mcp/asset/e4c039e5-c524-43e5-8088-4c9dcb214173.png",
+    "public/assets/images/enquiry-dealership.png": "https://www.figma.com/api/mcp/asset/46ed5506-fe87-4654-9523-2242ec3ed951.png",
+    "public/assets/images/enquiry-retail.png": "https://www.figma.com/api/mcp/asset/4b57aa06-ce21-442c-a098-4f2c866072f6.png",
+    "public/assets/images/enquiry-general.png": "https://www.figma.com/api/mcp/asset/99958ef3-d388-4843-a4f1-252f7efb027d.png"
+  }
+}
