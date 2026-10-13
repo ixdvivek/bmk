@@ -12,8 +12,8 @@ export const brandFilters = [
 const placeholder = 'Short brand description placeholder. One or two lines of supporting text.';
 
 export const brands = [
-  { id: 'nikon', name: 'Nikon', logo: '/assets/brands/nikon.svg', categories: ['cameras'], description: placeholder, href: '#' },
-  { id: 'sony', name: 'Sony', logo: '/assets/brands/sony.svg', categories: ['cameras', 'mobile'], description: placeholder, href: '#' },
-  { id: 'canon', name: 'Canon', logo: '/assets/brands/canon.svg', categories: ['cameras'], description: placeholder, href: '#' },
-  { id: 'leica', name: 'Leica', logo: '/assets/brands/leica.svg', categories: ['cameras'], description: placeholder, href: '#' },
+  { id: 'nikon', name: 'Nikon', logo: 'assets/brands/nikon.svg', categories: ['cameras'], description: placeholder, href: '#' },
+  { id: 'sony', name: 'Sony', logo: 'assets/brands/sony.svg', categories: ['cameras', 'mobile'], description: placeholder, href: '#' },
+  { id: 'canon', name: 'Canon', logo: 'assets/brands/canon.svg', categories: ['cameras'], description: placeholder, href: '#' },
+  { id: 'leica', name: 'Leica', logo: 'assets/brands/leica.svg', categories: ['cameras'], description: placeholder, href: '#' },
 ];

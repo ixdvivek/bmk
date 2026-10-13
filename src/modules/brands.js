@@ -24,7 +24,7 @@ export function initBrands({ reduced }) {
           <h3 class="text-[32px] leading-8 font-semibold">${b.name}</h3>
           <p class="t-body text-black/50">${b.description}</p>
           <a href="${b.href}" class="brand-cta">${b.name} Products
-            <img src="/assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+            <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
           </a>
         </div>
       </div>

@@ -34,7 +34,7 @@ export const locations = [
     city: 'Kuala Lumpur, Malaysia',
     address: 'Kuala Lumpur, Malaysia',
     summary: 'Regional HQ and principal trading entity.',
-    icon: '/assets/icons/petronas.svg',
+    icon: 'assets/icons/petronas.svg',
     href: '#contact',
   },
   {
