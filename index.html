@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BMK Group — Global Technology Distribution</title>
+    <meta
+      name="description"
+      content="BMK Group brings global technology brands closer to businesses through trusted sourcing, international distribution and a forward-looking approach to product development."
+    />
+    <link rel="preload" href="video/hero-poster.jpg" as="image" />
+    <script>
+      // Hide animated elements before first paint only when motion is allowed.
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js-motion');
+    </script>
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2">Skip to content</a>
+
+    <!-- ── Navbar ─────────────────────────────────────────────────────── -->
+    <header
+      id="nav"
+      class="fixed top-4 left-1/2 z-50 w-[min(928px,calc(100%-32px))] -translate-x-1/2 rounded-lg bg-white/60 py-2 pr-2 pl-4 backdrop-blur-[16px] transition-[background-color,box-shadow] duration-500 md:top-10"
+    >
+      <nav class="flex items-center justify-between" aria-label="Primary">
+        <a href="#top" class="block h-12 w-[92px] shrink-0" aria-label="BMK Group home">
+          <img src="assets/logo/bmk.svg" alt="BMK" width="92" height="48" class="size-full" />
+        </a>
+        <ul class="hidden items-center gap-5 text-sm leading-5 text-black lg:flex">
+          <li><a class="nav-link font-bold" href="#top" aria-current="page">Home</a></li>
+          <li><a class="nav-link" href="#about">About Us</a></li>
+          <li><a class="nav-link" href="#brands">Brands &amp; Products</a></li>
+          <li><a class="nav-link" href="#faq">FAQ</a></li>
+          <li><a class="nav-link" href="#contact">Contact Us</a></li>
+        </ul>
+        <div class="flex items-center gap-2">
+          <a href="#contact" class="btn btn-dark">
+            Enquiry <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+          </a>
+          <button
+            id="menu-toggle"
+            type="button"
+            class="icon-btn size-12 bg-ink/5 lg:hidden"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            aria-label="Open menu"
+          >
+            <span class="relative block h-3 w-5" aria-hidden="true">
+              <span class="menu-bar absolute top-0 left-0 h-px w-full bg-ink transition-transform duration-300"></span>
+              <span class="menu-bar absolute bottom-0 left-0 h-px w-full bg-ink transition-transform duration-300"></span>
+            </span>
+          </button>
+        </div>
+      </nav>
+      <div id="mobile-menu" class="hidden lg:hidden" hidden>
+        <ul class="flex flex-col gap-1 px-1 pt-4 pb-3 text-lg">
+          <li><a class="block py-2 font-semibold" href="#top">Home</a></li>
+          <li><a class="block py-2" href="#about">About Us</a></li>
+          <li><a class="block py-2" href="#brands">Brands &amp; Products</a></li>
+          <li><a class="block py-2" href="#faq">FAQ</a></li>
+          <li><a class="block py-2" href="#contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ── Hero: scroll-scrubbed video ──────────────────────────────── -->
+      <section id="top" class="hero relative h-svh min-h-[640px] overflow-hidden bg-ink text-white" aria-label="Introduction">
+        <video
+          class="hero-video absolute inset-0 size-full object-cover"
+          data-src="video/hero-1080.mp4"
+          data-src-mobile="video/hero-720.mp4"
+          poster="video/hero-poster.jpg"
+          muted
+          playsinline
+          preload="auto"
+          aria-hidden="true"
+        ></video>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent"></div>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 to-transparent md:from-black/15"></div>
+
+        <!-- decorative brand mark (Figma: Logo 538×538, 10% opacity) -->
+        <div class="hero-mark pointer-events-none absolute top-[48%] left-[78%] hidden aspect-square w-[min(33.6vw,538px)] opacity-10 md:block" aria-hidden="true">
+          <img src="assets/patterns/hero-mark.svg" alt="" class="absolute inset-y-0 right-[8.58%] left-[10.42%] size-auto h-full" />
+        </div>
+
+        <div class="hero-content relative flex h-full flex-col justify-end pb-[clamp(40px,9.6vh,88px)]" style="padding-inline: clamp(20px, 6.25vw, 100px)">
+          <div class="mx-auto flex w-full max-w-[1400px] flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+            <div class="flex max-w-[760px] flex-col items-start gap-6">
+              <p class="hero-badge inline-flex items-center gap-2 rounded-[20px] px-3 py-1 text-xs leading-5 tracking-[1px] uppercase backdrop-blur-[16px]">
+                <img src="assets/icons/badge-globe.svg" alt="" width="16" height="16" class="size-4" />
+                Global technology distribution
+              </p>
+              <h1 class="hero-title t-hero">Connecting markets with the technology of&nbsp;tomorrow.</h1>
+              <p class="hero-copy t-body max-w-[690px] tracking-normal">
+                BMK Group brings global technology brands closer to businesses through trusted sourcing, international distribution and a
+                forward-looking approach to product development.
+              </p>
+              <div class="hero-ctas flex flex-wrap gap-5">
+                <a href="#brands" class="btn btn-dark">
+                  Explore Our Products <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+                </a>
+                <a href="#contact" class="btn btn-outline-light">
+                  Partner With Us <img src="assets/icons/arrow-white.svg" alt="" class="btn-icon" width="16" height="16" />
+                </a>
+              </div>
+            </div>
+
+            <div class="hero-stat flex w-full max-w-[280px] flex-col gap-4 rounded-xl bg-white/30 backdrop-blur-[16px]">
+              <div class="px-4 pt-2">
+                <div class="flex items-start justify-between border-b border-[#aaa] pb-3">
+                  <div class="flex h-6 items-center gap-1" role="img" aria-label="Rated 5 out of 5">
+                    <img src="assets/icons/star.svg" alt="" class="size-4" width="16" height="16" />
+                    <img src="assets/icons/star.svg" alt="" class="size-4" width="16" height="16" />
+                    <img src="assets/icons/star.svg" alt="" class="size-4" width="16" height="16" />
+                    <img src="assets/icons/star.svg" alt="" class="size-4" width="16" height="16" />
+                    <img src="assets/icons/star.svg" alt="" class="size-4" width="16" height="16" />
+                  </div>
+                  <img src="assets/icons/verified.svg" alt="Verified" class="size-6" width="24" height="24" />
+                </div>
+              </div>
+              <div class="flex items-center gap-5 px-4 pb-4">
+                <p class="text-4xl leading-10 font-semibold"><span class="hero-count" data-count="25">25</span></p>
+                <p class="text-base leading-5 font-medium">Years of<br />Experience &amp; Trust</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── About ───────────────────────────────────────────────────── -->
+      <section id="about" class="section-y bg-white" aria-labelledby="about-title">
+        <div class="shell grid items-stretch gap-10 lg:grid-cols-2 lg:gap-16 xl:grid-cols-[520px_520px] xl:gap-[120px]">
+          <figure class="about-media relative aspect-[520/504] overflow-hidden rounded-xl lg:aspect-auto lg:min-h-[504px]" data-reveal="clip">
+            <img
+              src="assets/images/about.webp"
+              alt="Hands interacting with a glowing digital globe network"
+              class="absolute inset-0 size-full object-cover object-[66%_50%]"
+              loading="lazy"
+              data-parallax-img
+            />
+          </figure>
+          <div class="flex flex-col items-start gap-6">
+            <span class="chip border-line text-ink" data-reveal="up">About BMK Group</span>
+            <div class="flex flex-col gap-3">
+              <h2 id="about-title" class="t-display" data-split>Built on trust. Driven by innovation.</h2>
+              <div class="t-body space-y-6" data-reveal="up">
+                <p>
+                  BMK Group is a UAE-incorporated international trading company specialising in the wholesale import and export of consumer
+                  electronics. What began as a trading operation has evolved into a broader business focused on global partnerships, market
+                  expansion and product development.
+                </p>
+                <p>
+                  With business diversification beginning in 2004 and branches established in Singapore and India in 2010, BMK continues to build
+                  connections across markets, helping businesses access technology and opportunities worldwide.
+                </p>
+              </div>
+            </div>
+            <a href="#history" class="btn btn-navy" data-reveal="up">
+              Discover Our Story <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Group presence: interactive dot map ─────────────────────── -->
+      <section id="presence" class="relative overflow-hidden bg-fog pt-[clamp(72px,7.5vw,120px)] pb-[clamp(72px,10.75vw,172px)]" aria-labelledby="presence-title">
+        <!-- Heading block: in flow on small screens; overlaps the map bottom-left on xl (Figma Frame 39) -->
+        <div class="shell relative z-10 xl:absolute xl:bottom-[clamp(72px,7.5vw,120px)] xl:left-0 xl:w-auto xl:max-w-none">
+          <div class="max-w-[360px]">
+            <h2 id="presence-title" class="t-display" data-split>BMK Group Presence</h2>
+            <p class="t-body mt-3 tracking-normal" data-reveal="up">
+              BMK Group operates through distinct registered companies and business entities across multiple countries and regions. Click any
+              entity to view full company details.
+            </p>
+          </div>
+        </div>
+
+        <div class="map relative mx-auto mt-10 w-[calc(100%-24px)] xl:mt-0 xl:w-3/4" data-map>
+          <div class="relative aspect-[1200/620]">
+            <canvas class="map-canvas absolute inset-0 size-full" aria-hidden="true"></canvas>
+            <div class="map-pins absolute inset-0" role="group" aria-label="Group entities">
+              <!-- pins injected from src/data/locations.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Location card (Figma: 360×352, top-right) -->
+        <div class="shell mt-8 xl:pointer-events-none xl:absolute xl:inset-x-0 xl:top-[140px] xl:mt-0 xl:flex xl:justify-end">
+          <article
+            class="location-card pointer-events-auto flex w-full max-w-[360px] flex-col gap-16 rounded-xl bg-white p-6 drop-shadow-[0_20px_10px_rgba(0,0,0,0.08)] xl:-mr-px"
+            aria-live="polite"
+            data-location-card
+          >
+            <div class="flex items-start justify-between">
+              <div class="loc-icon grid size-16 place-items-center"></div>
+              <div class="flex gap-1">
+                <button type="button" class="icon-btn hover:bg-fog" data-loc-prev aria-label="Previous location">
+                  <img src="assets/icons/arrow-dark.svg" alt="" class="size-4 -scale-x-100" width="16" height="16" />
+                </button>
+                <button type="button" class="icon-btn hover:bg-fog" data-loc-next aria-label="Next location">
+                  <img src="assets/icons/arrow-dark.svg" alt="" class="size-4" width="16" height="16" />
+                </button>
+              </div>
+            </div>
+            <div class="loc-body flex flex-col items-start gap-3">
+              <h3 class="text-2xl leading-7 font-semibold text-black">
+                <span class="loc-entity block"></span><span class="loc-city block"></span>
+              </h3>
+              <p class="t-body text-black/50"><span class="loc-address block"></span><span class="loc-summary block"></span></p>
+              <a href="#contact" class="loc-link btn btn-navy">
+                View Details <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ── Brands ──────────────────────────────────────────────────── -->
+      <section id="brands" class="section-y bg-navy text-white" aria-labelledby="brands-title">
+        <div class="shell flex flex-col gap-10">
+          <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div class="flex max-w-[640px] flex-col gap-6">
+              <div class="flex flex-col gap-3">
+                <h2 id="brands-title" class="t-display" data-split>Our Brands</h2>
+                <p class="t-body" data-reveal="up">Explore the brands associated with and handled by BMK Group.</p>
+              </div>
+              <div class="flex flex-wrap gap-2" role="group" aria-label="Filter brands" data-brand-filters data-reveal="up"></div>
+            </div>
+            <div class="flex gap-1 self-end" data-reveal="up">
+              <button type="button" class="icon-btn hover:bg-white/10" data-brands-prev aria-label="Previous brands">
+                <img src="assets/icons/arrow-light.svg" alt="" class="size-4 -scale-x-100" width="16" height="16" />
+              </button>
+              <button type="button" class="icon-btn hover:bg-white/10" data-brands-next aria-label="Next brands">
+                <img src="assets/icons/arrow-light.svg" alt="" class="size-4" width="16" height="16" />
+              </button>
+            </div>
+          </div>
+
+          <div class="relative">
+            <ul
+              class="brand-track -my-4 flex snap-x snap-mandatory gap-6 overflow-x-auto py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              data-brand-track
+              data-lenis-prevent-wheel
+            ></ul>
+            <p class="hidden py-24 text-center text-white/60" data-brand-empty>No brands in this category yet — check back soon.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── History & timeline ──────────────────────────────────────── -->
+      <section id="history" class="history relative overflow-hidden bg-mist" aria-labelledby="history-title">
+        <div class="history-marks pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
+          <div class="history-mark absolute top-[-114px] left-[62%] aspect-square w-[min(20.4vw,326px)] opacity-30">
+            <img src="assets/patterns/history-mark-1.svg" alt="" class="absolute inset-y-0 right-[8.58%] left-[10.42%] h-full" />
+          </div>
+          <div class="history-mark absolute top-[-114px] left-[74.44%] aspect-square w-[min(20.4vw,326px)] opacity-30">
+            <img src="assets/patterns/history-mark-2.svg" alt="" class="absolute inset-y-0 right-[8.58%] left-[10.42%] h-full" />
+          </div>
+          <div class="history-mark absolute top-[-114px] left-[86.88%] aspect-square w-[min(20.4vw,326px)] opacity-30">
+            <img src="assets/patterns/history-mark-2.svg" alt="" class="absolute inset-y-0 right-[8.58%] left-[10.42%] h-full" />
+          </div>
+          <div class="history-mark absolute top-[137px] left-[80.81%] aspect-square w-[min(20.4vw,326px)] opacity-30">
+            <img src="assets/patterns/history-mark-2.svg" alt="" class="absolute inset-y-0 right-[8.58%] left-[10.42%] h-full" />
+          </div>
+        </div>
+
+        <div class="history-pin section-y relative flex flex-col justify-center lg:min-h-svh">
+          <div class="shell flex flex-col gap-10">
+            <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              <div class="flex max-w-[520px] flex-col items-start gap-6">
+                <span class="chip border-line text-ink" data-reveal="up">Our Journey</span>
+                <div class="flex flex-col gap-3">
+                  <h2 id="history-title" class="t-display" data-split>From global trade to new possibilities.</h2>
+                  <p class="t-body" data-reveal="up">
+                    A business built on international connections, evolving with the technology market and expanding into new opportunities.
+                  </p>
+                </div>
+              </div>
+              <a href="#about" class="btn btn-navy self-start md:self-auto" data-reveal="up">
+                Discover About Us <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+              </a>
+            </div>
+
+            <!-- progress (Figma Frame 48: 8px track, 160px orange thumb) -->
+            <div class="relative h-2 overflow-hidden rounded-full bg-white/60" aria-hidden="true">
+              <div class="history-thumb absolute inset-y-0 left-0 w-[min(160px,25%)] bg-accent will-change-transform"></div>
+            </div>
+
+            <div class="history-viewport -mx-[clamp(20px,7.5vw,120px)] overflow-x-auto px-[clamp(20px,7.5vw,120px)] [scrollbar-width:none] lg:overflow-visible [&::-webkit-scrollbar]:hidden">
+              <ol class="history-track flex w-max gap-2 pb-6 will-change-transform">
+                <li class="milestone" data-tone="dark">
+                  <div class="m-bg" aria-hidden="true"></div>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2005.svg" alt="" width="32" height="32" /></span>
+                  <div class="m-text">
+                    <p class="m-year">2005</p>
+                    <p class="m-title">Founded</p>
+                    <p class="m-desc">BMK Group established as a trading company.</p>
+                  </div>
+                </li>
+                <li class="milestone" data-tone="light">
+                  <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2008.webp" alt="" loading="lazy" /></div>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2008.svg" alt="" width="32" height="32" /></span>
+                  <div class="m-text">
+                    <p class="m-year">2008</p>
+                    <p class="m-title">First Expansion</p>
+                    <p class="m-desc">Expanded into Singapore and regional ASEAN markets.</p>
+                  </div>
+                </li>
+                <li class="milestone" data-tone="dark">
+                  <div class="m-bg" aria-hidden="true"></div>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2012.svg" alt="" width="32" height="32" /></span>
+                  <div class="m-text">
+                    <p class="m-year">2012</p>
+                    <p class="m-title">Brand Partnerships</p>
+                    <p class="m-desc">Secured key international brand distribution rights.</p>
+                  </div>
+                </li>
+                <li class="milestone" data-tone="dark">
+                  <div class="m-bg" aria-hidden="true"></div>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2015.svg" alt="" width="32" height="32" /></span>
+                  <div class="m-text">
+                    <p class="m-year">2015</p>
+                    <p class="m-title">European Entry</p>
+                    <p class="m-desc">Opened BMK Europe Ltd. in London.</p>
+                  </div>
+                </li>
+                <li class="milestone" data-tone="dark">
+                  <div class="m-bg" aria-hidden="true"></div>
+                  <span class="m-icon-wrap"><img class="m-icon !w-auto px-[5.9px]" src="assets/icons/milestone-2018.svg" alt="" width="32" height="32" /></span>
+                  <div class="m-text">
+                    <p class="m-year">2018</p>
+                    <p class="m-title">MENA Launch</p>
+                    <p class="m-desc">Established presence in Dubai Free Zone.</p>
+                  </div>
+                </li>
+                <li class="milestone" data-tone="dark">
+                  <div class="m-bg" aria-hidden="true"></div>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2022.svg" alt="" width="32" height="32" /></span>
+                  <div class="m-text">
+                    <p class="m-year">2022</p>
+                    <p class="m-title">Digital Growth</p>
+                    <p class="m-desc">Launched e-commerce and digital distribution channels.</p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Enquiry CTA ─────────────────────────────────────────────── -->
+      <section id="contact" class="section-y bg-white" aria-labelledby="contact-title">
+        <div class="shell flex flex-col gap-10">
+          <div class="flex flex-col gap-3 text-center">
+            <h2 id="contact-title" class="t-display" data-split>Let's do business together</h2>
+            <p class="t-body" data-reveal="up">
+              Have a business enquiry? Select the enquiry type below and get in touch with the relevant BMK Group team.
+            </p>
+          </div>
+          <div class="mx-auto grid w-full max-w-[1292px] gap-4 rounded-3xl bg-mist p-2 sm:p-4 md:grid-cols-2" data-reveal-group>
+            <article class="enquiry group">
+              <div class="enquiry-media"><img src="assets/images/enquiry-distribution.webp" alt="Courier unloading parcels from a delivery van" loading="lazy" /></div>
+              <div class="enquiry-text">
+                <h3>Good business starts with the right connection</h3>
+                <p>Enquire about becoming a distribution partner for BMK Group brands.</p>
+              </div>
+              <a href="mailto:info@bmkintl.com?subject=Distribution%20Enquiry" class="btn btn-navy">
+                Distribution Enquiry <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+              </a>
+            </article>
+            <article class="enquiry group">
+              <div class="enquiry-media"><img src="assets/images/enquiry-dealership.webp" alt="Store associate in an electronics showroom" loading="lazy" /></div>
+              <div class="enquiry-text">
+                <h3>Let's build something valuable together.</h3>
+                <p>Apply to become an authorised dealer for one or more BMK brands.</p>
+              </div>
+              <a href="mailto:info@bmkintl.com?subject=Dealership%20Enquiry" class="btn btn-navy">
+                Dealership Enquiry <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+              </a>
+            </article>
+            <article class="enquiry group">
+              <div class="enquiry-media"><img src="assets/images/enquiry-retail.webp" alt="Camera body and lenses in a padded bag" loading="lazy" /></div>
+              <div class="enquiry-text">
+                <h3>Connect with BMK. Grow with confidence.</h3>
+                <p>Enquire about retail supply, pricing, and product availability.</p>
+              </div>
+              <a href="mailto:info@bmkintl.com?subject=Retail%20Sales%20Enquiry" class="btn btn-navy">
+                Retail Sales Enquiry <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+              </a>
+            </article>
+            <article class="enquiry group">
+              <div class="enquiry-media"><img src="assets/images/enquiry-general.webp" alt="Businessperson reviewing documents on a phone" loading="lazy" /></div>
+              <div class="enquiry-text">
+                <h3>Your next opportunity starts here.</h3>
+                <p>All other enquiries - partnerships, corporate, media, and more.</p>
+              </div>
+              <a href="mailto:info@bmkintl.com?subject=General%20Enquiry" class="btn btn-navy">
+                General Enquiry <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ── Footer ────────────────────────────────────────────────────── -->
+    <footer class="bg-black text-white">
+      <div class="shell grid gap-10 py-20 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+        <div class="flex flex-col gap-5">
+          <img src="assets/logo/bmk-white.svg" alt="BMK Group" width="92" height="48" class="h-12 w-[92px]" />
+          <p class="text-[15px] leading-[25px] text-white/40">Global technology distribution, trusted partnerships and a commitment to innovation.</p>
+        </div>
+        <nav class="flex flex-col gap-5 text-[15px]" aria-label="Quick links">
+          <p class="leading-5 font-bold">Quick links</p>
+          <ul class="flex flex-col gap-1.5 leading-6">
+            <li><a class="footer-link" href="#top">Home</a></li>
+            <li><a class="footer-link" href="#about">About Us</a></li>
+            <li><a class="footer-link" href="#brands">Brands &amp; Products</a></li>
+            <li><a class="footer-link" href="#faq">FAQ</a></li>
+            <li><a class="footer-link" href="#contact">Contact Us</a></li>
+          </ul>
+        </nav>
+        <nav class="flex flex-col gap-5 text-[15px]" aria-label="Categories">
+          <p class="leading-5 font-bold">Categories</p>
+          <ul class="flex flex-col gap-1.5 leading-6">
+            <li><a class="footer-link" href="#brands">Photography</a></li>
+            <li><a class="footer-link" href="#brands">Audio</a></li>
+            <li><a class="footer-link" href="#brands">Memory &amp; Storage</a></li>
+            <li><a class="footer-link" href="#brands">Mobile Accessories</a></li>
+          </ul>
+        </nav>
+        <div class="flex flex-col gap-5 text-[15px]">
+          <p class="leading-5 font-bold">CONTACT</p>
+          <address class="flex flex-col gap-1.5 leading-6 not-italic">
+            <p class="flex gap-2">
+              <img src="assets/icons/location.svg" alt="" class="size-6 shrink-0" width="24" height="24" />
+              <span>BMK GULF FZE<br />Warehouse # RA08LB07, P.O. Box 261752, Jebel Ali Free Zone, Dubai, UAE</span>
+            </p>
+            <a class="footer-link flex gap-2" href="tel:+97148870211">
+              <img src="assets/icons/call.svg" alt="" class="size-6 shrink-0" width="24" height="24" />+971 4 887 0211
+            </a>
+            <a class="footer-link flex gap-2" href="mailto:info@bmkintl.com">
+              <img src="assets/icons/email.svg" alt="" class="size-6 shrink-0" width="24" height="24" />info@bmkintl.com
+            </a>
+          </address>
+          <ul class="flex gap-6 pl-8">
+            <li><a href="#" class="social" aria-label="Facebook"><img src="assets/icons/facebook.svg" alt="" width="20" height="20" /></a></li>
+            <li><a href="#" class="social" aria-label="Instagram"><img src="assets/icons/instagram.svg" alt="" width="20" height="20" /></a></li>
+            <li><a href="#" class="social" aria-label="LinkedIn"><img src="assets/icons/linkedin.svg" alt="" width="20" height="20" /></a></li>
+            <li><a href="#" class="social" aria-label="X"><img src="assets/icons/x.svg" alt="" width="20" height="20" /></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-gradient-to-b from-black to-navy to-90% py-12">
+        <p class="footer-tagline px-2 text-center text-[clamp(2.5rem,6vw,6rem)] leading-[1.25] font-bold tracking-[-1px] lg:whitespace-nowrap" data-split-chars>
+          Built on trust. Driven by innovation.
+        </p>
+      </div>
+
+      <div class="bg-navy">
+        <div class="shell flex flex-col gap-4 py-10 text-[13px] leading-5 text-white/40 md:h-32 md:flex-row md:items-center md:justify-between md:py-0">
+          <p>© BMK Group. All Rights Reserved.</p>
+          <ul class="flex flex-wrap gap-5">
+            <li><a class="hover:text-white" href="#">Privacy Policy</a></li>
+            <li><a class="hover:text-white" href="#">Cookie Policy</a></li>
+            <li><a class="hover:text-white" href="#">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,282 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/plus-jakarta-sans';
+
+/* ── Design tokens (pulled from the Figma "Home" frame) ─────────────── */
+@theme {
+  --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy: #1f487d;
+  --color-ink: #121212;
+  --color-accent: #f77335;
+  --color-mist: #f2f2f2;
+  --color-fog: #f5f5f5;
+  --color-muted: #585858;
+  --color-line: #dddcdc;
+  --color-star: #ffc107;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-white font-sans text-black;
+  }
+  /* Lenis */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: clip;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* 1600px frame with 120px side padding → 1360px content, fluid below */
+  .shell {
+    @apply mx-auto w-full max-w-[1600px];
+    padding-inline: clamp(20px, 7.5vw, 120px);
+  }
+  .section-y {
+    padding-block: clamp(72px, 7.5vw, 120px);
+  }
+
+  /* Type scale */
+  .t-display {
+    font-size: clamp(2.25rem, 1.35rem + 2.3vw, 3.25rem); /* 52px */
+    line-height: 1.15;
+    letter-spacing: -0.05em; /* -2.6px @ 52 */
+  }
+  .t-hero {
+    font-size: clamp(2.4rem, 1.4rem + 2.6vw, 3.5rem); /* 56px */
+    line-height: 1.143;
+    letter-spacing: -0.027em; /* -1.5px @ 56 */
+    @apply font-semibold;
+  }
+  .t-body {
+    @apply text-base leading-6 tracking-[-0.01em];
+  }
+
+  /* Pills / chips */
+  .chip {
+    @apply inline-flex items-center rounded-full border px-4 py-2 text-xs leading-[18px] whitespace-nowrap;
+  }
+
+  /* Buttons (CTA component in Figma) */
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-[14px] text-sm leading-5 whitespace-nowrap transition-colors duration-300;
+  }
+  .btn-icon {
+    @apply size-4 shrink-0 transition-transform duration-300 ease-out-expo;
+  }
+  .btn:hover .btn-icon,
+  .group:hover .btn-icon {
+    transform: translateX(4px);
+  }
+  .btn-dark {
+    @apply bg-ink text-white hover:bg-navy;
+  }
+  .btn-navy {
+    @apply bg-navy text-white hover:bg-ink;
+  }
+  .btn-outline-light {
+    @apply border border-white text-white hover:bg-white hover:text-ink;
+  }
+
+  .icon-btn {
+    @apply grid size-10 place-items-center rounded-full transition-colors duration-300 disabled:opacity-30;
+  }
+
+  /* Nav link underline */
+  .nav-link {
+    @apply relative py-1;
+  }
+  .nav-link::after {
+    content: '';
+    @apply absolute inset-x-0 -bottom-0.5 h-px origin-right scale-x-0 bg-current transition-transform duration-500 ease-out-expo;
+  }
+  .nav-link:hover::after,
+  .nav-link[aria-current='page']::after {
+    @apply origin-left scale-x-100;
+  }
+}
+
+/* Brand cards (Figma "Milestone card" in Section: Brands) */
+/* The <li> is animated by GSAP; hover motion lives on .brand-inner so CSS
+   transitions never fight GSAP over the same transform. */
+.brand-card {
+  @apply flex shrink-0 snap-start;
+  width: calc((100% - 0px) / 1.15);
+}
+.brand-inner {
+  @apply flex w-full flex-col items-end gap-16 rounded-xl bg-white p-8 text-black transition-[transform,box-shadow] duration-500 ease-out-expo;
+}
+@media (min-width: 640px) {
+  .brand-card {
+    width: calc((100% - 24px) / 2);
+  }
+}
+@media (min-width: 1024px) {
+  .brand-card {
+    width: calc((100% - 72px) / 4);
+  }
+}
+.brand-card:hover .brand-inner {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 40px -12px rgb(0 0 0 / 0.35);
+}
+.brand-card .brand-logo {
+  @apply h-11 w-[120px] object-contain object-right transition-transform duration-500 ease-out-expo;
+}
+.brand-card:hover .brand-logo {
+  transform: scale(1.06);
+}
+.brand-cta {
+  @apply flex w-full items-center justify-between rounded-full border border-black/30 px-6 py-[14px] text-sm leading-5 transition-colors duration-300;
+}
+.brand-card:hover .brand-cta {
+  @apply border-ink bg-ink text-white;
+}
+
+/* Timeline milestones */
+.milestone {
+  @apply relative flex h-[296px] w-[280px] shrink-0 flex-col justify-between overflow-hidden rounded-xl bg-white p-6 text-black transition-[box-shadow,color] duration-500;
+}
+.milestone .m-bg {
+  @apply absolute inset-0 bg-navy opacity-0 transition-opacity duration-500;
+}
+.milestone .m-bg img {
+  @apply size-full scale-110 object-cover transition-transform duration-[1.2s] ease-out-expo;
+}
+.milestone .m-bg:has(img)::after {
+  content: '';
+  @apply absolute inset-0 bg-black/50;
+}
+.milestone .m-icon-wrap {
+  @apply relative grid size-16 place-items-center rounded-full border border-black/10 transition-colors duration-500;
+}
+.milestone .m-icon {
+  @apply size-8 transition-[filter] duration-500;
+}
+.milestone .m-text {
+  @apply relative flex flex-col;
+}
+.milestone .m-year {
+  @apply text-[32px] leading-8 font-semibold;
+}
+.milestone .m-title {
+  @apply mt-1 text-base leading-6 font-medium tracking-[-0.01em];
+}
+.milestone .m-desc {
+  @apply mt-3 text-base leading-6 tracking-[-0.01em] text-black/50 transition-colors duration-500;
+}
+.milestone.is-active {
+  @apply text-white shadow-[0_20px_20px_rgba(0,0,0,0.08)];
+}
+.milestone.is-active .m-bg {
+  @apply opacity-100;
+}
+.milestone.is-active .m-bg img {
+  transform: scale(1);
+}
+.milestone.is-active .m-icon-wrap {
+  @apply border-white/10;
+}
+.milestone.is-active .m-desc {
+  @apply text-white;
+}
+/* Icons ship in one tone; flip them to match the card state */
+.milestone[data-tone='dark'].is-active .m-icon {
+  filter: brightness(0) invert(1);
+}
+.milestone[data-tone='light']:not(.is-active) .m-icon {
+  filter: brightness(0);
+}
+
+/* Enquiry blocks */
+.enquiry {
+  @apply flex flex-col items-center gap-3 rounded-xl bg-white p-5 text-center sm:p-8;
+}
+.enquiry-media {
+  @apply h-[200px] w-full overflow-hidden rounded-xl sm:h-60;
+}
+.enquiry-media img {
+  @apply size-full object-cover transition-transform duration-[1.2s] ease-out-expo;
+}
+.enquiry:hover .enquiry-media img {
+  transform: scale(1.06);
+}
+.enquiry-text {
+  @apply flex flex-col items-center gap-2 p-4;
+}
+.enquiry-text h3 {
+  @apply text-xl leading-8 font-medium tracking-[-1px] text-black sm:text-2xl;
+}
+.enquiry-text p {
+  @apply text-base leading-6 tracking-[-0.5px] text-muted;
+}
+
+/* Footer */
+.footer-link {
+  @apply transition-colors duration-300 hover:text-accent;
+}
+.social {
+  @apply block size-5 transition-transform duration-300 ease-out-expo hover:-translate-y-0.5;
+}
+
+/* Map pins */
+.pin {
+  --pin: 9px;
+}
+.pin-dot {
+  width: var(--pin);
+  height: var(--pin);
+  @apply block rounded-full bg-accent transition-transform duration-300 ease-out-expo;
+}
+.pin-ring {
+  @apply pointer-events-none absolute inset-0 m-auto rounded-full border border-accent opacity-0;
+  width: var(--pin);
+  height: var(--pin);
+}
+.pin[aria-pressed='true'] .pin-dot,
+.pin:hover .pin-dot {
+  transform: scale(1.6);
+}
+.pin[aria-pressed='true'] .pin-ring {
+  animation: pin-pulse 1.8s var(--ease-out-expo) infinite;
+}
+@keyframes pin-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(5);
+    opacity: 0;
+  }
+}
+
+/* Elements animated by GSAP start hidden only when JS + motion are on */
+html.js-motion [data-reveal],
+html.js-motion [data-split],
+html.js-motion [data-split-chars],
+html.js-motion [data-reveal-group] > * {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin[aria-pressed='true'] .pin-ring {
+    animation: none;
+  }
+}
