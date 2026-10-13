@@ -19,6 +19,8 @@ export function initHero({ reduced }) {
   const mark = section.querySelector('.hero-mark');
   const fade = section.querySelector('.hero-fade');
   const shade = section.querySelector('.hero-shade');
+  const partner = section.querySelector('.hero-partner');
+  const partnerIcon = partner?.querySelector('img');
 
   const small = matchMedia('(max-width: 767px)').matches;
   // H.264 MP4 everywhere it decodes (Safari/iOS need it); VP9 WebM for
@@ -83,7 +85,16 @@ export function initHero({ reduced }) {
     // video under it when the pin releases.
     .fromTo(fade, { y: 0, yPercent: 100 }, { y: 0, yPercent: 0, duration: 0.38, ease: 'power1.out' }, 0.52)
     // The dark bottom shading clears as the white rises, so the blend stays clean, not grey
-    .to(shade, { autoAlpha: 0, duration: 0.3, ease: 'power1.inOut' }, 0.5);
+    .to(shade, { autoAlpha: 0, duration: 0.3, ease: 'power1.inOut' }, 0.5)
+    // "Partner With Us" turns from white to ink as the white rises behind it
+    .fromTo(partner, { color: '#ffffff', borderColor: '#ffffff' }, { color: '#121212', borderColor: '#121212', duration: 0.22, ease: 'power1.inOut' }, 0.64)
+    .fromTo(partnerIcon, { filter: 'brightness(1)' }, { filter: 'brightness(0.07)', duration: 0.22, ease: 'power1.inOut' }, 0.64)
+    // Seal the bottom edge: once the solid white has covered it, the video
+    // stops short of the edge and the hero's own background turns white. The
+    // last pixel rows then hold neither video nor dark background, so no line
+    // can appear there, whatever the GPU's rounding on high-DPI screens.
+    .fromTo(video, { clipPath: 'inset(0% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 6% 0%)', duration: 0.06 }, 0.84)
+    .fromTo(section, { backgroundColor: '#121212' }, { backgroundColor: '#ffffff', duration: 0.06 }, 0.84);
 }
 
 function loadVideo(video, src) {
