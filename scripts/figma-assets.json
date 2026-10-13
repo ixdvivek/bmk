@@ -36,11 +36,11 @@
     "public/assets/brands/canon.svg": "https://www.figma.com/api/mcp/asset/e3fc46b4-4404-48fc-ab7c-b63ea8564837.svg",
     "public/assets/brands/leica.svg": "https://www.figma.com/api/mcp/asset/bb78e5bc-46b0-4a39-a33d-d834bda86ed9.svg",
 
-    "public/assets/images/about.png": "https://www.figma.com/api/mcp/asset/6baa9609-7846-415c-b62f-ef8e00b17aca.png",
-    "public/assets/images/milestone-2008.png": "https://www.figma.com/api/mcp/asset/34e077b1-5c31-4e7b-b62f-70a86bd710ed.png",
-    "public/assets/images/enquiry-distribution.png": "https://www.figma.com/api/mcp/asset/e4c039e5-c524-43e5-8088-4c9dcb214173.png",
-    "public/assets/images/enquiry-dealership.png": "https://www.figma.com/api/mcp/asset/46ed5506-fe87-4654-9523-2242ec3ed951.png",
-    "public/assets/images/enquiry-retail.png": "https://www.figma.com/api/mcp/asset/4b57aa06-ce21-442c-a098-4f2c866072f6.png",
-    "public/assets/images/enquiry-general.png": "https://www.figma.com/api/mcp/asset/99958ef3-d388-4843-a4f1-252f7efb027d.png"
+    "design-source/images/about.png": "https://www.figma.com/api/mcp/asset/6baa9609-7846-415c-b62f-ef8e00b17aca.png",
+    "design-source/images/milestone-2008.png": "https://www.figma.com/api/mcp/asset/34e077b1-5c31-4e7b-b62f-70a86bd710ed.png",
+    "design-source/images/enquiry-distribution.png": "https://www.figma.com/api/mcp/asset/e4c039e5-c524-43e5-8088-4c9dcb214173.png",
+    "design-source/images/enquiry-dealership.png": "https://www.figma.com/api/mcp/asset/46ed5506-fe87-4654-9523-2242ec3ed951.png",
+    "design-source/images/enquiry-retail.png": "https://www.figma.com/api/mcp/asset/4b57aa06-ce21-442c-a098-4f2c866072f6.png",
+    "design-source/images/enquiry-general.png": "https://www.figma.com/api/mcp/asset/99958ef3-d388-4843-a4f1-252f7efb027d.png"
   }
 }

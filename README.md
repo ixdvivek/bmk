@@ -11,13 +11,14 @@ npm run build    # static output in dist/
 
 ## Design assets
 
-`public/assets/` currently holds **labelled placeholders** (grey images, simple
-icons, text logos) so the page renders. `npm run assets` downloads the real
-exports listed in `scripts/figma-assets.json` and overwrites them. Run it once
-and commit the result.
+Icons, logos and patterns in `public/assets/` are the original Figma exports.
+The photos are served as right-sized WebP (`public/assets/images/*.webp`,
+about 300 KB total instead of 4.7 MB of PNG).
 
-The Figma asset links expire about 7 days after 2026-10-13. If they have
-expired, re-export from Figma (or ask Claude to refresh the manifest).
+`npm run assets` re-downloads everything listed in `scripts/figma-assets.json`.
+Icons and logos go straight into `public/assets/`. The full-size photo PNGs go
+to `design-source/` (git-ignored), so re-encode them to WebP if a photo changes.
+The Figma links expire about 7 days after 2026-10-13.
 
 ## Structure
 
