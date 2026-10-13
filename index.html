@@ -130,13 +130,13 @@
           </div>
         </div>
 
-        <!-- Scroll-out "overexposure" layers (driven in src/modules/hero.js) -->
+        <!-- Scroll-out fade (Figma node 41:18061): a white gradient pulls up from the
+             bottom as the video ends, so the hero hands off to About with no blank screen. -->
         <div
-          class="hero-bloom pointer-events-none absolute inset-0 opacity-0"
-          style="background: radial-gradient(circle at 62% 42%, #fff 0%, rgb(255 255 255 / 0.85) 28%, rgb(255 255 255 / 0) 62%)"
+          class="hero-fade pointer-events-none absolute inset-x-0 bottom-0 h-[38%] translate-y-full"
+          style="background: linear-gradient(to bottom, rgb(255 255 255 / 0) 0%, rgb(255 255 255 / 0.55) 30%, rgb(255 255 255 / 0.92) 52%, #fff 64%)"
           aria-hidden="true"
         ></div>
-        <div class="hero-white pointer-events-none absolute inset-0 bg-white opacity-0" aria-hidden="true"></div>
       </section>
 
       <!-- ── About ───────────────────────────────────────────────────── -->
