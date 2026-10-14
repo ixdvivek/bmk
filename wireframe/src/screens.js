@@ -9,7 +9,7 @@ const sections = [
     title: 'Company pages',
     items: [
       { label: 'Home (reference)', to: '#/home', desc: 'Mirrors the approved homepage design, only to show the enquiry popups and links in context.' },
-      { label: 'About Us', to: '#/about', desc: 'Group profile, companies with addresses and map, and the full timeline.' },
+      { label: 'About Us', to: '#/about', desc: 'Group profile, a block per company (image, write-up, map, details) and the full timeline.' },
       { label: 'FAQ', to: '#/faq', desc: 'Topics, live search and an accordion. Answers still needed from BMK are marked.' },
       { label: 'Contact Us', to: '#/contact', desc: 'Office selector with map, contact form, and the four enquiry types.' },
     ],

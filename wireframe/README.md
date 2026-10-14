@@ -53,8 +53,8 @@ production build (Next.js) would use the clean URLs from the plan, e.g.
 - Model numbers are not in the client sheet yet (shown as "to be supplied").
 - About, Contact and Home copy is from the approved homepage design. FAQ
   questions and answers are drafts; answers BMK must supply are marked.
-- The About page lists content conflicts found across the approved copy
-  (founding year, Singapore date, India branch, Dubai entity name).
+- Content conflicts in the approved copy and content still to be supplied are
+  listed on an unlisted notes page: `#/notes` (not linked from the index).
 
 ## Adding a product type
 

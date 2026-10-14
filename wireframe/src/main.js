@@ -1,6 +1,6 @@
 import '../wf.css';
 import { renderHeader, renderFooter, closeHeaderPanels, setActiveNav } from './header.js';
-import { renderHome, renderAbout, renderFaq, renderContact, wireEnquiryTriggers } from './pages.js';
+import { renderHome, renderAbout, renderFaq, renderContact, renderNotes, wireEnquiryTriggers } from './pages.js';
 import { listingContext, renderListing, resetListingUi } from './listing.js';
 import { renderProduct } from './product.js';
 import { renderScreens } from './screens.js';
@@ -24,6 +24,7 @@ function resolve({ path, params, parts }) {
   if (path === '/about') return renderAbout(params);
   if (path === '/faq') return renderFaq();
   if (path === '/contact') return renderContact(params);
+  if (path === '/notes') return renderNotes(); // unlisted: not in the screens index
   if (parts[0] === 'products' && parts.length === 1) return renderListing(listingContext('all', null, params), params);
   if (parts[0] === 'search') return renderListing(listingContext('search', null, params), params);
   if (parts[0] === 'category' || parts[0] === 'brand') {

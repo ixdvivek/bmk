@@ -1,6 +1,6 @@
 // Company pages: Home (reference only), About Us, FAQ, Contact Us.
 import { brands } from './data.js';
-import { intro, entities, milestones, conflicts, enquiryTypes, faqTopics, faqs } from './content.js';
+import { intro, entities, milestones, conflicts, gaps, enquiryTypes, faqTopics, faqs } from './content.js';
 import { esc, href, icons, ph, note } from './ui.js';
 import { openEnquiry } from './enquiry.js';
 
@@ -105,19 +105,35 @@ export function renderHome() {
 
 // ── About Us ─────────────────────────────────────────────────────────────────
 export function renderAbout(params) {
-  let active = entities.some((e) => e.id === params.get('section')) ? params.get('section') : entities[0].id;
-  const entityCard = (e) => `
-    <article id="${e.id}" class="scroll-mt-24 rounded-xl border border-line p-5 ${e.id === active ? 'border-ink' : ''}" data-entity="${e.id}">
-      <p class="eyebrow">${esc(e.city)}</p>
-      <h3 class="mt-1 text-lg font-semibold">${esc(e.name)}</h3>
-      <p class="mt-1 text-sm text-sub">${esc(e.role)}</p>
-      <dl class="mt-4 grid gap-1.5 text-sm">
-        <div class="flex gap-3"><dt class="w-16 shrink-0 text-faint">Address</dt><dd>${e.address ? esc(e.address) : tbc()}</dd></div>
-        <div class="flex gap-3"><dt class="w-16 shrink-0 text-faint">Phone</dt><dd>${e.phone ? esc(e.phone) : tbc()}</dd></div>
-        <div class="flex gap-3"><dt class="w-16 shrink-0 text-faint">Email</dt><dd>${e.email ? esc(e.email) : tbc()}</dd></div>
-      </dl>
-      <a class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline" href="${href('/contact', { office: e.id })}">Contact this office ${icons.arrow}</a>
+  // One block per company: big image on one side, details on the other,
+  // alternating sides down the page. Stacks (image first) on mobile.
+  const companyBlock = (e, i) => {
+    const flip = i % 2 === 1;
+    return `
+    <article id="${e.id}" class="scroll-mt-24 grid items-center gap-8 lg:grid-cols-2 lg:gap-14" data-entity="${e.id}"
+      ${i === 0 ? note('One block per group company: large company image on one side, details on the other. Sides alternate down the page; on mobile the image stacks above. Each block has its own anchor, so the homepage’s “View Details” lands on the right company.') : ''}>
+      <div class="${flip ? 'lg:order-2' : ''}">${ph(`${e.name} — company image`, 'rounded-2xl', '4 / 3')}</div>
+      <div class="grid content-start gap-5 ${flip ? 'lg:order-1' : ''}">
+        <div>
+          <p class="eyebrow">${esc(e.city)}</p>
+          <h3 class="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">${esc(e.name)}</h3>
+        </div>
+        <div class="grid gap-3 text-sub" ${i === 0 ? note('Company write-up: the one-line role is from the approved location cards; the longer write-up is still to be supplied.') : ''}>
+          <p class="text-ink">${esc(e.role)}</p>
+          <p class="text-faint">A short write-up on what this company does, the markets it covers and the brands it handles. ${tbc()}</p>
+        </div>
+        <div class="grid gap-4 rounded-xl border border-line p-4 sm:grid-cols-[1fr_1.1fr]">
+          <div class="ph rounded-lg" style="aspect-ratio:4/3" ${i === 0 ? note('Location map: Google Maps embed centred on the office.') : ''}><span>Map · ${esc(e.city.split(',')[0])}</span></div>
+          <dl class="grid content-start gap-2 text-sm">
+            <div><dt class="text-xs text-faint">Address</dt><dd>${e.address ? esc(e.address) : tbc()}</dd></div>
+            <div><dt class="text-xs text-faint">Phone</dt><dd>${e.phone ? esc(e.phone) : tbc()}</dd></div>
+            <div><dt class="text-xs text-faint">Email</dt><dd>${e.email ? esc(e.email) : tbc()}</dd></div>
+          </dl>
+        </div>
+        <a class="inline-flex w-fit items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline" href="${href('/contact', { office: e.id })}">Contact this office ${icons.arrow}</a>
+      </div>
     </article>`;
+  };
 
   return {
     title: 'About Us',
@@ -139,15 +155,12 @@ export function renderAbout(params) {
       <div class="grid gap-3">${ph('Corporate image', 'rounded-xl', '4 / 3')}<div class="grid grid-cols-2 gap-3">${ph('Image', 'rounded-lg', '4 / 3')}${ph('Image', 'rounded-lg', '4 / 3')}</div></div>
     </section>
 
-    <section id="presence" class="scroll-mt-24 border-y border-line bg-wash py-14">
+    <section id="presence" class="scroll-mt-24 border-y border-line py-14">
       <div class="wrap">
         <p class="eyebrow">Group presence</p>
         <h2 class="mt-1 text-3xl font-semibold tracking-tight">Our companies</h2>
         <p class="mt-2 max-w-2xl text-sub">BMK Group operates through distinct registered companies and business entities across multiple countries and regions.</p>
-        <div class="mt-8 grid gap-8 lg:grid-cols-[1.3fr_1fr]">
-          <div ${note('Map: select a pin to highlight that company. Each company card has its own anchor, so the homepage’s “View Details” opens the right one.')}>${mapPh(active)}</div>
-          <div class="grid content-start gap-3" data-entity-list ${note('Company cards: name, role, address and contacts. Address, phone and email are only known for the Dubai company (from the design footer); the rest are to be supplied.')}>${entities.map(entityCard).join('')}</div>
-        </div>
+        <div class="mt-12 grid gap-16 lg:gap-24">${entities.map(companyBlock).join('')}</div>
       </div>
     </section>
 
@@ -170,38 +183,38 @@ export function renderAbout(params) {
       </ol>
     </section>
 
-    <section class="wrap pb-6">
-      <div class="rounded-xl border-2 border-dashed border-ink p-6" ${note('Wireframe-only callout: content conflicts found across the approved copy. BMK to confirm before the build.')}>
-        <p class="font-semibold">Content to confirm with BMK</p>
-        <ul class="mt-3 grid gap-2 text-sm text-sub">${conflicts.map((c) => `<li class="flex gap-2"><span aria-hidden="true">–</span>${esc(c)}</li>`).join('')}</ul>
-      </div>
-    </section>
-
     <section class="wrap py-10">
       <div class="flex flex-col items-start justify-between gap-4 rounded-xl bg-wash p-8 sm:flex-row sm:items-center">
         <div><p class="text-xl font-semibold">Work with BMK</p><p class="mt-1 text-sub">Distribution, dealership, retail supply or something else.</p></div>
         <div class="flex flex-wrap gap-2"><a class="btn btn-ghost btn-sm" href="${href('/contact')}">Contact us</a><button type="button" class="btn btn-primary btn-sm" data-enquiry-type="">Make an enquiry</button></div>
       </div>
     </section>`,
-    wire(root) {
-      const select = (id) => {
-        active = id;
-        root.querySelectorAll('[data-pin] > span').forEach((s) => {
-          const on = s.parentElement.dataset.pin === id;
-          s.classList.toggle('bg-ink', on);
-          s.classList.toggle('scale-150', on);
-          s.classList.toggle('bg-sub', !on);
-        });
-        root.querySelectorAll('[data-entity]').forEach((c) => c.classList.toggle('border-ink', c.dataset.entity === id));
-      };
-      root.querySelectorAll('button[data-pin]').forEach((b) =>
-        b.addEventListener('click', () => {
-          select(b.dataset.pin);
-          document.getElementById(b.dataset.pin)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }),
-      );
+    wire() {
       scrollToSection(params);
     },
+  };
+}
+
+// ── Notes for BMK (unlisted: #/notes) ────────────────────────────────────────
+export function renderNotes() {
+  return {
+    title: 'Notes for BMK',
+    html: `
+    ${pageHead('Notes for BMK', 'Content questions raised while building the wireframe. Not part of the website.', [['Home', '#/home'], ['Notes']])}
+    <section class="wrap grid max-w-4xl gap-12 py-12">
+      <div>
+        <h2 class="text-xl font-semibold">Conflicts in the approved copy</h2>
+        <p class="mt-1 text-sm text-sub">These statements disagree with each other. Please confirm which is correct.</p>
+        <ol class="mt-5 grid gap-3">${conflicts.map((c, i) => `<li class="flex gap-4 rounded-lg border border-line p-4 text-sm"><span class="font-semibold">${i + 1}</span><span>${esc(c)}</span></li>`).join('')}</ol>
+      </div>
+      <div>
+        <h2 class="text-xl font-semibold">Content still to be supplied</h2>
+        <p class="mt-1 text-sm text-sub">Shown in the wireframe as <span class="tbc">to be supplied</span>.</p>
+        <div class="mt-5 grid gap-4 sm:grid-cols-2">${gaps
+          .map((g) => `<div class="rounded-lg border border-line p-4"><p class="font-semibold">${esc(g.area)}</p><ul class="mt-2 grid gap-1.5 text-sm text-sub">${g.items.map((x) => `<li class="flex gap-2"><span aria-hidden="true">–</span>${esc(x)}</li>`).join('')}</ul></div>`)
+          .join('')}</div>
+      </div>
+    </section>`,
   };
 }
 
