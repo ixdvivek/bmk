@@ -6,6 +6,24 @@ const tplName = { camera: 'Camera (client’s 14 fields)', lens: 'Lens', instant
 
 const sections = [
   {
+    title: 'Company pages',
+    items: [
+      { label: 'Home (reference)', to: '#/home', desc: 'Mirrors the approved homepage design, only to show the enquiry popups and links in context.' },
+      { label: 'About Us', to: '#/about', desc: 'Group profile, companies with addresses and map, and the full timeline.' },
+      { label: 'FAQ', to: '#/faq', desc: 'Topics, live search and an accordion. Answers still needed from BMK are marked.' },
+      { label: 'Contact Us', to: '#/contact', desc: 'Office selector with map, contact form, and the four enquiry types.' },
+    ],
+  },
+  {
+    title: 'Enquiry popups',
+    items: [
+      { label: 'Distribution Enquiry', type: 'Distribution Enquiry', desc: 'Opens the popup with the type selected, as from the homepage, footer or Contact.' },
+      { label: 'Dealership Enquiry', type: 'Dealership Enquiry', desc: 'Same popup, Dealership selected.' },
+      { label: 'Retail Sales Enquiry', type: 'Retail Sales Enquiry', desc: 'Same popup, Retail Sales selected.' },
+      { label: 'Product enquiry', to: href('/product/nikon-z8'), desc: 'On any product page, “Enquire about this product” carries the product into the popup.' },
+    ],
+  },
+  {
     title: 'Navigation',
     items: [
       { label: 'Mega menu', to: '#/products', action: 'mega', desc: 'Brands & Products menu: category groups, brands, View all products. Hover or click it in the header.' },
@@ -49,9 +67,9 @@ export function renderScreens() {
     html: `
     <section class="border-b border-line bg-wash">
       <div class="wrap py-10 sm:py-14">
-        <p class="eyebrow">BMK Global website · Wireframe round 1</p>
-        <h1 class="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">Product listing, product details, mega menu and search</h1>
-        <p class="mt-4 max-w-3xl text-sub">A clickable black-and-white wireframe with real content: ${products.length} products from 3 brands across ${withProducts} of the 14 client categories. Images are placeholders. No visual theme is applied yet; this round is about structure and behaviour.</p>
+        <p class="eyebrow">BMK Global website · Phase 1 wireframe</p>
+        <h1 class="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">All Phase 1 page templates</h1>
+        <p class="mt-4 max-w-3xl text-sub">A clickable black-and-white wireframe of every page template in the Phase 1 scope, with real content: ${products.length} products from 3 brands across ${withProducts} of the 14 client categories. Images are placeholders. No visual theme is applied yet; this is about structure and behaviour.</p>
         <div class="mt-6 grid max-w-3xl gap-3 text-sm sm:grid-cols-2">
           <div class="rounded-lg border border-line bg-white p-4"><p class="font-semibold">Numbered notes</p><p class="mt-1 text-sub">Black dots explain each element. Click one to read it; turn them off with “Notes” at the bottom left.</p></div>
           <div class="rounded-lg border border-line bg-white p-4"><p class="font-semibold">Content conventions</p><p class="mt-1 text-sub">Crossed boxes are images. <span class="tbc">Dashed</span> means content still to be supplied.</p></div>
@@ -66,7 +84,7 @@ export function renderScreens() {
             <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               ${s.items
                 .map(
-                  (it) => `<li><a href="${it.to}" ${it.action ? `data-screen-action="${it.action}"` : ''} class="card h-full p-5">
+                  (it) => `<li><a href="${it.to || '#/'}" ${it.action ? `data-screen-action="${it.action}"` : ''} ${it.type ? `data-enquiry-type="${it.type}"` : ''} class="card h-full p-5">
                     <span class="flex items-center justify-between gap-3 font-semibold">${esc(it.label)} ${icons.arrow}</span>
                     <span class="mt-1.5 block text-sm text-sub">${esc(it.desc)}</span></a></li>`,
                 )

@@ -240,7 +240,7 @@ const crumb = (items) =>
 
 function header(ctx, base, selC, url) {
   if (ctx.kind === 'brand') return brandHeader(ctx, base, selC, url);
-  const home = ['Home', '#/'];
+  const home = ['Home', '#/home'];
   const prods = ['Products', href('/products')];
   let crumbs;
   let title;
@@ -319,7 +319,7 @@ function brandHeader(ctx, base, selC, url) {
   return `
   <section class="border-b border-line">
     <div class="wrap pt-6">
-      ${crumb([['Home', '#/'], ['Brands', href('/products')], [b.name]])}
+      ${crumb([['Home', '#/home'], ['Brands & Products', href('/products')], [b.name]])}
     </div>
     <div class="wrap mt-5">
       <div ${note('Brand banner (admin-managed image per brand, per the scope). Wide on desktop, cropped taller on mobile.')}>${ph(`${b.name} brand banner`, 'rounded-xl', 'var(--banner-ratio, 4 / 1)')}</div>
