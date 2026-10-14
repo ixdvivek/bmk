@@ -144,6 +144,24 @@ body:not(.notes-on) .note-badge {
   display: none;
 }
 
+/* Site header: sticky, hides on scroll down and returns on scroll up (as on
+   the built site). --hdr is the visible header height that sticky bars sit under. */
+:root {
+  --hdr: 64px;
+}
+body.header-hidden {
+  --hdr: 0px;
+}
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: transform 0.3s ease;
+}
+body.header-hidden #site-header {
+  transform: translateY(-100%);
+}
+
 /* Overlay helpers */
 .scrim {
   position: fixed;

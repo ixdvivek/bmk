@@ -108,6 +108,20 @@ wireEnquiryTriggers();
 toolbar();
 initNotes();
 window.addEventListener('hashchange', render);
+
+// Hide the header on scroll down, show it on scroll up (never while a header panel is open).
+let lastY = scrollY;
+window.addEventListener(
+  'scroll',
+  () => {
+    const y = scrollY;
+    const panelOpen = document.querySelector('#mega:not(.hidden), #search-panel:not(.hidden)');
+    if (y < 120 || panelOpen) document.body.classList.remove('header-hidden');
+    else if (Math.abs(y - lastY) > 6) document.body.classList.toggle('header-hidden', y > lastY);
+    lastY = y;
+  },
+  { passive: true },
+);
 window.addEventListener('resize', () => {
   clearTimeout(window.__nt);
   window.__nt = setTimeout(refreshNotes, 200);

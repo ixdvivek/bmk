@@ -241,7 +241,7 @@ export function renderFaq() {
             .join('')}
           <div data-faq-empty class="hidden rounded-xl border border-dashed border-line p-8"><p class="font-semibold">No questions match your search</p><p class="mt-1 text-sub">Try other words, or ask us directly.</p></div>
         </div>
-        <aside class="h-fit rounded-xl bg-wash p-6 lg:sticky lg:top-24" ${note('Help box: routes to Contact or the enquiry popup when the answer isn’t here.')}>
+        <aside class="h-fit rounded-xl bg-wash p-6 lg:sticky lg:top-[calc(var(--hdr)+24px)] transition-[top] duration-300" ${note('Help box: routes to Contact or the enquiry popup when the answer isn’t here.')}>
           <p class="text-lg font-semibold">Still have a question?</p>
           <p class="mt-2 text-sm text-sub">Our team will get back to you.</p>
           <div class="mt-4 grid gap-2"><button type="button" class="btn btn-primary btn-sm" data-enquiry-type="General Enquiry">Send an enquiry</button><a class="btn btn-ghost btn-sm" href="${href('/contact')}">Contact us</a></div>
