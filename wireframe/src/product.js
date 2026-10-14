@@ -81,7 +81,7 @@ export function renderProduct(slug) {
   const html = `
   <div class="wrap pt-6">
     <nav class="crumbs" aria-label="Breadcrumb" ${note('Breadcrumb: Home / Products / Group / Category / Product. Brand is linked from the summary, so the trail stays one fixed shape for every product.')}>
-      <a href="#/">Home</a><span aria-hidden="true">/</span><a href="${href('/products')}">Products</a><span aria-hidden="true">/</span>
+      <a href="#/home">Home</a><span aria-hidden="true">/</span><a href="${href('/products')}">Products</a><span aria-hidden="true">/</span>
       <a href="${href(`/category/${g.id}`)}">${esc(g.name)}</a><span aria-hidden="true">/</span><a href="${href(`/category/${c.id}`)}">${esc(c.name)}</a><span aria-hidden="true">/</span>
       <span aria-current="page" class="text-ink">${esc(p.name)}</span>
     </nav>

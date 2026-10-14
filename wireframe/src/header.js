@@ -5,7 +5,6 @@ import { openEnquiry } from './enquiry.js';
 
 const countIn = (catId) => products.filter((p) => p.category === catId).length;
 const countBrand = (id) => products.filter((p) => p.brand === id).length;
-const NOT_IN_ROUND = 'Not part of this prototype round';
 
 // ── Header markup ────────────────────────────────────────────────────────────
 export function renderHeader() {
@@ -13,15 +12,15 @@ export function renderHeader() {
   root.innerHTML = `
   <header class="sticky top-0 z-50 border-b border-line bg-white">
     <div class="wrap flex h-16 items-center gap-6">
-      <a href="#/" class="ph h-9 w-24 shrink-0 rounded text-[10px]" aria-label="BMK Group home (wireframe index)" style="aspect-ratio:auto"><span>Logo</span></a>
+      <a href="#/home" class="ph h-9 w-24 shrink-0 rounded text-[10px]" aria-label="BMK Group home" style="aspect-ratio:auto"><span>Logo</span></a>
       <nav class="hidden flex-1 items-center gap-1 text-sm lg:flex" aria-label="Primary">
-        <a href="#" data-stub class="rounded-full px-3 py-2 hover:bg-wash">Home</a>
-        <a href="#" data-stub class="rounded-full px-3 py-2 hover:bg-wash">About Us</a>
+        <a href="#/home" data-nav="/home" class="rounded-full px-3 py-2 hover:bg-wash aria-[current=page]:font-semibold aria-[current=page]:underline aria-[current=page]:underline-offset-8">Home</a>
+        <a href="#/about" data-nav="/about" class="rounded-full px-3 py-2 hover:bg-wash aria-[current=page]:font-semibold aria-[current=page]:underline aria-[current=page]:underline-offset-8">About Us</a>
         <button type="button" id="mega-toggle" aria-expanded="false" aria-controls="mega" class="inline-flex items-center gap-1.5 rounded-full px-3 py-2 font-semibold hover:bg-wash aria-expanded:bg-wash" ${note('Mega menu: opens on hover (with a short delay so passing the cursor over it does not flicker) and on click/keyboard. Three areas, per the homepage feedback doc: product categories, brands, and View all products.')}>
           Brands &amp; Products ${icons.chevron}
         </button>
-        <a href="#" data-stub class="rounded-full px-3 py-2 hover:bg-wash">FAQ</a>
-        <a href="#" data-stub class="rounded-full px-3 py-2 hover:bg-wash">Contact Us</a>
+        <a href="#/faq" data-nav="/faq" class="rounded-full px-3 py-2 hover:bg-wash aria-[current=page]:font-semibold aria-[current=page]:underline aria-[current=page]:underline-offset-8">FAQ</a>
+        <a href="#/contact" data-nav="/contact" class="rounded-full px-3 py-2 hover:bg-wash aria-[current=page]:font-semibold aria-[current=page]:underline aria-[current=page]:underline-offset-8">Contact Us</a>
       </nav>
       <div class="ml-auto flex items-center gap-2">
         <button type="button" id="search-toggle" class="grid size-10 place-items-center rounded-full hover:bg-wash" aria-label="Search products" aria-expanded="false" ${note('Search: available on every page. Opens an overlay with instant suggestions as you type.')}>${icons.search}</button>
@@ -145,8 +144,8 @@ function drawer() {
         ${icons.search}<input name="q" type="search" placeholder="Search products" class="min-w-0 flex-1 bg-transparent outline-none" aria-label="Search products" />
       </form>
       <nav class="text-[17px]" aria-label="Mobile">
-        <a href="#" data-stub class="block border-b border-hair py-3">Home</a>
-        <a href="#" data-stub class="block border-b border-hair py-3">About Us</a>
+        <a href="#/home" class="block border-b border-hair py-3">Home</a>
+        <a href="#/about" class="block border-b border-hair py-3">About Us</a>
         <details class="border-b border-hair" open ${note('Mobile: the mega menu becomes nested accordions inside the menu drawer: category groups, then brands, then View all products.')}>
           <summary class="flex cursor-pointer list-none items-center justify-between py-3 font-semibold">Brands &amp; Products ${icons.chevron}</summary>
           <div class="pb-3 pl-3">
@@ -165,8 +164,8 @@ function drawer() {
             <a href="${href('/products')}" class="btn btn-ghost btn-sm mt-4 w-full">View all products (${products.length})</a>
           </div>
         </details>
-        <a href="#" data-stub class="block border-b border-hair py-3">FAQ</a>
-        <a href="#" data-stub class="block border-b border-hair py-3">Contact Us</a>
+        <a href="#/faq" class="block border-b border-hair py-3">FAQ</a>
+        <a href="#/contact" class="block border-b border-hair py-3">Contact Us</a>
       </nav>
     </div>
     <div class="border-t border-line p-4"><button type="button" data-enquiry class="btn btn-primary w-full">Make an enquiry</button></div>
@@ -265,26 +264,51 @@ function wireHeader() {
   document.getElementById('site-header').addEventListener('click', (e) => {
     const a = e.target.closest('a');
     if (!a) return;
-    if (a.hasAttribute('data-stub')) {
-      e.preventDefault();
-      toast(NOT_IN_ROUND);
-      return;
-    }
     closeAll();
   });
   document.querySelectorAll('[data-enquiry]').forEach((b) => b.addEventListener('click', () => (closeAll(), openEnquiry())));
 }
 
-// ── Footer (simplified, out of scope this round) ─────────────────────────────
+// ── Footer ───────────────────────────────────────────────────────────────────
+// Structure follows the approved design footer + the homepage feedback
+// (business enquiry links for the four types, each opening its popup).
 export function renderFooter() {
+  const link = (to, label) => `<li><a class="hover:text-ink hover:underline" href="${to}">${label}</a></li>`;
   document.getElementById('site-footer').innerHTML = `
-  <footer class="mt-24 border-t border-line bg-wash">
-    <div class="wrap grid gap-8 py-12 text-sm sm:grid-cols-2 lg:grid-cols-4">
-      <div class="grid content-start gap-3">${ph('Logo', 'h-10 w-24 rounded', 'auto')}<p class="text-sub">Global technology distribution, trusted partnerships and a commitment to innovation.</p></div>
-      <div><p class="mb-3 font-semibold">Quick links</p><ul class="grid gap-1.5 text-sub"><li>Home</li><li>About Us</li><li><a class="underline" href="${href('/products')}">Brands &amp; Products</a></li><li>FAQ</li><li>Contact Us</li></ul></div>
-      <div><p class="mb-3 font-semibold">Categories</p><ul class="grid gap-1.5 text-sub">${groups.map((g) => `<li><a class="hover:underline" href="${href(`/category/${g.id}`)}">${esc(g.name)}</a></li>`).join('')}</ul></div>
-      <div><p class="mb-3 font-semibold">Business enquiries</p><ul class="grid gap-1.5 text-sub"><li>Distribution</li><li>Dealership</li><li>Retail Sales</li><li>General Enquiry</li></ul></div>
+  <footer class="mt-24 border-t border-line bg-wash text-sm">
+    <div class="wrap grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-5">
+      <div class="grid content-start gap-3 lg:col-span-1">${ph('Logo', 'h-10 w-24 rounded', 'auto')}<p class="text-sub">Global technology distribution, trusted partnerships and a commitment to innovation.</p>
+        <ul class="mt-2 flex gap-3" aria-label="Social media">${['Facebook', 'Instagram', 'LinkedIn', 'X'].map((n) => `<li><span class="ph grid size-8 rounded-full text-[8px]" style="aspect-ratio:1" aria-label="${n}"></span></li>`).join('')}</ul></div>
+      <div><p class="mb-3 font-semibold">Quick links</p><ul class="grid gap-1.5 text-sub">
+        ${link('#/home', 'Home')}${link('#/about', 'About Us')}${link(href('/products'), 'Brands &amp; Products')}${link('#/faq', 'FAQ')}${link('#/contact', 'Contact Us')}</ul></div>
+      <div><p class="mb-3 font-semibold">Categories</p><ul class="grid gap-1.5 text-sub">${groups.map((g) => link(href(`/category/${g.id}`), esc(g.name))).join('')}</ul></div>
+      <div ${note('Business enquiry links for the four types, per the homepage feedback. Each opens the enquiry popup with its type selected.')}><p class="mb-3 font-semibold">Business enquiries</p><ul class="grid gap-1.5 text-sub">
+        ${['Distribution Enquiry', 'Dealership Enquiry', 'Retail Sales Enquiry', 'General Enquiry'].map((t) => `<li><button type="button" class="text-left hover:text-ink hover:underline" data-enquiry-type="${t}">${t.replace(' Enquiry', '') === 'General' ? 'General Enquiry' : t.replace(' Enquiry', '')}</button></li>`).join('')}</ul></div>
+      <div><p class="mb-3 font-semibold">Contact</p><address class="grid gap-1.5 text-sub not-italic"><span>BMK GULF FZE<br />Warehouse # RA08LB07, P.O. Box 261752, Jebel Ali Free Zone, Dubai, UAE</span><a class="hover:underline" href="tel:+97148870211">+971 4 887 0211</a><a class="hover:underline" href="mailto:info@bmkintl.com">info@bmkintl.com</a></address></div>
     </div>
-    <div class="border-t border-line"><p class="wrap py-5 text-xs text-faint">Footer shown simplified. It is not part of this wireframe round.</p></div>
+    <div class="border-t border-line">
+      <div class="wrap flex flex-col gap-3 py-5 text-xs text-faint md:flex-row md:items-center md:justify-between">
+        <p>© BMK Group. All Rights Reserved. Website made by <span class="underline">Phitany</span></p>
+        <ul class="flex flex-wrap gap-4">${['Privacy Policy', 'Cookie Policy', 'Terms &amp; Conditions'].map((l) => `<li><a href="#" data-stub class="hover:underline">${l}</a></li>`).join('')}</ul>
+      </div>
+    </div>
   </footer>`;
+  document.getElementById('site-footer').addEventListener('click', (e) => {
+    if (e.target.closest('[data-stub]')) {
+      e.preventDefault();
+      toast('Legal pages are not part of the Phase 1 page templates');
+    }
+  });
+}
+
+/** Mark the current top-level page in the header nav. */
+export function setActiveNav(path) {
+  const top = path === '/' ? '' : `/${path.split('/')[1]}`;
+  const productish = ['/products', '/category', '/brand', '/product', '/search'].includes(top);
+  document.querySelectorAll('[data-nav]').forEach((a) => {
+    if (a.dataset.nav === top) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
+  document.getElementById('mega-toggle')?.classList.toggle('underline', productish);
+  document.getElementById('mega-toggle')?.classList.toggle('underline-offset-8', productish);
 }
