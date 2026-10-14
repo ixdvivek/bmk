@@ -43,13 +43,21 @@ export const milestones = [
   { year: '2022', title: 'Digital Growth', text: 'Launched e-commerce and digital distribution channels.' },
 ];
 
-// Inconsistencies found across the approved copy, surfaced on the About page.
+// Inconsistencies found across the approved copy. Shown on the unlisted #/notes page.
 export const conflicts = [
   'Founding year: the timeline says 2005, but “25 Years of Experience” in the hero points to about 2001, and the About copy mentions diversification in 2004.',
   'Singapore: the timeline says 2008; the About copy says the Singapore branch was established in 2010.',
   'India: the About copy mentions a 2010 India branch, but there is no India entity in Group Presence.',
   'Dubai entity name: “BMK Middle East FZE” on the location card, “BMK GULF FZE” in the footer address.',
   'Dubai: the timeline dates the MENA launch to 2018, while the company is described as UAE-incorporated.',
+];
+
+// Content still to be supplied by BMK. Shown on the unlisted #/notes page.
+export const gaps = [
+  { area: 'Products', items: ['Brand for each product (the sheet has no brand column; the brand is inside the model name)', 'Model numbers', 'Several images per product (front, back, top, side) for the gallery', 'Spec fields for categories other than cameras (lenses, phones, watches, etc.)', 'One spelling per category (“MIRRORLESS  CAMERAS” appears with and without a double space)'] },
+  { area: 'About Us', items: ['Corporate background copy', 'A write-up and a photo for each group company', 'Addresses, phone numbers and emails for Kuala Lumpur, Singapore and London (only Dubai is known)', 'Images for the timeline milestones'] },
+  { area: 'FAQ', items: ['Answers marked “to be supplied”: manufacturer status, warranty, partner requirements, reply time, after-sales support'] },
+  { area: 'Brands', items: ['Logo, banner image and introduction for each brand'] },
 ];
 
 export const enquiryTypes = [
