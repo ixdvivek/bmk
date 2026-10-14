@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/plus-jakarta-sans';
+@source not '../wireframe';
 
 /* ── Design tokens (pulled from the Figma "Home" frame) ─────────────── */
 @theme {
