@@ -61,7 +61,7 @@ export function renderProduct(slug) {
   const specs = manyGroups
     ? `<div class="grid gap-10 lg:grid-cols-[220px_1fr]">
         <nav class="hidden lg:block" aria-label="Specification groups" ${note('Group index: appears when a product has 3+ spec groups. Sticky, so long spec sheets stay navigable.')}>
-          <ul class="sticky top-36 grid gap-1 text-sm">${groupsList.map((x, i) => `<li><a class="block rounded px-3 py-1.5 text-sub hover:bg-wash hover:text-ink" href="#spec-${i}" data-anchor>${esc(x.group)} <span class="text-faint">${x.rows.length}</span></a></li>`).join('')}</ul>
+          <ul class="sticky top-[calc(var(--hdr)+80px)] grid gap-1 text-sm transition-[top] duration-300">${groupsList.map((x, i) => `<li><a class="block rounded px-3 py-1.5 text-sub hover:bg-wash hover:text-ink" href="#spec-${i}" data-anchor>${esc(x.group)} <span class="text-faint">${x.rows.length}</span></a></li>`).join('')}</ul>
         </nav>
         <div class="grid gap-3">
           ${groupsList
@@ -81,7 +81,7 @@ export function renderProduct(slug) {
   const html = `
   <div class="wrap pt-6">
     <nav class="crumbs" aria-label="Breadcrumb" ${note('Breadcrumb: Home / Products / Group / Category / Product. Brand is linked from the summary, so the trail stays one fixed shape for every product.')}>
-      <a href="#/">Home</a><span aria-hidden="true">/</span><a href="${href('/products')}">Products</a><span aria-hidden="true">/</span>
+      <a href="#/home">Home</a><span aria-hidden="true">/</span><a href="${href('/products')}">Products</a><span aria-hidden="true">/</span>
       <a href="${href(`/category/${g.id}`)}">${esc(g.name)}</a><span aria-hidden="true">/</span><a href="${href(`/category/${c.id}`)}">${esc(c.name)}</a><span aria-hidden="true">/</span>
       <span aria-current="page" class="text-ink">${esc(p.name)}</span>
     </nav>
@@ -150,7 +150,7 @@ export function renderProduct(slug) {
     </div>
   </section>
 
-  <div id="pdp-nav" class="sticky top-16 z-40 mt-14 border-y border-line bg-white/95 backdrop-blur" ${note('Sticky section bar: jump links with the active section highlighted, plus the enquiry button, always within reach on long pages.')}>
+  <div id="pdp-nav" class="sticky top-[var(--hdr)] z-40 mt-14 transition-[top] duration-300 border-y border-line bg-white/95 backdrop-blur" ${note('Sticky section bar: jump links with the active section highlighted, plus the enquiry button, always within reach on long pages. Sits flush at the top while scrolling down (the site header hides), and drops below the header when it reappears on scroll up.')}>
     <div class="wrap flex h-14 items-center gap-6">
       <p class="hidden max-w-[28ch] truncate text-sm font-semibold md:block">${esc(p.name)}</p>
       <nav class="-mx-1 flex flex-1 gap-1 overflow-x-auto text-sm [scrollbar-width:none]" aria-label="Product sections">

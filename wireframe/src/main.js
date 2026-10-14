@@ -1,5 +1,6 @@
 import '../wf.css';
-import { renderHeader, renderFooter, closeHeaderPanels } from './header.js';
+import { renderHeader, renderFooter, closeHeaderPanels, setActiveNav } from './header.js';
+import { renderHome, renderAbout, renderFaq, renderContact, wireEnquiryTriggers } from './pages.js';
 import { listingContext, renderListing, resetListingUi } from './listing.js';
 import { renderProduct } from './product.js';
 import { renderScreens } from './screens.js';
@@ -19,6 +20,10 @@ function parse() {
 
 function resolve({ path, params, parts }) {
   if (path === '/') return renderScreens();
+  if (path === '/home') return renderHome();
+  if (path === '/about') return renderAbout(params);
+  if (path === '/faq') return renderFaq();
+  if (path === '/contact') return renderContact(params);
   if (parts[0] === 'products' && parts.length === 1) return renderListing(listingContext('all', null, params), params);
   if (parts[0] === 'search') return renderListing(listingContext('search', null, params), params);
   if (parts[0] === 'category' || parts[0] === 'brand') {
@@ -47,6 +52,7 @@ function render() {
   document.title = `${page.title} · BMK wireframe`;
   window.scrollTo(0, samePage ? y : 0);
   lastPath = route.path;
+  setActiveNav(route.path);
   refreshNotes();
 }
 
@@ -98,9 +104,24 @@ document.addEventListener('click', (e) => {
 
 renderHeader();
 renderFooter();
+wireEnquiryTriggers();
 toolbar();
 initNotes();
 window.addEventListener('hashchange', render);
+
+// Hide the header on scroll down, show it on scroll up (never while a header panel is open).
+let lastY = scrollY;
+window.addEventListener(
+  'scroll',
+  () => {
+    const y = scrollY;
+    const panelOpen = document.querySelector('#mega:not(.hidden), #search-panel:not(.hidden)');
+    if (y < 120 || panelOpen) document.body.classList.remove('header-hidden');
+    else if (Math.abs(y - lastY) > 6) document.body.classList.toggle('header-hidden', y > lastY);
+    lastY = y;
+  },
+  { passive: true },
+);
 window.addEventListener('resize', () => {
   clearTimeout(window.__nt);
   window.__nt = setTimeout(refreshNotes, 200);
