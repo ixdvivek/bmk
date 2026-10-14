@@ -10,7 +10,7 @@ const countBrand = (id) => products.filter((p) => p.brand === id).length;
 export function renderHeader() {
   const root = document.getElementById('site-header');
   root.innerHTML = `
-  <header class="sticky top-0 z-50 border-b border-line bg-white">
+  <header class="relative border-b border-line bg-white">
     <div class="wrap flex h-16 items-center gap-6">
       <a href="#/home" class="ph h-9 w-24 shrink-0 rounded text-[10px]" aria-label="BMK Group home" style="aspect-ratio:auto"><span>Logo</span></a>
       <nav class="hidden flex-1 items-center gap-1 text-sm lg:flex" aria-label="Primary">

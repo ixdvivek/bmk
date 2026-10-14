@@ -159,7 +159,7 @@ export function renderListing(ctx, params) {
   <section class="wrap mt-8">
     ${mobileBar}
     <div class="mt-4 flex gap-10 lg:mt-0">
-      ${hasSidebar ? `<aside class="hidden w-64 shrink-0 lg:block" aria-label="Filters"><div class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2">${facets}</div></aside>` : ''}
+      ${hasSidebar ? `<aside class="hidden w-64 shrink-0 lg:block" aria-label="Filters"><div class="sticky top-[calc(var(--hdr)+24px)] max-h-[calc(100vh-var(--hdr)-48px)] transition-[top] duration-300 overflow-y-auto pr-2">${facets}</div></aside>` : ''}
       <div class="min-w-0 flex-1">
         ${
           isEmpty
