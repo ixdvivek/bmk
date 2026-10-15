@@ -41,8 +41,9 @@ export function renderProduct(slug) {
   const manyGroups = groupsList.length >= 3;
   const state = { img: 0, colour: p.colours[0] || '', variant: p.variants?.[0] || '' };
 
+  // Two independent strips: same brand, and same category (a product may appear in both)
+  const fromBrand = products.filter((x) => x.brand === p.brand && x.slug !== p.slug).slice(0, 4);
   const related = products.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 4);
-  const fromBrand = products.filter((x) => x.brand === p.brand && x.slug !== p.slug && !related.includes(x)).slice(0, 4);
 
   const hl = c.card.filter((k) => p.specs[k] != null);
   const tile = (k) => {
@@ -154,7 +155,7 @@ export function renderProduct(slug) {
     <div class="wrap flex h-14 items-center gap-6">
       <p class="hidden max-w-[28ch] truncate text-sm font-semibold md:block">${esc(p.name)}</p>
       <nav class="-mx-1 flex flex-1 gap-1 overflow-x-auto text-sm [scrollbar-width:none]" aria-label="Product sections">
-        ${['Overview', 'Specifications', related.length || fromBrand.length ? 'Related' : null]
+        ${['Overview', 'Specifications', 'Related']
           .filter(Boolean)
           .map((s) => `<a href="#${s.toLowerCase()}" data-anchor data-section-link="${s.toLowerCase()}" class="rounded-full px-3 py-1.5 whitespace-nowrap text-sub hover:text-ink">${s}</a>`)
           .join('')}
@@ -189,14 +190,10 @@ export function renderProduct(slug) {
     </div>
   </section>
 
-  ${
-    related.length || fromBrand.length
-      ? `<section id="related" class="wrap scroll-mt-36 py-14" data-section ${note('Related products: same category first, then more from the same brand. Rows hide when empty. Scroll sideways on mobile.')}>
-          ${related.length ? relatedRow(`More in ${c.name}`, related, href(`/category/${c.id}`)) : ''}
-          ${fromBrand.length ? relatedRow(`More from ${b.name}`, fromBrand, href(`/brand/${b.id}`)) : ''}
-        </section>`
-      : ''
-  }
+  <section id="related" class="wrap scroll-mt-36 py-14" data-section ${note('Two “more” strips on every product: more from the same brand, then more in the same category. If either has nothing else yet, it says so and links onward instead of disappearing (try the Pixel Watch 4). Scroll sideways on mobile.')}>
+    ${relatedRow(`More from ${b.name}`, fromBrand, href(`/brand/${b.id}`), `No other ${b.name} products yet.`, ['View all products', href('/products')])}
+    ${relatedRow(`More in ${c.name}`, related, href(`/category/${c.id}`), `No other ${c.name.toLowerCase()} yet.`, [`Browse ${g.name}`, href(`/category/${g.id}`)])}
+  </section>
 
   <div id="mobile-cta" class="fixed inset-x-0 bottom-0 z-40 translate-y-full border-t border-line bg-white p-3 transition-transform sm:hidden" ${note('Mobile: a sticky enquiry bar appears once the main button scrolls out of view.')}>
     <button type="button" class="btn btn-primary w-full" data-enquire>Enquire about this product</button>
@@ -282,9 +279,14 @@ export function renderProduct(slug) {
   };
 }
 
-function relatedRow(title, list, more) {
+function relatedRow(title, list, more, emptyText, emptyLink) {
+  const head = `<div class="mb-5 flex items-end justify-between gap-4"><h2 class="text-2xl font-semibold tracking-tight">${esc(title)}</h2>${list.length ? `<a class="text-sm font-semibold underline-offset-4 hover:underline" href="${more}">View all</a>` : ''}</div>`;
+  if (!list.length)
+    return `<div class="mb-12 last:mb-0">${head}
+      <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed border-line p-6"><p class="text-sub">${esc(emptyText)}</p><a class="btn btn-ghost btn-sm" href="${emptyLink[1]}">${esc(emptyLink[0])}</a></div>
+    </div>`;
   return `<div class="mb-12 last:mb-0">
-    <div class="mb-5 flex items-end justify-between gap-4"><h2 class="text-2xl font-semibold tracking-tight">${esc(title)}</h2><a class="text-sm font-semibold underline-offset-4 hover:underline" href="${more}">View all</a></div>
+    ${head}
     <ul class="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
       ${list.map((x) => `<li class="w-[75%] shrink-0 snap-start sm:w-auto">${productCard(x)}</li>`).join('')}
     </ul>
