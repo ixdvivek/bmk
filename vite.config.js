@@ -7,12 +7,13 @@ export default defineConfig({
   base: './',
   plugins: [tailwindcss()],
   server: { host: true },
-  // Two pages: the site (/) and the wireframe (/wireframe/)
+  // Pages: the site (/), the catalogue designs (/catalogue/) and the wireframe (/wireframe/)
   build: {
     rollupOptions: {
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
         wireframe: resolve(import.meta.dirname, 'wireframe/index.html'),
+        catalogue: resolve(import.meta.dirname, 'catalogue/index.html'),
       },
     },
   },

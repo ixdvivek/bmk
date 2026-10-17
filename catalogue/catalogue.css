@@ -1,0 +1,207 @@
+/* Catalogue pages (listing, brand, product detail).
+   Built on the homepage stylesheet so tokens, type, buttons and chips are shared. */
+@import '../src/styles.css';
+
+/* ── Product image stage ──────────────────────────────────────────────────
+   Until real product photography arrives, products sit on a soft studio
+   "stage" with a line glyph for their category. */
+.stage {
+  @apply relative grid place-items-center overflow-hidden rounded-xl;
+  background:
+    radial-gradient(120% 90% at 50% 35%, #ffffff 0%, rgb(255 255 255 / 0) 60%),
+    linear-gradient(180deg, #f6f6f6 0%, #ececec 100%);
+}
+.stage::after {
+  /* floor shadow */
+  content: '';
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 14%;
+  height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.12), transparent);
+}
+.stage svg {
+  position: relative;
+  z-index: 1;
+  width: 44%;
+  height: auto;
+  color: #b9bec6;
+  transition: transform 0.9s var(--ease-soft);
+}
+.stage-label {
+  @apply absolute bottom-3 left-3 z-[2] rounded-full bg-white/80 px-2.5 py-1 text-[11px] text-muted backdrop-blur;
+}
+.stage-dark {
+  background:
+    radial-gradient(120% 90% at 50% 30%, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 60%),
+    linear-gradient(180deg, #2a5893 0%, #173a66 100%);
+}
+.stage-dark svg {
+  color: rgb(255 255 255 / 0.45);
+}
+
+/* ── Product card ─────────────────────────────────────────────────────────── */
+.pcard {
+  @apply relative flex h-full flex-col rounded-xl border border-line bg-white p-2;
+  transition:
+    transform 0.8s var(--ease-soft),
+    box-shadow 0.8s var(--ease-soft),
+    border-color 0.4s;
+}
+.pcard:hover {
+  transform: translateY(-6px);
+  border-color: transparent;
+  box-shadow: 0 28px 48px -24px rgb(18 18 18 / 0.28);
+}
+.pcard:hover .stage svg {
+  transform: scale(1.06);
+}
+.pcard .brand-cta {
+  @apply mt-auto;
+}
+.pcard:hover .brand-cta {
+  @apply border-ink text-white;
+}
+.pcard:hover .brand-cta::before {
+  clip-path: inset(0 0% 0 0 round 999px);
+}
+.pcard:hover .brand-cta .btn-icon {
+  transform: translateX(4px);
+}
+.on-navy .pcard {
+  @apply border-transparent;
+}
+
+/* Card entrance */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+.rise {
+  animation: rise 0.9s var(--ease-soft) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* ── Filters ──────────────────────────────────────────────────────────────── */
+.facet summary {
+  @apply flex cursor-pointer list-none items-center justify-between py-4 text-[15px] font-semibold;
+}
+.facet summary::-webkit-details-marker {
+  display: none;
+}
+.facet[open] > summary .facet-chev {
+  transform: rotate(180deg);
+}
+.check {
+  @apply flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 text-sm transition-colors hover:bg-fog;
+}
+.check-box {
+  @apply grid size-[18px] shrink-0 place-items-center rounded-[5px] border border-ink/25 bg-white transition-colors;
+}
+.check[aria-checked='true'] .check-box {
+  @apply border-navy bg-navy;
+}
+.check-count {
+  @apply ml-auto rounded-full bg-fog px-2 py-0.5 text-[11px] text-muted;
+}
+.check[aria-checked='true'] {
+  @apply font-medium;
+}
+
+/* Category / filter chips on light backgrounds (homepage chip shape) */
+.pill {
+  @apply inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white px-4 py-2 text-[13px] leading-[18px] whitespace-nowrap text-ink transition-colors duration-300 hover:border-ink;
+}
+.pill[aria-current='true'],
+.pill.is-on {
+  @apply border-navy bg-navy text-white;
+}
+.pill .n {
+  @apply text-[11px] text-muted;
+}
+.pill.is-on .n,
+.pill[aria-current='true'] .n {
+  @apply text-white/60;
+}
+.pill-muted {
+  @apply text-ink/40;
+}
+/* On navy (brand hero): homepage "Our Brands" chip style */
+.pill-light {
+  @apply inline-flex items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-[13px] leading-[18px] whitespace-nowrap text-white transition-colors duration-300 hover:border-white;
+}
+.pill-light.is-on {
+  @apply border-white bg-white text-black;
+}
+.pill-light .n {
+  @apply text-[11px] text-white/60;
+}
+.pill-light.is-on .n {
+  @apply text-black/50;
+}
+
+/* Pill select */
+.select {
+  @apply relative inline-flex items-center;
+}
+.select select {
+  @apply appearance-none rounded-full border border-ink/15 bg-white py-2.5 pr-10 pl-4 text-sm text-ink transition-colors hover:border-ink;
+}
+.select::after {
+  content: '';
+  @apply pointer-events-none absolute right-4 size-2 -translate-y-0.5 rotate-45 border-r border-b border-ink;
+}
+
+/* ── Product detail ───────────────────────────────────────────────────────── */
+.tile {
+  @apply rounded-xl bg-mist p-4;
+}
+.spec-group {
+  @apply rounded-xl bg-white;
+}
+.spec-group summary {
+  @apply flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-lg font-semibold tracking-[-0.01em];
+}
+.spec-group summary::-webkit-details-marker {
+  display: none;
+}
+.spec-group[open] > summary .facet-chev {
+  transform: rotate(180deg);
+}
+.spec-row {
+  @apply grid gap-1 border-t border-line/70 py-4 sm:grid-cols-[minmax(180px,36%)_1fr] sm:gap-8;
+}
+
+/* Field */
+.field {
+  @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] transition-[border-color,box-shadow] outline-none focus:border-navy focus:shadow-[0_0_0_3px_rgb(31_72_125_/_0.15)];
+}
+
+/* Navbar hide on scroll (homepage behaviour) */
+#nav {
+  transition:
+    transform 0.6s var(--ease-out-expo),
+    background-color 0.5s,
+    box-shadow 0.5s;
+}
+body.nav-hidden #nav {
+  transform: translate(-50%, -160%);
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+  .pcard,
+  .pcard:hover {
+    transform: none;
+  }
+}
