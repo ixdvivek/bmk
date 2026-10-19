@@ -28,6 +28,7 @@ function render() {
   cleanup = null;
   closePanels();
   const same = path === lastPath;
+  document.body.dataset.page = path.split('/')[1] || 'products';
   if (!same) resetListing();
   const y = scrollY;
   view.innerHTML = page

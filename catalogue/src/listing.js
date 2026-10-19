@@ -1,6 +1,7 @@
 // Listing: category, group, all products, search results, and the brand page.
 import { products, brands, groups, categories, categoriesIn, byId, groupOf, searchProducts, searchBrands, searchCategories } from '../../wireframe/src/data.js';
-import { esc, href, arrow, icon, crumbs, productCard, brandMark, stage } from './ui.js';
+import { esc, href, arrow, icon, crumbs, productCard, brandMark, brandVars } from './ui.js';
+import { brandStyle, categoryHero } from './media.js';
 
 const PAGE = 9;
 let sheetOpen = false;
@@ -84,7 +85,7 @@ export function renderListing(ctx, params) {
       <option value="latest" ${sort === 'latest' ? 'selected' : ''}>Sort: Latest</option><option value="az" ${sort === 'az' ? 'selected' : ''}>Sort: A–Z</option></select></label>`;
 
   const grid = results.length
-    ? `<ul class="grid gap-5 sm:grid-cols-2 ${sidebar ? 'xl:grid-cols-3' : 'lg:grid-cols-3 xl:grid-cols-4'}">${shown.map((p, i) => `<li>${productCard(p, i)}</li>`).join('')}</ul>
+    ? `<ul class="grid gap-5 sm:grid-cols-2 ${sidebar ? 'xl:grid-cols-3' : 'lg:grid-cols-3 xl:grid-cols-4'}">${shown.map((p, i) => `<li>${productCard(p, i, { brand: ctx.kind === 'brand' })}</li>`).join('')}</ul>
       ${
         results.length > shown.length
           ? `<div class="mt-14 grid justify-items-center gap-4"><p class="text-sm text-muted">Showing ${shown.length} of ${results.length} products</p>
@@ -103,7 +104,7 @@ export function renderListing(ctx, params) {
         : ''
     }
     <div class="flex gap-12">
-      ${sidebar ? `<aside class="hidden w-[272px] shrink-0 lg:block" aria-label="Filters"><div class="sticky top-32"><p class="pb-2 text-xs tracking-[0.14em] text-muted uppercase">Filter by</p>${facets}</div></aside>` : ''}
+      ${sidebar ? `<aside class="hidden w-[272px] shrink-0 lg:block" aria-label="Filters"><div class="sticky top-48"><p class="pb-2 text-xs tracking-[0.14em] text-muted uppercase">Filter by</p>${facets}</div></aside>` : ''}
       <div class="min-w-0 flex-1">
         ${isEmpty ? '' : `<div class="mb-6 flex items-center justify-between gap-4"><p class="text-[15px] text-muted"><strong class="font-semibold text-ink">${results.length}</strong> product${results.length === 1 ? '' : 's'}</p><div class="${sidebar ? 'hidden lg:block' : ''}">${sortSel}</div></div>`}
         ${activeChips}
@@ -137,14 +138,49 @@ export function renderListing(ctx, params) {
       root.querySelector('[data-open-sheet]')?.addEventListener('click', () => setSheet(true));
       root.querySelectorAll('[data-close-sheet]').forEach((el) => el.addEventListener('click', () => setSheet(false)));
       if (sheetOpen && sheet) document.body.classList.add('no-scroll');
+      const off = wirePillbar(root);
       root.querySelector('[data-inline-search]')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const q = e.target.q.value.trim();
         if (q) location.hash = href('/search', { q });
       });
+      return off;
     },
   };
 }
+
+/** Category pill bar: stick under the navbar (or to the very top when the navbar
+ *  has scrolled away) and switch on its dark backdrop once it is stuck. */
+function wirePillbar(root) {
+  const bar = root.querySelector('.pillbar');
+  if (!bar) return null;
+  const mark = bar.previousElementSibling; // in-flow marker: the bar's resting spot is 106px above its bottom
+  const nav = document.getElementById('nav');
+  let top = 0;
+  const sync = () => {
+    top = document.body.classList.contains('nav-hidden') ? 0 : nav.offsetTop + nav.offsetHeight + 8; // layout box, not mid-transition
+    bar.style.top = `${top}px`;
+    // Judge by the resting position so the navbar's slide (which animates `top`) can't fool it
+    bar.classList.toggle('is-stuck', mark.getBoundingClientRect().bottom - 106 < top);
+  };
+  const mo = new MutationObserver(() => requestAnimationFrame(sync));
+  mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  addEventListener('scroll', sync, { passive: true });
+  addEventListener('resize', sync);
+  sync();
+  return () => (mo.disconnect(), removeEventListener('scroll', sync), removeEventListener('resize', sync));
+}
+
+/** Pills that live at the bottom of a photo hero and stick on scroll. */
+const pillbar = (label, items, vars = '') => `
+  <div class="h-0" aria-hidden="true"></div>
+  <div class="pillbar -mt-[106px]" style="${vars}">
+    <div class="pillbar-inner">
+      <nav class="shell" aria-label="${esc(label)}">
+        <ul class="-mx-5 flex w-auto gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">${items}</ul>
+      </nav>
+    </div>
+  </div>`;
 
 // ── Heroes ───────────────────────────────────────────────────────────────────
 function pageHero(ctx, base) {
@@ -177,14 +213,29 @@ function pageHero(ctx, base) {
     eyebrow = ctx.kind === 'group' ? 'Category' : g.name;
     title = ctx.kind === 'group' ? g.name : ctx.cat.name;
     sub = ctx.kind === 'group' ? `Every ${g.name.toLowerCase()} product BMK Group handles, across ${categoriesIn(g.id).length} categories.` : `${base.length} product${base.length === 1 ? '' : 's'} from the brands BMK Group handles.`;
-    const sibs = categoriesIn(g.id);
-    if (sibs.length > 1)
-      extra = `<nav class="-mx-5 mt-8 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0" aria-label="${esc(g.name)} categories"><ul class="flex w-max gap-2 sm:w-auto sm:flex-wrap">
-        <li><a class="pill ${ctx.kind === 'group' ? 'is-on' : ''}" href="${href(`/category/${g.id}`)}">All ${esc(g.name)}</a></li>
-        ${sibs.map((c) => {
-          const n = products.filter((p) => p.category === c.id).length;
-          return `<li><a class="pill ${ctx.cat?.id === c.id ? 'is-on' : ''} ${n ? '' : 'pill-muted'}" href="${href(`/category/${c.id}`)}">${esc(c.name)} <span class="n">${n}</span></a></li>`;
-        }).join('')}</ul></nav>`;
+    const img = categoryHero[ctx.cat?.id] || categoryHero[g.id];
+    // Empty categories are left out of the pills (the current one always shows)
+    const sibs = categoriesIn(g.id)
+      .map((c) => ({ c, n: products.filter((p) => p.category === c.id).length }))
+      .filter(({ c, n }) => n || ctx.cat?.id === c.id);
+    const pills = sibs.length
+      ? pillbar(
+          `${g.name} categories`,
+          `<li><a class="pill-dark ${ctx.kind === 'group' ? 'is-on' : ''}" href="${href(`/category/${g.id}`)}">All ${esc(g.name)}</a></li>
+          ${sibs.map(({ c, n }) => `<li><a class="pill-dark ${ctx.cat?.id === c.id ? 'is-on' : ''}" href="${href(`/category/${c.id}`)}">${esc(c.name)} <span class="n">${n}</span></a></li>`).join('')}`,
+        )
+      : '';
+    return `
+  <section class="photo-hero pt-[clamp(128px,11vw,176px)] ${pills ? 'pb-[138px]' : 'pb-[clamp(40px,4.5vw,64px)]'}" style="--hero-overlay:linear-gradient(180deg,rgb(0 0 0/.5) 0%,rgb(0 0 0/.85) 100%)">
+    ${img ? `<img class="photo-hero-img" src="${img}" alt="" fetchpriority="high" />` : ''}
+    <div class="shell">
+      ${crumbs(trail, true)}
+      <span class="pill-dark mt-6">${esc(eyebrow)}</span>
+      <h1 class="t-display mt-4 max-w-4xl">${esc(title)}</h1>
+      <p class="t-body mt-2 max-w-2xl text-mist">${esc(sub)}</p>
+    </div>
+  </section>
+  ${pills}`;
   }
   return `
   <section class="bg-mist pt-[clamp(128px,11vw,168px)] pb-[clamp(40px,4.5vw,64px)]">
@@ -201,37 +252,33 @@ function pageHero(ctx, base) {
 function brandHero(ctx, base, selC, url) {
   const b = ctx.brand;
   const cats = categories.filter((c) => base.some((p) => p.category === c.id));
-  const feature = [...base].sort((x, y) => y.released.localeCompare(x.released))[0];
+  const img = brandStyle[b.id]?.hero;
+  const tabs = pillbar(
+    `${b.name} categories`,
+    `<li><a class="pill-dark is-brand ${selC.length ? '' : 'is-on'}" href="${url({ cat: [], page: '' })}">All <span class="n">${base.length}</span></a></li>
+    ${cats.map((c) => {
+      const on = selC.length === 1 && selC[0] === c.id;
+      return `<li><a class="pill-dark is-brand ${on ? 'is-on' : ''}" href="${url({ cat: on ? [] : [c.id], page: '' })}">${esc(c.name)} <span class="n">${base.filter((p) => p.category === c.id).length}</span></a></li>`;
+    }).join('')}`,
+    brandVars(b.id),
+  );
   return `
-  <section class="bg-navy pt-[clamp(128px,11vw,168px)] pb-[clamp(48px,5vw,80px)] text-white">
+  <section class="photo-hero pt-[clamp(128px,11vw,176px)] pb-[146px]" style="--hero-overlay:linear-gradient(90deg,rgb(0 0 0/.55) 0%,rgb(0 0 0/.15) 55%,rgb(0 0 0/0) 100%)">
+    ${img ? `<img class="photo-hero-img object-[70%_top]" src="${img}" alt="" fetchpriority="high" />` : ''}
     <div class="shell">
       ${crumbs([['Home', '../'], ['Brands & Products', href('/products')], [b.name]], true)}
-      <div class="mt-8 grid items-center gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
-        <div class="flex flex-col items-start gap-6">
-          <div class="rounded-xl bg-white px-6 py-5">${brandMark(b, { cls: 'h-9' })}</div>
-          <h1 class="t-display">${esc(b.name)}</h1>
-          <p class="t-body max-w-xl text-white/80">${esc(b.intro)}</p>
-          <dl class="flex gap-10">
-            <div><dt class="text-xs tracking-[0.14em] text-white/60 uppercase">Products</dt><dd class="mt-1 text-4xl font-semibold">${base.length}</dd></div>
-            <div><dt class="text-xs tracking-[0.14em] text-white/60 uppercase">Categories</dt><dd class="mt-1 text-4xl font-semibold">${cats.length}</dd></div>
-          </dl>
-        </div>
-        <div class="relative">
-          ${feature ? stage(feature, { ratio: '16 / 11', dark: true, cls: '!rounded-2xl' }) : ''}
-          <p class="absolute bottom-4 left-4 rounded-full bg-white/15 px-3 py-1 text-xs text-white/80 backdrop-blur">Brand banner image</p>
-        </div>
+      <div class="mt-10 flex max-w-xl flex-col items-start gap-6">
+        <div class="rounded-xl bg-white px-4 py-4">${brandMark(b, { cls: 'h-[42px]' })}</div>
+        <h1 class="t-display">${esc(b.name)}</h1>
+        <p class="t-body text-white/75">${esc(b.intro)}</p>
+        <dl class="flex gap-12">
+          <div><dt class="text-[11px] tracking-[0.14em] text-white/60 uppercase">Products</dt><dd class="mt-1 text-[32px] leading-10 tracking-[-0.02em]">${base.length}</dd></div>
+          <div><dt class="text-[11px] tracking-[0.14em] text-white/60 uppercase">Categories</dt><dd class="mt-1 text-[32px] leading-10 tracking-[-0.02em]">${cats.length}</dd></div>
+        </dl>
       </div>
-      <nav class="-mx-5 mt-12 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0" aria-label="${esc(b.name)} categories">
-        <ul class="flex w-max gap-2 sm:w-auto sm:flex-wrap">
-          <li><a class="pill-light ${selC.length ? '' : 'is-on'}" href="${url({ cat: [], page: '' })}">All <span class="n">${base.length}</span></a></li>
-          ${cats.map((c) => {
-            const on = selC.length === 1 && selC[0] === c.id;
-            return `<li><a class="pill-light ${on ? 'is-on' : ''}" href="${url({ cat: on ? [] : [c.id], page: '' })}">${esc(c.name)} <span class="n">${base.filter((p) => p.category === c.id).length}</span></a></li>`;
-          }).join('')}
-        </ul>
-      </nav>
     </div>
-  </section>`;
+  </section>
+  ${tabs}`;
 }
 
 function empty(ctx, base, url) {

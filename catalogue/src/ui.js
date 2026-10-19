@@ -1,4 +1,5 @@
 import { brandOf, categoryOf, highlightsFor } from '../../wireframe/src/data.js';
+import { mediaOf, brandColor } from './media.js';
 
 /** Public assets live at the site root; this page is served from /catalogue/. */
 export const A = '../assets/';
@@ -17,6 +18,13 @@ export function href(path, params = {}) {
 }
 
 export const arrow = (tone = 'orange', cls = 'btn-icon') => `<img src="${A}icons/arrow-${tone}.svg" alt="" class="${cls}" width="16" height="16" />`;
+/** Arrow drawn as a mask so CSS can recolour it (brand-colour hovers). */
+export const arrowMask = (cls = 'btn-icon') => `<span class="arrow-mask ${cls}" aria-hidden="true"></span>`;
+/** Inline CSS variables for a brand's colour. */
+export const brandVars = (id) => {
+  const s = brandColor(id);
+  return `--brand:${s.color};--on:${s.on};`;
+};
 
 export const icon = {
   search: `<svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6"/><path d="m14 14 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
@@ -39,10 +47,16 @@ const glyphs = {
   generic: `<svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="30" y="10" width="60" height="60" rx="8"/></svg>`,
 };
 
-/** Product image stage. `label` names the shot (Front, Back…) */
-export function stage(p, { label = '', ratio = '4 / 3', dark = false, cls = '' } = {}) {
+/** Product image stage. Shows the photo when there is one (`src`), otherwise
+ *  a studio stage with the category glyph. `label` names the shot (Front, Back…). */
+export function stage(p, { label = '', ratio = '4 / 3', dark = false, cls = '', src = '', brand = false, eager = false } = {}) {
   const tpl = categoryOf(p).template;
-  return `<div class="stage ${dark ? 'stage-dark' : ''} ${cls}" style="aspect-ratio:${ratio}" role="img" aria-label="${esc(p.name)}${label ? `, ${esc(label)}` : ''} (image to come)">
+  const alt = `${p.name}${label ? `, ${label}` : ''}`;
+  if (src)
+    return `<div class="stage stage-photo ${brand ? 'stage-brand' : ''} ${cls}" style="aspect-ratio:${ratio}">
+      <img class="stage-img" src="${src}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" />
+    </div>`;
+  return `<div class="stage ${dark ? 'stage-dark' : ''} ${brand ? 'stage-brand' : ''} ${cls}" style="aspect-ratio:${ratio}" role="img" aria-label="${esc(alt)} (image to come)">
     ${glyphs[tpl] || glyphs.generic}
     ${label ? `<span class="stage-label">${esc(label)}</span>` : ''}
   </div>`;
@@ -55,14 +69,17 @@ export function brandMark(b, { light = false, cls = 'h-7' } = {}) {
   return `<span class="${cls} inline-flex items-center text-[22px] leading-none font-bold tracking-[-0.03em] ${light ? 'text-white' : 'text-ink'}">${esc(b.name)}</span>`;
 }
 
-/** Product card — identical in every listing. */
-export function productCard(p, i = 0) {
+/** Product card — identical in every listing. On brand surfaces (`brand: true`)
+ *  it uses the brand-colour shot and the brand-colour hover. */
+export function productCard(p, i = 0, { brand = false } = {}) {
   const b = brandOf(p);
   const c = categoryOf(p);
   const hl = highlightsFor(p);
+  const m = mediaOf(p);
+  const src = brand ? m.brand || m.card : m.card;
   return `
-  <article class="pcard group rise" style="--i:${i % 8}">
-    ${stage(p)}
+  <article class="pcard group rise ${brand ? 'pcard-brand' : ''}" style="--i:${i % 8};${brand ? brandVars(b.id) : ''}">
+    ${stage(p, { src, brand })}
     <div class="flex flex-1 flex-col gap-4 px-4 pt-5 pb-4">
       <div class="flex items-center justify-between gap-2">
         <span class="text-[11px] font-semibold tracking-[0.14em] text-muted uppercase">${esc(b.name)}</span>
@@ -77,7 +94,7 @@ export function productCard(p, i = 0) {
           ? `<dl class="grid gap-1.5 text-[13px]">${hl.map((h) => `<div class="flex items-start gap-3"><dt class="w-[42%] shrink-0 text-muted">${esc(h.label)}</dt><dd class="line-clamp-1 font-medium">${esc(h.value)}</dd></div>`).join('')}</dl>`
           : `<p class="line-clamp-2 text-sm text-muted">${esc(p.short)}</p>`
       }
-      <span class="brand-cta">View details ${arrow('orange')}</span>
+      <span class="brand-cta">View details ${arrowMask()}</span>
     </div>
   </article>`;
 }
