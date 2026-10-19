@@ -1,5 +1,6 @@
 import '../catalogue.css';
-import { renderChrome, closePanels, openEnquiry } from './chrome.js';
+import { renderChrome, closePanels, openEnquiry, setActiveNav } from './chrome.js';
+import { renderAbout, renderFaq, renderContact } from './pages.js';
 import { context, renderListing, resetListing } from './listing.js';
 import { renderProduct } from './product.js';
 
@@ -19,6 +20,9 @@ function route() {
     const ctx = context(parts[0], parts[1], params);
     page = ctx && renderListing(ctx, params);
   } else if (parts[0] === 'product') page = renderProduct(parts[1]);
+  else if (parts[0] === 'about') page = renderAbout(params);
+  else if (parts[0] === 'faq') page = renderFaq();
+  else if (parts[0] === 'contact') page = renderContact(params);
   return { path, page };
 }
 
@@ -29,6 +33,7 @@ function render() {
   closePanels();
   const same = path === lastPath;
   document.body.dataset.page = path.split('/')[1] || 'products';
+  setActiveNav(document.body.dataset.page);
   if (!same) resetListing();
   const y = scrollY;
   view.innerHTML = page
@@ -48,9 +53,10 @@ document.addEventListener('click', (e) => {
     document.getElementById(a.getAttribute('href').slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
-  if (e.target.closest('[data-enquire]')) {
+  const enq = e.target.closest('[data-enquire]');
+  if (enq) {
     closePanels();
-    openEnquiry();
+    openEnquiry({ type: enq.dataset.enquire || '' });
   }
 });
 

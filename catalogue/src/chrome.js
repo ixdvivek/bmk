@@ -13,10 +13,10 @@ export function renderChrome() {
       <a href="${HOME}" class="block h-12 w-[92px] shrink-0" aria-label="BMK Group home"><img src="${A}logo/bmk.svg" alt="BMK" width="92" height="48" class="size-full" /></a>
       <ul class="hidden items-center gap-5 text-sm leading-5 text-black lg:flex">
         <li><a class="nav-link" href="${HOME}">Home</a></li>
-        <li><a class="nav-link" href="${HOME}#about">About Us</a></li>
-        <li><button type="button" id="mega-toggle" class="nav-link inline-flex items-center gap-1.5 font-bold" aria-expanded="false" aria-controls="mega" aria-current="page">Brands &amp; Products ${icon.chev}</button></li>
-        <li><a class="nav-link" href="${HOME}#faq">FAQ</a></li>
-        <li><a class="nav-link" href="${HOME}#contact">Contact Us</a></li>
+        <li><a class="nav-link" data-nav="about" href="${href('/about')}">About Us</a></li>
+        <li><button type="button" id="mega-toggle" class="nav-link inline-flex items-center gap-1.5" data-nav="catalogue" aria-expanded="false" aria-controls="mega">Brands &amp; Products ${icon.chev}</button></li>
+        <li><a class="nav-link" data-nav="faq" href="${href('/faq')}">FAQ</a></li>
+        <li><a class="nav-link" data-nav="contact" href="${href('/contact')}">Contact Us</a></li>
       </ul>
       <div class="flex items-center gap-2">
         <button type="button" id="search-toggle" class="icon-btn size-12 hover:bg-ink/5" aria-label="Search products" aria-expanded="false">${icon.search}</button>
@@ -68,7 +68,7 @@ export function renderChrome() {
       <form role="search" class="mb-4 flex items-center gap-2 rounded-full border border-ink/15 px-4 py-3" data-drawer-search>${icon.search}<input name="q" type="search" placeholder="Search products" class="min-w-0 flex-1 bg-transparent outline-none" aria-label="Search products" /></form>
       <nav class="text-[22px] leading-tight tracking-[-0.02em]" aria-label="Mobile">
         <a class="block border-b border-line py-4" href="${HOME}">Home</a>
-        <a class="block border-b border-line py-4" href="${HOME}#about">About Us</a>
+        <a class="block border-b border-line py-4" href="${href('/about')}">About Us</a>
         <details class="facet border-b border-line" open>
           <summary class="!py-4 !text-[22px] !font-semibold">Brands &amp; Products ${icon.chev}</summary>
           <div class="grid gap-1 pb-5 text-base">
@@ -84,8 +84,8 @@ export function renderChrome() {
             <a href="${href('/products')}" class="btn btn-navy mt-5">View all products ${arrow('orange')}</a>
           </div>
         </details>
-        <a class="block border-b border-line py-4" href="${HOME}#faq">FAQ</a>
-        <a class="block border-b border-line py-4" href="${HOME}#contact">Contact Us</a>
+        <a class="block border-b border-line py-4" href="${href('/faq')}">FAQ</a>
+        <a class="block border-b border-line py-4" href="${href('/contact')}">Contact Us</a>
       </nav>
     </div>
     <div class="absolute inset-x-0 bottom-0 border-t border-line bg-white p-5"><button type="button" class="btn btn-dark w-full" data-enquire>Make an enquiry ${arrow('orange')}</button></div>
@@ -93,6 +93,17 @@ export function renderChrome() {
 
   document.getElementById('site-footer').innerHTML = footer();
   wire();
+}
+
+/** Mark the current section in the navbar (bold + underline). */
+export function setActiveNav(page) {
+  const key = ['about', 'faq', 'contact'].includes(page) ? page : 'catalogue';
+  document.querySelectorAll('#nav [data-nav]').forEach((el) => {
+    const on = el.dataset.nav === key;
+    el.classList.toggle('font-bold', on);
+    if (on) el.setAttribute('aria-current', 'page');
+    else el.removeAttribute('aria-current');
+  });
 }
 
 function groupBlock(g, wide = false) {
@@ -224,8 +235,8 @@ function footer() {
       </div>
       <nav class="flex flex-col gap-5 text-[15px]" aria-label="Quick links"><p class="leading-5 font-bold">Quick links</p>
         <ul class="flex flex-col gap-1.5 leading-6">
-          <li><a class="footer-link" href="${HOME}">Home</a></li><li><a class="footer-link" href="${HOME}#about">About Us</a></li>
-          <li><a class="footer-link" href="${href('/products')}">Brands &amp; Products</a></li><li><a class="footer-link" href="${HOME}#faq">FAQ</a></li><li><a class="footer-link" href="${HOME}#contact">Contact Us</a></li>
+          <li><a class="footer-link" href="${HOME}">Home</a></li><li><a class="footer-link" href="${href('/about')}">About Us</a></li>
+          <li><a class="footer-link" href="${href('/products')}">Brands &amp; Products</a></li><li><a class="footer-link" href="${href('/faq')}">FAQ</a></li><li><a class="footer-link" href="${href('/contact')}">Contact Us</a></li>
         </ul></nav>
       <nav class="flex flex-col gap-5 text-[15px]" aria-label="Categories"><p class="leading-5 font-bold">Categories</p>
         <ul class="flex flex-col gap-1.5 leading-6">${groups.map((g) => `<li><a class="footer-link" href="${href(`/category/${g.id}`)}">${esc(g.name)}</a></li>`).join('')}</ul></nav>
@@ -248,7 +259,7 @@ function footer() {
 
 // ── Enquiry popup ────────────────────────────────────────────────────────────
 const TYPES = ['Distribution Enquiry', 'Dealership Enquiry', 'Retail Sales Enquiry', 'General Enquiry'];
-export function openEnquiry({ product = null } = {}) {
+export function openEnquiry({ product = null, type = '' } = {}) {
   const host = document.getElementById('overlays');
   host.innerHTML = `
   <div class="fixed inset-0 z-[80] grid place-items-end sm:place-items-center" role="dialog" aria-modal="true" aria-labelledby="enq-title">
@@ -259,7 +270,7 @@ export function openEnquiry({ product = null } = {}) {
         <button type="button" data-close class="icon-btn shrink-0 bg-ink/5" aria-label="Close">${icon.close}</button>
       </div>
       <form class="grid gap-4" data-form>
-        ${product ? `<div class="flex items-center gap-4 rounded-2xl bg-mist p-3"><div class="w-20 shrink-0">${stage(product, { cls: '!rounded-lg' })}</div><div class="min-w-0"><p class="text-xs text-muted">${esc(brandOf(product).name)} · ${esc(categoryOf(product).name)}</p><p class="truncate font-semibold">${esc(product.name)}</p></div></div>` : `<label class="grid gap-1.5 text-sm"><span class="font-medium">Enquiry type</span><select required class="field">${['', ...TYPES].map((t) => `<option value="${t}" ${t ? '' : 'disabled selected'}>${t || 'Select a type'}</option>`).join('')}</select></label>`}
+        ${product ? `<div class="flex items-center gap-4 rounded-2xl bg-mist p-3"><div class="w-20 shrink-0">${stage(product, { cls: '!rounded-lg' })}</div><div class="min-w-0"><p class="text-xs text-muted">${esc(brandOf(product).name)} · ${esc(categoryOf(product).name)}</p><p class="truncate font-semibold">${esc(product.name)}</p></div></div>` : `<label class="grid gap-1.5 text-sm"><span class="font-medium">Enquiry type</span><select required class="field">${['', ...TYPES].map((t) => `<option value="${t}" ${t ? (t === type ? 'selected' : '') : `disabled ${type ? '' : 'selected'}`}>${t || 'Select a type'}</option>`).join('')}</select></label>`}
         <div class="grid gap-4 sm:grid-cols-2">
           <label class="grid gap-1.5 text-sm"><span class="font-medium">Full name</span><input required class="field" /></label>
           <label class="grid gap-1.5 text-sm"><span class="font-medium">Company</span><input class="field" /></label>
