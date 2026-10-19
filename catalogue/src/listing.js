@@ -151,7 +151,7 @@ export function renderListing(ctx, params) {
 
 /** Category pill bar: stick under the navbar (or to the very top when the navbar
  *  has scrolled away) and switch on its dark backdrop once it is stuck. */
-function wirePillbar(root) {
+export function wirePillbar(root) {
   const bar = root.querySelector('.pillbar');
   if (!bar) return null;
   const mark = bar.previousElementSibling; // in-flow marker: the bar's resting spot is 106px above its bottom
@@ -172,7 +172,7 @@ function wirePillbar(root) {
 }
 
 /** Pills that live at the bottom of a photo hero and stick on scroll. */
-const pillbar = (label, items, vars = '') => `
+export const pillbar = (label, items, vars = '') => `
   <div class="h-0" aria-hidden="true"></div>
   <div class="pillbar -mt-[106px]" style="${vars}">
     <div class="pillbar-inner">
