@@ -1,6 +1,7 @@
 import '../catalogue.css';
 import { renderChrome, closePanels, openEnquiry, setActiveNav } from './chrome.js';
 import { renderAbout, renderFaq, renderContact } from './pages.js';
+import { renderLegal, renderNotFound } from './legal.js';
 import { context, renderListing, resetListing } from './listing.js';
 import { renderProduct } from './product.js';
 
@@ -23,6 +24,8 @@ function route() {
   else if (parts[0] === 'about') page = renderAbout(params);
   else if (parts[0] === 'faq') page = renderFaq();
   else if (parts[0] === 'contact') page = renderContact(params);
+  else if (['terms', 'privacy', 'cookies'].includes(parts[0])) page = renderLegal(parts[0]);
+  page ||= renderNotFound();
   return { path, page };
 }
 
@@ -36,11 +39,9 @@ function render() {
   setActiveNav(document.body.dataset.page);
   if (!same) resetListing();
   const y = scrollY;
-  view.innerHTML = page
-    ? page.html
-    : `<section class="shell section-y pt-40"><h1 class="t-display">Page not found</h1><a class="btn btn-navy mt-8" href="#/products">Browse all products</a></section>`;
-  cleanup = page?.wire?.(view) || null;
-  document.title = `${page?.title || 'Not found'} — BMK Group`;
+  view.innerHTML = page.html;
+  cleanup = page.wire?.(view) || null;
+  document.title = `${page.title} — BMK Group`;
   scrollTo(0, same ? y : 0);
   lastPath = path;
 }
