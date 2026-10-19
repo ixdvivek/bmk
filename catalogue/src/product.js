@@ -11,7 +11,8 @@ function specGroups(p) {
   if (extra.length) out.push({ group: out.length ? 'Other' : 'Specifications', rows: extra.map((k) => ({ key: k, label: k, value: p.specs[k] })) });
   return out;
 }
-import { esc, href, arrow, icon, crumbs, productCard, brandMark, stage } from './ui.js';
+import { esc, href, arrow, icon, crumbs, productCard, brandMark, stage, brandVars } from './ui.js';
+import { mediaOf, swatch } from './media.js';
 import { openEnquiry } from './chrome.js';
 
 function valueHtml(v, variant) {
@@ -39,6 +40,10 @@ export function renderProduct(slug) {
     return v && typeof v === 'object' && !Array.isArray(v) ? v[st.variant] ?? shortValue(v) : shortValue(v);
   };
   const shot = (i) => `${p.images[i]}${st.colour && p.colours.length > 1 ? ` · ${st.colour}` : ''}`;
+  const m = mediaOf(p);
+  const srcOf = (i) => m.shots?.[p.images[i]] || (i === 0 ? m.card : '');
+  // Photo when we have it; otherwise the labelled studio stage
+  const view = (i, o = {}) => stage(p, { label: srcOf(i) ? p.images[i] : shot(i), src: srcOf(i), ...o });
   const rows = (rs) => rs.map((r) => `<div class="spec-row"><dt class="text-[15px] text-muted">${esc(r.label)}</dt><dd class="text-[15px]" data-spec="${r.key}">${valueHtml(r.value, st.variant)}</dd></div>`).join('');
 
   const html = `
@@ -46,10 +51,10 @@ export function renderProduct(slug) {
     <div class="shell">${crumbs([['Home', '../'], ['Brands & Products', href('/products')], [g.name, href(`/category/${g.id}`)], [c.name, href(`/category/${c.id}`)], [p.name]])}</div>
     <div class="shell mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)] lg:gap-16">
       <div>
-        <button type="button" class="block w-full cursor-zoom-in" data-lightbox aria-label="Open full-screen gallery"><div data-main>${stage(p, { label: shot(0), cls: '!rounded-2xl' })}</div></button>
+        <button type="button" class="block w-full cursor-zoom-in" data-lightbox aria-label="Open full-screen gallery"><div data-main>${view(0, { cls: '!rounded-3xl', eager: true })}</div></button>
         ${
           p.images.length > 1
-            ? `<ul class="mt-3 grid grid-cols-6 gap-2" aria-label="Images">${p.images.map((im, i) => `<li><button type="button" data-thumb="${i}" aria-label="Show ${esc(im)}" class="block w-full rounded-lg ring-2 ring-offset-2 transition ${i ? 'ring-transparent hover:ring-line' : 'ring-navy'}">${stage(p, { ratio: '1 / 1', cls: '!rounded-lg [&_svg]:!w-[58%]' })}</button></li>`).join('')}</ul>`
+            ? `<ul class="mt-3 grid grid-cols-6 gap-2" aria-label="Images">${p.images.map((im, i) => `<li><button type="button" data-thumb="${i}" aria-label="Show ${esc(im)}" class="block w-full rounded-xl ring-2 ring-offset-2 transition ${i ? 'ring-transparent hover:ring-line' : 'ring-navy'}">${stage(p, { ratio: '1 / 1', src: srcOf(i), cls: '!rounded-xl [&_svg]:!w-[58%]' })}</button></li>`).join('')}</ul>`
             : ''
         }
       </div>
@@ -107,7 +112,7 @@ export function renderProduct(slug) {
     ${
       p.features?.length
         ? `<ul class="mt-14 grid gap-4 rounded-3xl bg-mist p-4 sm:grid-cols-2 ${p.features.length >= 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}">${p.features
-            .map((f) => `<li class="enquiry !items-start !text-left"><div class="w-full">${stage(p, { ratio: '16 / 10', cls: '!rounded-xl' })}</div><div class="px-1 pt-3"><p class="text-lg font-semibold tracking-[-0.01em]">${esc(f.title)}</p><p class="mt-1.5 text-sm text-muted">${esc(f.text)}</p></div></li>`)
+            .map((f, i) => `<li class="enquiry !items-start !text-left"><div class="w-full">${stage(p, { ratio: '16 / 10', cls: '!rounded-xl', src: m.features?.[i] || '' })}</div><div class="px-1 pt-3"><p class="text-lg font-semibold tracking-[-0.01em]">${esc(f.title)}</p><p class="mt-1.5 text-sm text-muted">${esc(f.text)}</p></div></li>`)
             .join('')}</ul>`
         : ''
     }
@@ -123,7 +128,7 @@ export function renderProduct(slug) {
         many
           ? `<div class="grid gap-10 lg:grid-cols-[240px_1fr]">
               <nav class="hidden lg:block" aria-label="Specification groups"><ul class="sticky top-40 grid gap-1">${gs.map((x, i) => `<li><a href="#sg-${i}" data-anchor class="flex items-center justify-between rounded-lg px-4 py-2.5 text-[15px] text-muted transition-colors hover:bg-white hover:text-ink">${esc(x.group)}<span class="text-xs">${x.rows.length}</span></a></li>`).join('')}</ul></nav>
-              <div class="grid gap-3">${gs.map((x, i) => `<details id="sg-${i}" class="spec-group scroll-mt-40" open><summary>${esc(x.group)}<span class="flex items-center gap-3 text-xs font-normal text-muted">${x.rows.length} spec${x.rows.length === 1 ? '' : 's'} ${icon.chev}</span></summary><dl class="px-6 pb-2">${rows(x.rows)}</dl></details>`).join('')}</div>
+              <div class="grid gap-3">${gs.map((x, i) => `<details id="sg-${i}" class="spec-group scroll-mt-40" open><summary>${esc(x.group)}${icon.chev}</summary><dl class="px-6 pb-2">${rows(x.rows)}</dl></details>`).join('')}</div>
             </div>`
           : `<dl class="spec-group px-6 py-2 [&>.spec-row:first-child]:border-t-0">${gs.map((x) => rows(x.rows)).join('')}</dl>`
       }
@@ -132,7 +137,7 @@ export function renderProduct(slug) {
   </section>
 
   <section id="more" class="scroll-mt-24" data-section>
-    <div class="on-navy bg-navy section-y text-white">${strip(`More from ${b.name}`, fromBrand, href(`/brand/${b.id}`), true, `No other ${b.name} products yet.`, ['View all products', href('/products')])}</div>
+    <div class="on-brand section-y" style="${brandVars(b.id)}background:var(--brand);color:var(--on)">${strip(`More from ${b.name}`, fromBrand, href(`/brand/${b.id}`), true, `No other ${b.name} products yet.`, ['View all products', href('/products')], true)}</div>
     <div class="section-y">${strip(`More in ${c.name}`, inCat, href(`/category/${c.id}`), false, `No other ${c.name.toLowerCase()} yet.`, [`Browse ${g.name}`, href(`/category/${g.id}`)])}</div>
   </section>
 
@@ -147,7 +152,7 @@ export function renderProduct(slug) {
       const main = root.querySelector('[data-main]');
       const setImg = (i) => {
         st.img = i;
-        main.innerHTML = stage(p, { label: shot(i), cls: '!rounded-2xl' });
+        main.innerHTML = view(i, { cls: '!rounded-3xl' });
         root.querySelectorAll('[data-thumb]').forEach((t) => {
           const on = +t.dataset.thumb === i;
           t.classList.toggle('ring-navy', on);
@@ -155,7 +160,7 @@ export function renderProduct(slug) {
         });
       };
       root.querySelectorAll('[data-thumb]').forEach((t) => t.addEventListener('click', () => setImg(+t.dataset.thumb)));
-      root.querySelector('[data-lightbox]').addEventListener('click', () => lightbox(p, st, shot, setImg));
+      root.querySelector('[data-lightbox]').addEventListener('click', () => lightbox(p, st, view, setImg));
       const pick = (attr, key, label) =>
         root.querySelectorAll(`[${attr}]`).forEach((btn) =>
           btn.addEventListener('click', () => {
@@ -204,17 +209,17 @@ export function renderProduct(slug) {
   };
 }
 
-function strip(title, list, more, dark, emptyText, emptyLink) {
+function strip(title, list, more, dark, emptyText, emptyLink, brand = false) {
   const head = `<div class="mb-10 flex items-end justify-between gap-6"><h2 class="t-display">${esc(title)}</h2>${list.length ? `<a class="group hidden items-center gap-2 text-sm font-semibold sm:inline-flex" href="${more}">View all ${arrow(dark ? 'orange' : 'orange')}</a>` : ''}</div>`;
   if (!list.length)
     return `<div class="shell">${head}<div class="flex flex-wrap items-center justify-between gap-4 rounded-2xl ${dark ? 'bg-white/10' : 'bg-mist'} p-8"><p class="t-body ${dark ? 'text-white/80' : 'text-muted'}">${esc(emptyText)}</p><a class="btn ${dark ? 'btn-outline-light' : 'btn-dark'}" href="${emptyLink[1]}">${esc(emptyLink[0])} ${arrow(dark ? 'white' : 'orange')}</a></div></div>`;
   return `<div class="shell">${head}
     <ul class="-mx-5 flex snap-x gap-5 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
-      ${list.map((x, i) => `<li class="w-[78%] shrink-0 snap-start text-ink sm:w-auto">${productCard(x, i)}</li>`).join('')}
+      ${list.map((x, i) => `<li class="w-[78%] shrink-0 snap-start text-ink sm:w-auto">${productCard(x, i, { brand })}</li>`).join('')}
     </ul></div>`;
 }
 
-function lightbox(p, st, shot, setImg) {
+function lightbox(p, st, view, setImg) {
   const host = document.getElementById('overlays');
   let i = st.img;
   host.innerHTML = `
@@ -226,7 +231,7 @@ function lightbox(p, st, shot, setImg) {
     <div class="flex justify-center gap-2 p-5">${p.images.map((_, k) => `<button type="button" data-k="${k}" class="h-1.5 w-8 rounded-full bg-white/25 transition-colors" aria-label="Image ${k + 1}"></button>`).join('')}</div>
   </div>`;
   const draw = () => {
-    host.querySelector('[data-img]').innerHTML = stage(p, { label: shot(i), cls: '!rounded-2xl' });
+    host.querySelector('[data-img]').innerHTML = view(i, { cls: '!rounded-2xl' });
     host.querySelector('[data-count]').textContent = `${i + 1} / ${p.images.length}`;
     host.querySelectorAll('[data-k]').forEach((d) => d.classList.toggle('!bg-accent', +d.dataset.k === i));
   };

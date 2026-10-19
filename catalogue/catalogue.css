@@ -30,6 +30,27 @@
   color: #b9bec6;
   transition: transform 0.9s var(--ease-soft);
 }
+.stage-photo::after {
+  display: none;
+}
+.stage-img {
+  @apply absolute inset-0 size-full object-cover;
+  transition: transform 0.9s var(--ease-soft);
+}
+/* Brand surfaces: brand colour with a soft white glow (product shots sit on it) */
+.stage-brand {
+  background:
+    radial-gradient(120% 90% at 50% 35%, rgb(255 255 255 / 0.55) 0%, rgb(255 255 255 / 0) 60%),
+    var(--brand);
+}
+/* Arrow that can take any colour (mask of the homepage arrow) */
+.arrow-mask {
+  display: inline-block;
+  background: var(--arrow, var(--color-accent));
+  -webkit-mask: url('../public/assets/icons/arrow-orange.svg') center / contain no-repeat;
+  mask: url('../public/assets/icons/arrow-orange.svg') center / contain no-repeat;
+  transition: background-color 0.6s var(--ease-soft), transform 0.7s var(--ease-soft);
+}
 .stage-label {
   @apply absolute bottom-3 left-3 z-[2] rounded-full bg-white/80 px-2.5 py-1 text-[11px] text-muted backdrop-blur;
 }
@@ -51,9 +72,11 @@
     border-color 0.4s;
 }
 .pcard:hover {
-  transform: translateY(-6px);
   border-color: transparent;
-  box-shadow: 0 28px 48px -24px rgb(18 18 18 / 0.28);
+  box-shadow: 0 10px 20px rgb(0 0 0 / 0.15);
+}
+.pcard:hover .stage-img {
+  transform: scale(1.04);
 }
 .pcard:hover .stage svg {
   transform: scale(1.06);
@@ -61,14 +84,26 @@
 .pcard .brand-cta {
   @apply mt-auto;
 }
+/* Hover: the CTA fills navy (brand surfaces: black with the brand colour) */
+.pcard .brand-cta::before {
+  background: var(--cta-bg, var(--color-navy));
+}
 .pcard:hover .brand-cta {
-  @apply border-ink text-white;
+  border-color: var(--cta-bg, var(--color-navy));
+  color: var(--cta-fg, #fff);
 }
 .pcard:hover .brand-cta::before {
   clip-path: inset(0 0% 0 0 round 999px);
 }
 .pcard:hover .brand-cta .btn-icon {
   transform: translateX(4px);
+}
+.pcard-brand {
+  --cta-bg: var(--color-black);
+  --cta-fg: var(--brand);
+}
+.pcard-brand:hover .arrow-mask {
+  background: var(--brand);
 }
 .on-navy .pcard {
   @apply border-transparent;
@@ -144,6 +179,74 @@
   @apply text-black/50;
 }
 
+/* Pills on photo heroes (category + brand) */
+.pill-dark {
+  @apply inline-flex items-center gap-2 rounded-full border border-mist/30 bg-black/30 px-3 py-1.5 text-xs leading-4 whitespace-nowrap text-white transition-colors duration-300 hover:border-white;
+}
+.pill-dark .n {
+  @apply text-[11px] text-white/55;
+}
+.pill-dark.is-on {
+  @apply border-accent bg-accent;
+}
+.pill-dark.is-on .n {
+  @apply text-white/75;
+}
+.pill-dark.is-brand {
+  @apply text-[13px] leading-[18px];
+}
+.pill-dark.is-brand.is-on {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: var(--on);
+}
+.pill-dark.is-brand.is-on .n {
+  color: var(--on);
+}
+
+/* Photo hero: image + subtle black overlay so white text and the navbar read */
+.photo-hero {
+  @apply relative isolate overflow-hidden bg-ink text-white;
+}
+.photo-hero > .photo-hero-img {
+  @apply absolute inset-0 -z-20 size-full object-cover;
+}
+.photo-hero::before {
+  content: '';
+  @apply absolute inset-0 -z-10;
+  background: var(--hero-overlay, linear-gradient(180deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.85) 100%));
+}
+@media (max-width: 1023px) {
+  /* Text runs over the photo on small screens, so darken it a little more */
+  .photo-hero::before {
+    background:
+      linear-gradient(rgb(0 0 0 / 0.45), rgb(0 0 0 / 0.45)),
+      var(--hero-overlay, linear-gradient(180deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.85) 100%));
+  }
+}
+
+/* Category pill bar: sits at the bottom of the hero, then sticks to the top
+   as a dark blurred bar with tighter padding. The bar's box never changes size
+   (no layout shift); only its backdrop fades in. */
+.pillbar {
+  @apply pointer-events-none sticky z-30;
+  top: 0;
+  transition: top 0.6s var(--ease-out-expo);
+}
+.pillbar-inner {
+  @apply relative pt-3 pb-16;
+}
+.pillbar-inner::before {
+  content: '';
+  @apply absolute inset-x-0 top-0 h-[54px] bg-black/80 opacity-0 backdrop-blur-xl transition-opacity duration-300;
+}
+.pillbar.is-stuck .pillbar-inner::before {
+  @apply opacity-100;
+}
+.pillbar nav {
+  @apply pointer-events-auto relative;
+}
+
 /* Pill select */
 .select {
   @apply relative inline-flex items-center;
@@ -158,7 +261,7 @@
 
 /* ── Product detail ───────────────────────────────────────────────────────── */
 .tile {
-  @apply rounded-xl bg-mist p-4;
+  @apply rounded-xl bg-mist/60 p-4;
 }
 .spec-group {
   @apply rounded-xl bg-white;
@@ -188,6 +291,14 @@
     background-color 0.5s,
     box-shadow 0.5s;
 }
+#nav {
+  background-color: rgb(255 255 255 / 0.8);
+  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+}
+body[data-page='product'] #nav {
+  background-color: rgb(255 255 255 / 0.6);
+}
 body.nav-hidden #nav {
   transform: translate(-50%, -160%);
 }
@@ -200,8 +311,7 @@ body.nav-hidden #nav {
   .rise {
     animation: none;
   }
-  .pcard,
-  .pcard:hover {
+  .pcard:hover .stage-img {
     transform: none;
   }
 }
