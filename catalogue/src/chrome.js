@@ -1,6 +1,9 @@
 // Navbar (homepage pill), mega menu, search overlay, mobile menu, footer, enquiry popup.
 import { groups, categoriesIn, brands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../wireframe/src/data.js';
 import { A, esc, href, arrow, icon, brandMark, stage } from './ui.js';
+import { mediaOf } from './media.js';
+
+const thumb = (p) => mediaOf(p).card || '';
 
 const countIn = (id) => products.filter((p) => p.category === id).length;
 const countBrand = (id) => products.filter((p) => p.brand === id).length;
@@ -97,7 +100,7 @@ export function renderChrome() {
 
 /** Mark the current section in the navbar (bold + underline). */
 export function setActiveNav(page) {
-  const key = ['about', 'faq', 'contact'].includes(page) ? page : 'catalogue';
+  const key = ['about', 'faq', 'contact'].includes(page) ? page : ['products', 'search', 'category', 'brand', 'product'].includes(page) ? 'catalogue' : '';
   document.querySelectorAll('#nav [data-nav]').forEach((el) => {
     const on = el.dataset.nav === key;
     el.classList.toggle('font-bold', on);
@@ -134,7 +137,7 @@ function suggestions(q) {
         .slice(0, 5)
         .map(
           (p) => `<li><a href="${href(`/product/${p.slug}`)}" class="flex items-center gap-4 rounded-xl p-2 transition-colors hover:bg-mist">
-            <div class="w-20 shrink-0">${stage(p, { cls: '!rounded-lg' })}</div>
+            <div class="w-20 shrink-0">${stage(p, { cls: '!rounded-lg', src: thumb(p) })}</div>
             <span class="min-w-0"><span class="block truncate font-semibold">${esc(p.name)}</span><span class="block text-sm text-muted">${esc(brandOf(p).name)} · ${esc(categoryOf(p).name)}</span></span></a></li>`,
         )
         .join('')}</ul>
@@ -148,7 +151,8 @@ function suggestions(q) {
 }
 
 let closeAll = () => {};
-export const closePanels = () => closeAll();
+let closeEnquiry = () => {};
+export const closePanels = () => (closeAll(), closeEnquiry());
 
 function wire() {
   const megaBtn = document.getElementById('mega-toggle');
@@ -252,7 +256,7 @@ function footer() {
     <div class="bg-gradient-to-b from-black to-navy to-90% py-12"><p class="px-2 text-center text-[clamp(2.5rem,6vw,6rem)] leading-[1.25] font-bold tracking-[-1px] lg:whitespace-nowrap">Built on trust. Driven by innovation.</p></div>
     <div class="bg-navy"><div class="shell flex flex-col gap-4 py-10 text-[13px] leading-5 text-white/40 md:h-32 md:flex-row md:items-center md:justify-between md:py-0">
       <p>© BMK Group. All Rights Reserved. Website made by <a href="https://phitany.com/" target="_blank" rel="noopener" class="underline decoration-white/30 underline-offset-4 hover:text-white">Phitany</a></p>
-      <ul class="flex flex-wrap gap-5"><li><a class="hover:text-white" href="#">Privacy Policy</a></li><li><a class="hover:text-white" href="#">Cookie Policy</a></li><li><a class="hover:text-white" href="#">Terms &amp; Conditions</a></li></ul>
+      <ul class="flex flex-wrap gap-5">${[['/privacy', 'Privacy Policy'], ['/cookies', 'Cookie Policy'], ['/terms', 'Terms &amp; Conditions']].map(([p, n]) => `<li><a class="hover:text-white" href="${href(p)}">${n}</a></li>`).join('')}</ul>
     </div></div>
   </footer>`;
 }
@@ -270,7 +274,7 @@ export function openEnquiry({ product = null, type = '' } = {}) {
         <button type="button" data-close class="icon-btn shrink-0 bg-ink/5" aria-label="Close">${icon.close}</button>
       </div>
       <form class="grid gap-4" data-form>
-        ${product ? `<div class="flex items-center gap-4 rounded-2xl bg-mist p-3"><div class="w-20 shrink-0">${stage(product, { cls: '!rounded-lg' })}</div><div class="min-w-0"><p class="text-xs text-muted">${esc(brandOf(product).name)} · ${esc(categoryOf(product).name)}</p><p class="truncate font-semibold">${esc(product.name)}</p></div></div>` : `<label class="grid gap-1.5 text-sm"><span class="font-medium">Enquiry type</span><select required class="field">${['', ...TYPES].map((t) => `<option value="${t}" ${t ? (t === type ? 'selected' : '') : `disabled ${type ? '' : 'selected'}`}>${t || 'Select a type'}</option>`).join('')}</select></label>`}
+        ${product ? `<div class="flex items-center gap-4 rounded-2xl bg-mist p-3"><div class="w-20 shrink-0">${stage(product, { cls: '!rounded-lg', src: thumb(product) })}</div><div class="min-w-0"><p class="text-xs text-muted">${esc(brandOf(product).name)} · ${esc(categoryOf(product).name)}</p><p class="truncate font-semibold">${esc(product.name)}</p></div></div>` : `<label class="grid gap-1.5 text-sm"><span class="font-medium">Enquiry type</span><select required class="field">${['', ...TYPES].map((t) => `<option value="${t}" ${t ? (t === type ? 'selected' : '') : `disabled ${type ? '' : 'selected'}`}>${t || 'Select a type'}</option>`).join('')}</select></label>`}
         <div class="grid gap-4 sm:grid-cols-2">
           <label class="grid gap-1.5 text-sm"><span class="font-medium">Full name</span><input required class="field" /></label>
           <label class="grid gap-1.5 text-sm"><span class="font-medium">Company</span><input class="field" /></label>
@@ -291,10 +295,11 @@ export function openEnquiry({ product = null, type = '' } = {}) {
   };
   const onKey = (e) => e.key === 'Escape' && close();
   addEventListener('keydown', onKey);
+  closeEnquiry = close;
   host.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
   host.querySelector('[data-form]').addEventListener('submit', (e) => {
     e.preventDefault();
-    e.target.outerHTML = `<div class="grid justify-items-center gap-3 py-10 text-center"><div class="grid size-14 place-items-center rounded-full bg-navy text-2xl text-white">✓</div><p class="text-xl font-semibold">Thank you</p><p class="max-w-sm text-muted">We’ve received your enquiry. The relevant BMK Group team will get back to you by email.</p><button type="button" class="btn btn-dark mt-3" data-done>Close</button></div>`;
+    e.target.outerHTML = `<div class="grid justify-items-center gap-3 py-10 text-center"><div class="grid size-14 place-items-center rounded-full bg-navy"><svg width="24" height="24" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="m2.5 6.2 2.3 2.3L9.5 3.8" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="text-xl font-semibold">Thank you</p><p class="max-w-sm text-muted">We’ve received your enquiry. The relevant BMK Group team will get back to you by email.</p><button type="button" class="btn btn-dark mt-3" data-done>Close</button></div>`;
     host.querySelector('[data-done]').addEventListener('click', close);
   });
 }

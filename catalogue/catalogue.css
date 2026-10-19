@@ -425,3 +425,59 @@ body.nav-hidden #nav {
 .faq-tbc {
   @apply inline-flex rounded-full border border-dashed border-ink/25 px-3 py-1 text-sm text-muted;
 }
+
+.btn-outline {
+  @apply border border-ink/20 text-ink hover:border-navy hover:bg-navy hover:text-white;
+}
+
+/* Legal pages */
+.legal-toc ol {
+  @apply grid gap-0.5 border-l border-line;
+}
+.legal-toc a {
+  @apply -ml-px flex gap-3 border-l-2 border-transparent py-2 pl-4 text-[15px] leading-5 text-muted transition-colors hover:text-ink;
+}
+.legal-toc a .n,
+.legal-sec h2 .n {
+  @apply w-6 shrink-0 text-xs leading-5 text-muted/70 tabular-nums;
+}
+.legal-toc a.is-on {
+  @apply border-navy text-ink;
+}
+.legal-note {
+  @apply mb-12 rounded-2xl border border-dashed border-accent/50 bg-accent/5 p-5 text-[15px] leading-6;
+}
+.legal-tbc {
+  @apply rounded-full border border-dashed border-ink/25 px-2.5 py-0.5 text-xs;
+}
+.legal-sec {
+  @apply scroll-mt-32 border-t border-line py-10 first-of-type:border-t-0 first-of-type:pt-0;
+}
+.legal-sec h2 {
+  @apply mb-5 flex items-baseline gap-3 text-[28px] leading-tight font-normal tracking-[-0.04em];
+}
+.legal-sec h2 .n {
+  @apply text-sm;
+}
+.legal-sec p {
+  @apply text-base leading-7 tracking-[-0.01em] text-ink/80;
+}
+.legal-sec a {
+  @apply text-navy underline decoration-navy/30 underline-offset-4 hover:decoration-navy;
+}
+.legal-ph {
+  @apply mb-3 h-3.5 w-full rounded-full bg-mist;
+}
+
+/* 404 */
+.nf-code {
+  @apply text-[clamp(96px,16vw,220px)] leading-[0.85] font-bold tracking-[-0.06em] text-white/15;
+}
+.nf-tile {
+  @apply flex items-center justify-between rounded-2xl bg-mist px-6 py-8 text-xl tracking-[-0.03em] transition-colors duration-300 hover:bg-navy hover:text-white;
+}
+
+/* Our search fields have their own close/clear buttons */
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
