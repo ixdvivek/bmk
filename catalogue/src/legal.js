@@ -1,8 +1,7 @@
 // Legal pages (Terms, Privacy, Cookies) and the 404 page.
 // No approved legal text yet: the sections below are a layout skeleton with the
 // headings these policies usually carry. Every body is marked as placeholder.
-import { groups } from '../../wireframe/src/data.js';
-import { A, esc, href, arrow, icon, crumbs } from './ui.js';
+import { esc, href, arrow, crumbs } from './ui.js';
 
 const LEGAL = {
   terms: {
@@ -88,35 +87,98 @@ export function renderNotFound() {
   return {
     title: 'Page not found',
     html: `
-    <section class="relative isolate overflow-hidden bg-navy pt-[clamp(160px,14vw,220px)] pb-[clamp(80px,8vw,128px)] text-white">
-      <img src="${A}patterns/history-mark-1.svg" alt="" class="absolute -right-24 -bottom-40 -z-10 w-[min(720px,70vw)] opacity-10 brightness-0 invert" />
-      <div class="shell">
-        <p class="nf-code" aria-hidden="true">404</p>
-        <h1 class="t-display mt-2 max-w-3xl">This page isn’t here</h1>
-        <p class="t-body mt-4 max-w-xl text-white/75">The link may be old, or the page may have moved. Search the catalogue or pick a place to start.</p>
-        <form class="mt-10 flex max-w-xl items-center gap-3 rounded-full border border-white/25 bg-white/10 py-1.5 pr-1.5 pl-5 backdrop-blur focus-within:border-white" role="search" data-nf-search>
-          ${icon.search}<input name="q" type="search" placeholder="Search by product, model or brand" class="min-w-0 flex-1 bg-transparent py-2.5 outline-none placeholder:text-white/50" aria-label="Search products" />
-          <button class="btn bg-white text-ink hover:bg-accent hover:text-white">Search</button>
-        </form>
-      </div>
-    </section>
-    <section class="shell section-y">
-      <h2 class="mb-6 text-xs tracking-[0.14em] text-muted uppercase">Start here</h2>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        ${groups.map((g) => `<a class="nf-tile group" href="${href('/category/' + g.id)}"><span>${esc(g.name)}</span>${arrow('orange')}</a>`).join('')}
-      </div>
-      <div class="mt-10 flex flex-wrap gap-3">
-        <a class="btn btn-navy" href="${href('/products')}">Browse all products ${arrow('orange')}</a>
-        <a class="btn btn-outline" href="../">Back to home</a>
-        <a class="btn btn-outline" href="${href('/contact')}">Contact us</a>
+    <section class="nf" aria-labelledby="nf-title">
+      <h1 id="nf-title" class="sr-only">Page not found (404)</h1>
+      <div class="nf-grid" aria-hidden="true"><div class="nf-track" data-nf-track></div></div>
+      <div class="nf-actions">
+        <a class="btn nf-btn" href="${href('/products')}">Browse all products ${arrow('orange')}</a>
+        <a class="btn nf-btn" href="../">Back to home ${arrow('orange')}</a>
+        <a class="btn nf-btn" href="${href('/contact')}">Contact us ${arrow('orange')}</a>
       </div>
     </section>`,
     wire(root) {
-      root.querySelector('[data-nf-search]').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const q = e.target.q.value.trim();
-        location.hash = href('/search', { q }).slice(1);
-      });
+      return wireNotFound(root.querySelector('[data-nf-track]'));
     },
+  };
+}
+
+/* The 404 wall: rows of alternating 4s and 0s that shuffle like a sliding puzzle.
+   The whole wall drops one row, then neighbouring rows slide one digit in opposite
+   directions, each move with a springy overshoot. The pattern repeats every two
+   rows and every two digits, so offsets wrap back silently. */
+function wireNotFound(track) {
+  const MOVE = 650; // ms per move
+  const PAUSE = 450; // ms between moves
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let rows = [];
+  let ty = 0;
+  let tx = [];
+  let timer = 0;
+  let alive = true;
+
+  const build = () => {
+    const wall = track.parentElement;
+    const fs = parseFloat(getComputedStyle(wall).fontSize);
+    const cell = fs * 0.7;
+    const rowH = fs * 0.85;
+    const cols = Math.ceil(wall.clientWidth / cell) + 6; // spare digits for sideways moves
+    const count = Math.ceil(wall.clientHeight / rowH) + 3; // spare rows above for the drop
+    track.innerHTML = Array.from(
+      { length: count },
+      (_, r) => `<div class="nf-row">${Array.from({ length: cols }, (_, c) => `<span>${(r + c) % 2 ? '0' : '4'}</span>`).join('')}</div>`,
+    ).join('');
+    // Line up roughly like the Figma frame: a digit straddles the left edge, the top row is cropped.
+    track.style.left = `${-cell * 2.6}px`;
+    track.style.top = `${-rowH * 2.3}px`;
+    rows = [...track.children];
+    ty = 0;
+    tx = rows.map(() => 0);
+    paint(false);
+  };
+
+  const paint = (animate) => {
+    const t = animate ? `transform ${MOVE}ms var(--nf-ease)` : 'none';
+    track.style.transition = t;
+    track.style.transform = `translateY(calc(${ty} * var(--nf-row)))`;
+    rows.forEach((r, i) => {
+      r.style.transition = t;
+      r.style.transform = `translateX(calc(${tx[i]} * var(--nf-cell)))`;
+    });
+  };
+
+  // After a move, fold offsets of two steps back to zero; the wall looks identical.
+  const settle = () => {
+    let snap = false;
+    if (ty >= 2) (ty -= 2), (snap = true);
+    tx = tx.map((x) => (Math.abs(x) >= 2 ? ((snap = true), x - Math.sign(x) * 2) : x));
+    if (snap) paint(false);
+  };
+
+  let vertical = true;
+  const step = () => {
+    if (!alive) return;
+    if (vertical) ty += 1;
+    else tx = tx.map((x, i) => x + (i % 2 ? 1 : -1));
+    vertical = !vertical;
+    paint(true);
+    timer = setTimeout(() => {
+      settle();
+      timer = setTimeout(step, PAUSE);
+    }, MOVE + 20);
+  };
+
+  build();
+  let rw = 0;
+  const onResize = () => {
+    clearTimeout(rw);
+    rw = setTimeout(build, 150);
+  };
+  addEventListener('resize', onResize);
+  if (!still) timer = setTimeout(step, 600);
+  return () => {
+    alive = false;
+    clearTimeout(timer);
+    clearTimeout(rw);
+    removeEventListener('resize', onResize);
   };
 }
