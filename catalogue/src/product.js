@@ -1,5 +1,5 @@
-// Product detail. Spec sheet comes from the category's template (see wireframe/src/data.js).
-import { products, templates, productBySlug, brandOf, categoryOf, groupOf, fieldLabel, shortValue } from '../../wireframe/src/data.js';
+// Product detail. Spec sheet comes from the category's template (see wireframe/v1/src/data.js).
+import { products, templates, productBySlug, brandOf, categoryOf, groupOf, fieldLabel, shortValue } from '../../wireframe/v1/src/data.js';
 
 /** Template groups → filled rows; empty fields/groups dropped; unknown fields kept under "Other". */
 function specGroups(p) {

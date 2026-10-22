@@ -1,63 +1,216 @@
-// Company content for the About, FAQ and Contact wireframes.
-// Copy is taken from the approved homepage design wherever it exists. Anything
-// else is marked draft; `null` means "to be supplied by BMK" and renders as a
-// dashed placeholder.
+// Company content for the wireframe (v2).
+// Source: the client's document "BMK_WEBSITE_INFO_21.10.2026" (shared 22 Oct 2026),
+// with the agency's decisions of 22 Oct (24 years, latest phone number, PIN 682021,
+// "-Dr" dropped from the Malaysian entity name). Anything the document doesn't
+// cover is `null` and renders as "to be confirmed" — nothing is carried over from
+// the earlier placeholder copy.
+
+export const FOUNDED = 2002;
+export const YEARS = 24; // agreed figure for the homepage ("24 Years of Experience & Trust")
+
+export const contact = {
+  company: 'BMK GULF FZE',
+  address: 'Warehouse # RA08LB07, P.O. Box 261752, Jebel Ali Free Zone (JAFZA), Dubai, United Arab Emirates',
+  phone: '+971 4 232 4747', // from the client document's FAQ (replaces +971 4 887 0211)
+  email: 'info@bmkintl.com',
+  website: 'www.bmkintl.com',
+};
 
 export const intro = {
   heading: 'Built on trust. Driven by innovation.',
+  // Full About text (About page)
   paragraphs: [
-    'BMK Group is a UAE-incorporated international trading company specialising in the wholesale import and export of consumer electronics. What began as a trading operation has evolved into a broader business focused on global partnerships, market expansion and product development.',
-    'With business diversification beginning in 2004 and branches established in Singapore and India in 2010, BMK continues to build connections across markets, helping businesses access technology and opportunities worldwide.',
+    'BMK Group has been a trusted leader and driving force across the UAE and international consumer electronics landscape since 2002. Originating as Island Valley Electronics LLC, a dedicated trading firm, BMK Group has evolved into a dynamic, diversified global enterprise specializing in global sourcing, authorized tier-one brand distribution, regional wholesale trade, dedicated retail showrooms, and original product manufacturing.',
+    'In addition to serving as official regional distributors and channel partners for premier global names — including Nikon, Canon, Fujifilm, Sony, Samsung, LG, Sujata, Prestige, Voltas, Symphony, and SanDisk — BMK Group develops and markets proprietary technology and home living solutions through its two core in-house brands, SEEKEN and TEAM Appliances.',
+    'Today, BMK Group operates an integrated network of corporate entities, retail outlets, and distribution hubs across six core markets: the United Arab Emirates, Singapore, Malaysia, Zambia, the Democratic Republic of the Congo, and India.',
+  ],
+  // Shortened for the homepage About block (sentences from the document, trimmed)
+  short: [
+    'BMK Group has been a trusted leader across the UAE and international consumer electronics landscape since 2002. Originating as Island Valley Electronics LLC, it has evolved into a diversified global enterprise: global sourcing, authorized tier-one brand distribution, regional wholesale trade, retail showrooms and original product manufacturing.',
+    'Today the group operates corporate entities, retail outlets and distribution hubs across six markets: the UAE, Singapore, Malaysia, Zambia, the DR Congo and India.',
   ],
 };
 
-// Group companies (homepage location cards). Pin x/y = % of the map frame, as on the site.
-// Phone/email per office are not in the design yet → null.
+export const mission = 'To create and distribute technologically advanced products that seamlessly integrate into customers’ lives, delivering uncompromising quality and enduring performance.';
+export const vision = 'To build a global legacy of excellence in consumer electronics and home appliances, anchored in integrity, adaptability, and a customer-centric focus.';
+export const values = [
+  { name: 'Integrity', text: 'Conducting business transparently and ethically across all international partnerships.' },
+  { name: 'Customer-Centric', text: 'Prioritizing consumer lifestyle demands and reliable post-purchase support.' },
+  { name: 'Quality-Driven', text: 'Upholding rigorous standards in product durability, compliance, and performance.' },
+  { name: 'Innovation-Focused', text: 'Embracing emerging tech, agile distribution models, and intuitive product development.' },
+];
+
+// ── Group companies ──────────────────────────────────────────────────────────
+// Six countries, eight entities. Map pins are per country (x / y = % of the
+// world map frame, rough positions for the wireframe; the design sets them).
+// Phone and email per office are not in the document → null.
+export const countries = [
+  { id: 'uae', name: 'United Arab Emirates', short: 'UAE', city: 'Dubai', region: 'Middle East', x: 60.4, y: 47.1 },
+  { id: 'india', name: 'India', short: 'India', city: 'Kochi, Kerala', region: 'South Asia', x: 68.6, y: 58.2 },
+  { id: 'singapore', name: 'Singapore', short: 'Singapore', city: 'Singapore', region: 'Southeast Asia', x: 77.3, y: 62.7 },
+  { id: 'malaysia', name: 'Malaysia', short: 'Malaysia', city: 'Petaling Jaya', region: 'Southeast Asia', x: 75.6, y: 59.8 },
+  { id: 'zambia', name: 'Zambia', short: 'Zambia', city: 'Lusaka', region: 'Africa', x: 55.4, y: 72.6 },
+  { id: 'drc', name: 'Democratic Republic of the Congo', short: 'DR Congo', city: 'Kinshasa', region: 'Africa', x: 52.6, y: 65.4 },
+];
+
 export const entities = [
-  { id: 'bmk-global', name: 'BMK Global Sdn. Bhd.', city: 'Kuala Lumpur, Malaysia', role: 'Regional HQ and principal trading entity.', address: 'Kuala Lumpur, Malaysia', phone: null, email: null, x: 75.83, y: 60.16 },
-  { id: 'bmk-asia', name: 'BMK Asia Pte. Ltd.', city: 'Singapore', role: 'Distribution and logistics hub for Southeast Asia.', address: null, phone: null, email: null, x: 77.33, y: 62.74 },
-  { id: 'bmk-europe', name: 'BMK Europe Ltd.', city: 'London, United Kingdom', role: 'European operations and brand management office.', address: null, phone: null, email: null, x: 46.54, y: 31.9 },
   {
-    id: 'bmk-middle-east',
-    name: 'BMK Middle East FZE',
-    city: 'Dubai, UAE',
-    role: 'MENA region trade and distribution entity - United Arab Emirates.',
-    // From the design footer, where the company is named "BMK GULF FZE" (see conflicts)
-    address: 'Warehouse # RA08LB07, P.O. Box 261752, Jebel Ali Free Zone, Dubai, UAE',
-    phone: '+971 4 887 0211',
-    email: 'info@bmkintl.com',
-    x: 60.42,
-    y: 47.1,
+    id: 'bmk-gulf',
+    country: 'uae',
+    name: 'BMK GULF FZE',
+    kind: 'Headquarters & global logistics',
+    city: 'Jebel Ali Free Zone, Dubai',
+    role: 'Master distribution hub, global supply chain logistics, and regional partner for tier-one electronics (Samsung, LG, Canon, Nikon, Fujifilm, Sony, SanDisk, etc.).',
+    address: 'Warehouse # RA08LB07, P.O. Box 261752, Jebel Ali Free Zone (JAFZA), Dubai, United Arab Emirates',
+    phone: contact.phone,
+    email: contact.email,
+  },
+  {
+    id: 'island-valley',
+    country: 'uae',
+    name: 'Island Valley Electronics LLC',
+    kind: 'Commercial trading & retail',
+    city: 'Business Bay, Dubai',
+    role: 'Founding commercial and retail arm; distributor of mobile phones, gaming accessories, audio/video solutions, and group brand products.',
+    address: 'Westburry Business Tower 1, Business Bay, Dubai, United Arab Emirates',
+    phone: null,
+    email: null,
+  },
+  {
+    id: 'bmk-international',
+    country: 'india',
+    name: 'BMK International',
+    kind: 'Corporate office',
+    city: 'Thrikkakara, Ernakulam, Kerala',
+    role: 'Regional corporate entity & distributor for Samsung, Sujata, Prestige, Voltas, and Symphony in Kerala; manufacturer and distributor of Made-in-India SEEKEN Home and Kitchen Appliances.',
+    address: '3/287, Unichira, Edappally Pukkattupady Road, Thrikkakara, Ernakulam, Kerala, India – 682021',
+    phone: null,
+    email: null,
+  },
+  {
+    id: 'bhome',
+    country: 'india',
+    name: 'Bhome Appliances',
+    kind: 'Retail showroom',
+    retail: true,
+    city: 'Thrikkakara, Ernakulam, Kerala',
+    role: 'Dedicated multi-brand physical retail store offering Samsung, Sujata, Prestige, Voltas, Symphony, and SEEKEN appliances.',
+    products: 'Samsung, Sujata, Prestige, Voltas, Symphony, SEEKEN Appliances and more',
+    address: '3/288, Near St. Jude Church, Unichira, Thrikkakara, Ernakulam, Kerala, India – 682021',
+    phone: null,
+    email: null,
+  },
+  {
+    id: 'bmk-electronics',
+    country: 'singapore',
+    name: 'BMK Electronics Pte Ltd',
+    kind: 'Southeast Asia headquarters',
+    city: 'Singapore',
+    role: 'Southeast Asian corporate headquarters, product sourcing, and international trading.',
+    address: '114 Lavender Street, CT Hub 2, #10-81, Singapore – 338729',
+    phone: null,
+    email: null,
+  },
+  {
+    id: 'seeken-malaysia',
+    country: 'malaysia',
+    name: 'Seeken Electronics SDN. BHD.',
+    kind: 'Regional office',
+    city: 'Petaling Jaya, Selangor',
+    role: 'Regional operations and nationwide distribution of SEEKEN consumer electronics, smartwatches, and audio products across Malaysia.',
+    address: 'D-3A-05, Blk D, Oasis Square Ara Damansara, No. 2 Jalan PJU 1A/7A, 47301 Petaling Jaya, Selangor, Malaysia',
+    phone: null,
+    email: null,
+  },
+  {
+    id: 'seeken-zambia',
+    country: 'zambia',
+    name: 'SEEKEN ELECTRONICS LIMITED',
+    kind: 'Official Nikon distributor',
+    city: 'Lusaka',
+    role: 'Official distributor of Nikon cameras and camera accessories in Zambia; distributor of SEEKEN consumer electronics.',
+    mandate: 'Official Distributor of Nikon Cameras & Accessories; SEEKEN Brand Products',
+    address: 'Shop No. 17, Kavilamungu Business Centre, Mungwi Road, Lusaka, Zambia',
+    phone: null,
+    email: null,
+  },
+  {
+    id: 'ets-hb',
+    country: 'drc',
+    name: 'ETS HB Trading & BMK Gulf',
+    kind: 'Official Fujifilm distributor',
+    city: 'Kinshasa',
+    role: 'Official distributor of Fujifilm cameras and camera accessories in the DRC; distributor of SEEKEN consumer electronics.',
+    mandate: 'Official Distributor of Fujifilm Cameras & Accessories; SEEKEN Brand Products',
+    address: 'Shop B01, Galleries Leon, Croisement des Avenues Luambo et Colonel Ebeya, n° 218, Commune de la Gombe, Kinshasa, DRC',
+    phone: null,
+    email: null,
   },
 ];
 
-// Homepage timeline, plus two dates from the About copy (marked `source: 'about'`).
+export const entitiesIn = (countryId) => entities.filter((e) => e.country === countryId);
+export const regions = [...new Set(countries.map((c) => c.region))];
+
+// ── Timeline ─────────────────────────────────────────────────────────────────
 export const milestones = [
-  { year: '2004', title: 'Business diversification', text: 'BMK begins diversifying its business.', source: 'about' },
-  { year: '2005', title: 'Founded', text: 'BMK Group established as a trading company.' },
-  { year: '2008', title: 'First Expansion', text: 'Expanded into Singapore and regional ASEAN markets.' },
-  { year: '2010', title: 'Singapore and India branches', text: 'Branches established in Singapore and India.', source: 'about' },
-  { year: '2012', title: 'Brand Partnerships', text: 'Secured key international brand distribution rights.' },
-  { year: '2015', title: 'European Entry', text: 'Opened BMK Europe Ltd. in London.' },
-  { year: '2018', title: 'MENA Launch', text: 'Established presence in Dubai Free Zone.' },
-  { year: '2022', title: 'Digital Growth', text: 'Launched e-commerce and digital distribution channels.' },
+  { year: '2002', title: 'Origins & Early Success', points: ['BMK Group begins operations with the founding of Island Valley Electronics LLC in Dubai, UAE, specializing in consumer electronics import and export.'] },
+  { year: '2004', title: 'Portfolio Diversification', points: ['Expands wholesale and retail portfolios to include digital imaging and cameras, broadening market footprint across regional channels.'] },
+  {
+    year: '2010',
+    title: 'International Expansion & Distribution Hubs',
+    points: [
+      'Establishes BMK GULF FZE in Jebel Ali Free Zone (JAFZA), Dubai, to scale regional warehousing and logistics.',
+      'Incorporates BMK Electronics Pte Ltd in Singapore, securing BMK’s gateway into Southeast Asian markets.',
+      'Establishes long-term regional distribution relationships with global tech leaders including Samsung, LG, Canon, Fujifilm, Nikon, Sharp, Sony, and SanDisk.',
+    ],
+  },
+  { year: '2013', title: 'Launch of SEEKEN', points: ['Ventures into original consumer technology with the launch of flagship brand SEEKEN in Singapore.', 'Debuts its first proprietary device, the ST100 tablet.'] },
+  {
+    year: '2018',
+    title: 'Pan-African & Southeast Asian Expansion',
+    points: [
+      'Scales international distribution into Africa and Southeast Asia.',
+      'Secures official Fujifilm camera and accessories distribution in the Democratic Republic of the Congo.',
+      'Secures official Nikon camera and accessories distribution in Zambia via SEEKEN ELECTRONICS LIMITED.',
+      'Expands SEEKEN across the Middle East, Southeast Asia, and Africa.',
+    ],
+  },
+  { year: '2022', title: 'Wearables & Premium Segments', points: ['SEEKEN expands into premium smartwatches and advanced audio peripherals.'] },
+  { year: '2023', title: 'Acquisition of TEAM Appliances', points: ['BMK Group broadens its lifestyle portfolio into domestic living by acquiring home appliance brand TEAM Appliances.'] },
+  {
+    year: 'Present',
+    title: 'Global Distribution, Indian Expansion & Retail',
+    points: [
+      'Operates BMK International in Kerala, India, distributing premier brands (Samsung, Sujata, Prestige, Voltas, Symphony) and manufacturing the Made-in-India SEEKEN Home and Kitchen Appliances line.',
+      'Launches dedicated physical retail experience via Bhome Appliances in Kochi, Kerala.',
+      'Sustains direct corporate entities, authorized distributorships, and retail operations spanning the UAE, Singapore, Malaysia, Zambia, the DRC, and India.',
+    ],
+  },
 ];
 
-// Inconsistencies found across the approved copy. Shown on the unlisted #/notes page.
+// ── What changed since v1 (shown on the screens index) ───────────────────────
+export const changelog = [
+  { area: 'Company', items: ['Founded 2002 as Island Valley Electronics LLC (v1 had 2005).', 'New About text, plus Mission, Vision and Core Values.', '“25 Years” becomes “24 Years of Experience & Trust”.'] },
+  { area: 'Group companies', items: ['8 companies in 6 countries (v1: 4 placeholder companies in 4 countries).', 'Removed: BMK Europe Ltd. (London), BMK Global Sdn. Bhd., BMK Asia Pte. Ltd., BMK Middle East FZE.', 'Added: BMK GULF FZE, Island Valley Electronics LLC, BMK Electronics Pte Ltd, Seeken Electronics SDN. BHD., BMK International, Bhome Appliances, SEEKEN ELECTRONICS LIMITED, ETS HB Trading & BMK Gulf.', 'Addresses now known for all eight; phone and email only for the head office.'] },
+  { area: 'Timeline', items: ['8 milestones: 2002, 2004, 2010, 2013, 2018, 2022, 2023, Present.', 'Removed: 2005, 2008, 2012, 2015 (London) and the 2018 “MENA launch”.'] },
+  { area: 'Brands', items: ['2 in-house brands (SEEKEN, TEAM Appliances) and 12 partner brands, each with a description.', 'Removed: Leica (homepage) and Google (catalogue).', 'Logos are placeholders until BMK supplies them.'] },
+  { area: 'Categories', items: ['New 6-group hierarchy (20 categories) replaces the 4 groups / 14 categories from the product sheet.', 'Same listing page for every category: no new page types.', 'Existing products re-filed: cameras, lenses and instax only (Google products removed).'] },
+  { area: 'Contact & FAQ', items: ['Head-office phone is now +971 4 232 4747 (was +971 4 887 0211).', 'Contact Us has a tab per country, with both UAE and both India offices.', 'FAQ replaced with the client’s 8 questions and answers.'] },
+];
+
+// Content still to confirm with BMK. Shown on the unlisted #/notes page.
 export const conflicts = [
-  'Founding year: the timeline says 2005, but “25 Years of Experience” in the hero points to about 2001, and the About copy mentions diversification in 2004.',
-  'Singapore: the timeline says 2008; the About copy says the Singapore branch was established in 2010.',
-  'India: the About copy mentions a 2010 India branch, but there is no India entity in Group Presence.',
-  'Dubai entity name: “BMK Middle East FZE” on the location card, “BMK GULF FZE” in the footer address.',
-  'Dubai: the timeline dates the MENA launch to 2018, while the company is described as UAE-incorporated.',
+  'Head-office phone: the footer used +971 4 887 0211; the new document gives +971 4 232 4747. v2 uses the new number everywhere. Please confirm, and whether the old number belongs to another office.',
+  'BMK International PIN code: the document says “68202”; v2 uses 682021 (as for Bhome Appliances next door).',
+  'Malaysian entity: the document says “Seeken Electronics SDN.BHD-Dr”; v2 shows “Seeken Electronics SDN. BHD.”.',
+  'Partner brands: Sharp appears in the 2010 milestone and the brand list but not in the About text; Canon, Sony, Samsung, LG and Sharp have no catalogue products yet.',
 ];
 
-// Content still to be supplied by BMK. Shown on the unlisted #/notes page.
 export const gaps = [
-  { area: 'Products', items: ['Brand for each product (the sheet has no brand column; the brand is inside the model name)', 'Model numbers', 'Several images per product (front, back, top, side) for the gallery', 'Spec fields for categories other than cameras (lenses, phones, watches, etc.)', 'One spelling per category (“MIRRORLESS  CAMERAS” appears with and without a double space)'] },
-  { area: 'About Us', items: ['Corporate background copy', 'A write-up and a photo for each group company', 'Addresses, phone numbers and emails for Kuala Lumpur, Singapore and London (only Dubai is known)', 'Images for the timeline milestones'] },
-  { area: 'FAQ', items: ['Answers marked “to be supplied”: manufacturer status, warranty, partner requirements, reply time, after-sales support'] },
-  { area: 'Brands', items: ['Logo, banner image and introduction for each brand'] },
+  { area: 'Group companies', items: ['Phone and email for every office except the head office', 'A photo per company (or per city)', 'Opening hours for Bhome Appliances'] },
+  { area: 'Brands', items: ['Logos for all 14 brands (SEEKEN and TEAM Appliances first)', 'Products for every brand other than Nikon and FUJIFILM'] },
+  { area: 'Products', items: ['Products for the new categories (TVs, kitchen, climate, accessories…)', 'Spec fields for categories other than cameras', 'Model numbers', 'Several images per product'] },
+  { area: 'Timeline', items: ['An image or icon per milestone'] },
 ];
 
 export const enquiryTypes = [
@@ -67,26 +220,43 @@ export const enquiryTypes = [
   { type: 'General Enquiry', title: 'Your next opportunity starts here.', text: 'All other enquiries - partnerships, corporate, media, and more.' },
 ];
 
-// Draft FAQs. Answers drawn from the scope and approved copy; null = BMK to supply.
+// ── FAQ: the client's 8 questions, verbatim ──────────────────────────────────
+// `a` is an array of paragraphs; `list` an optional bullet list after the first paragraph.
 export const faqTopics = [
-  { id: 'general', name: 'About BMK' },
-  { id: 'products', name: 'Products & brands' },
+  { id: 'company', name: 'About BMK Group' },
+  { id: 'brands', name: 'Brands & distribution' },
+  { id: 'buy', name: 'Where to buy' },
   { id: 'partners', name: 'Partnerships' },
-  { id: 'support', name: 'Enquiries & support' },
 ];
 
 export const faqs = [
-  { topic: 'general', q: 'What does BMK Group do?', a: 'BMK Group is a UAE-incorporated international trading company specialising in the wholesale import and export of consumer electronics, with a growing focus on global partnerships, market expansion and product development.' },
-  { topic: 'general', q: 'Where does BMK operate?', a: 'BMK operates through registered group companies in Malaysia, Singapore, the United Kingdom and the UAE. See the Group Presence section on the About Us page for each company.' },
-  { topic: 'general', q: 'Is BMK a manufacturer?', a: null },
-  { topic: 'products', q: 'Which brands does BMK handle?', a: 'The current list of brands, and the products available for each, is on the Brands & Products page.' },
-  { topic: 'products', q: 'Can I buy products directly from this website?', a: 'This website is a product catalogue and does not take orders. To ask about buying, pricing or availability, send a Retail Sales Enquiry.' },
-  { topic: 'products', q: 'Where do the product specifications come from?', a: 'Specifications are provided by each manufacturer and may vary by region. Contact us if you need the specification for a particular market.' },
-  { topic: 'products', q: 'Are the products covered by a warranty?', a: null },
-  { topic: 'partners', q: 'How do I become a distribution partner?', a: 'Send a Distribution Enquiry with your company details and the markets you cover. The relevant BMK team will contact you.' },
-  { topic: 'partners', q: 'How do I become an authorised dealer?', a: 'Send a Dealership Enquiry and tell us which BMK brands you are interested in.' },
-  { topic: 'partners', q: 'What are the requirements to become a partner?', a: null },
-  { topic: 'support', q: 'How long does it take to get a reply?', a: null },
-  { topic: 'support', q: 'How do I contact a specific BMK office?', a: 'Office details for each group company are on the Contact Us page.' },
-  { topic: 'support', q: 'Who do I contact for after-sales support?', a: null },
+  { topic: 'company', q: 'What is BMK Group’s core business model?', a: ['BMK Group operates as an integrated consumer technology enterprise. Our business spans international supply chain management, authorized tier-one brand distribution (including Nikon, Canon, Fujifilm, Sony, Samsung, and LG), dedicated consumer retail stores, and the design and manufacturing of proprietary brands in consumer electronics and home appliances.'] },
+  {
+    topic: 'company',
+    q: 'Which proprietary brands are developed by BMK Group?',
+    a: ['BMK Group owns and operates two distinct brands:'],
+    list: ['SEEKEN: Smartwatches, audio devices, smart lifestyle electronics, and a Made-in-India range of home and kitchen appliances (explore online: seeken.com | seeken.co.in).', 'TEAM Appliances: Modern kitchen and household appliances, acquired by BMK Group in 2023 (visit: teamappliances.co).'],
+  },
+  { topic: 'company', q: 'Where does BMK Group have direct corporate entities?', a: ['BMK Group has registered operating entities and regional offices across six countries: the UAE, Singapore, Malaysia, Zambia, the Democratic Republic of Congo, and India.'] },
+  { topic: 'brands', q: 'Which brands does BMK Group distribute in India?', a: ['Through our Indian entity, BMK International, we distribute leading appliance and consumer tech brands in Kerala: Samsung, Sujata, Prestige, Voltas, and Symphony, alongside our own Made-in-India SEEKEN Home and Kitchen Appliances.'] },
+  {
+    topic: 'brands',
+    q: 'Which camera brands does BMK Group officially distribute globally?',
+    a: [],
+    list: [
+      'In the Democratic Republic of the Congo, BMK Group operates via ETS HB Trading & BMK Gulf as the official distributor of Fujifilm cameras and accessories.',
+      'In Zambia, BMK Group operates via SEEKEN ELECTRONICS LIMITED as the official distributor of Nikon cameras and accessories.',
+      'Across the wider Middle East, the group maintains long-standing distribution channels for leading imaging and consumer tech brands including Canon, Sony, Samsung, LG, Sharp, and SanDisk.',
+    ],
+  },
+  {
+    topic: 'buy',
+    q: 'Where can retail consumers shop for BMK Group products in India?',
+    a: [
+      'Customers can purchase Samsung, Sujata, Prestige, Voltas, Symphony, and SEEKEN products directly from our retail store:',
+      'Bhome Appliances, located at 3/288, Near St. Jude Church, Unichira, Thrikkakara, Ernakulam, Kerala – 682021. You can also shop SEEKEN appliances online in India at seeken.co.in.',
+    ],
+  },
+  { topic: 'buy', q: 'Where can I buy SEEKEN products in Malaysia?', a: ['SEEKEN smartwatches, audio devices, and accessories are distributed nationwide across Malaysia through our regional office, Seeken Electronics SDN. BHD., located in Oasis Square Ara Damansara, Petaling Jaya.'] },
+  { topic: 'partners', q: 'How can vendors, retailers, or commercial clients partner with BMK Group?', a: ['For distribution inquiries, wholesale partnerships, or corporate bulk sourcing, contact our central logistics team at info@bmkintl.com or call +971 4 232 4747.'] },
 ];

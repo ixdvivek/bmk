@@ -1,5 +1,20 @@
 # BMK Global — Phase 1 wireframe
 
+## Versions
+
+| Version | Date | URL | What it is |
+|---|---|---|---|
+| **v2** (latest) | 22 Oct 2026 | `/wireframe/` | Company content from the client document `BMK_WEBSITE_INFO_21.10.2026`: 8 companies in 6 countries, new timeline, 14 brands, 6-group category hierarchy, the client's FAQ. Home, About, Contact and FAQ reworked. |
+| v1 | 17 Oct 2026 (approved) | `/wireframe/v1/` | Frozen copy of the approved round. The catalogue visual designs (`/catalogue/`) still read their data from v1 until v2 is confirmed. |
+
+Switch versions from the toolbar at the bottom left (it keeps the current
+screen). In v2, yellow **v2** tags mark every section that changed, with a note
+on what changed; toggle them with **Changes**. The screens index lists all
+changes, and `#/notes` lists what BMK still needs to confirm or supply.
+
+To start v3: copy `wireframe/{index.html,wf.css,src}` to `wireframe/v2/`, add
+it to `vite.config.js`, then edit `wireframe/` and replace the `change()` notes.
+
 Clickable black-and-white wireframe of every Phase 1 page template, for one
 round of client feedback:
 
@@ -44,15 +59,15 @@ production build (Next.js) would use the clean URLs from the plan, e.g.
 
 ## Content
 
-- Categories: the 14 from the client sheet, cleaned, in four groups (Photography,
-  Mobile, Audio, Memory & Storage).
+- Categories (v2): the client's final hierarchy of 6 groups and 20 categories.
+  (v1: the 14 from the product sheet in four groups.)
 - FUJIFILM X-H2S and X-T5 camera specs are verbatim from the client sheet.
 - Other specs are from the manufacturers' published spec pages (Nikon, FUJIFILM
   instax, Google Store) and a camera database for the Nikon Zf, gathered
   October 2026. Overview and short descriptions are draft copy.
 - Model numbers are not in the client sheet yet (shown as "to be supplied").
-- About, Contact and Home copy is from the approved homepage design. FAQ
-  questions and answers are drafts; answers BMK must supply are marked.
+- About, Contact, Home and FAQ copy (v2) is from the client document of
+  21 Oct 2026. v1 used the homepage design's placeholder copy.
 - Content conflicts in the approved copy and content still to be supplied are
   listed on an unlisted notes page: `#/notes` (not linked from the index).
 

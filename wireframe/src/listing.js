@@ -2,7 +2,7 @@
 //   all products · group · category · brand · search results
 // Only the header and which filter is locked change between contexts.
 import { products, brands, groups, categories, categoriesIn, byId, groupOf, searchProducts, searchBrands, searchCategories } from './data.js';
-import { esc, href, icons, ph, note, productCard } from './ui.js';
+import { esc, href, icons, ph, note, change, productCard } from './ui.js';
 
 const PAGE = 8;
 let sheetOpen = false;
@@ -80,7 +80,7 @@ export function renderListing(ctx, params) {
   const facets = `
     ${
       showCatFacet
-        ? `<fieldset class="border-b border-hair pb-5" ${note('Category filter. Grouped by the four category groups; only categories with matching products are listed, with live counts. Multi-select.')}>
+        ? `<fieldset class="border-b border-hair pb-5" ${note('Category filter. Grouped by the six category groups; only categories with matching products are listed, with live counts. Multi-select.')}>
             <legend class="mb-3 text-sm font-semibold">Category</legend>
             ${groupBlocks(catOpts, ctx.kind === 'group')
               .map(
@@ -250,6 +250,7 @@ function header(ctx, base, selC, url) {
     crumbs = [home, ['Products']];
     title = 'All products';
     sub = `The full BMK catalogue across ${brands.length} brands and ${groups.length} category groups.`;
+    extra = `<div class="mt-6 flex flex-wrap gap-2" ${change('Six category groups (was four) and 14 brands (was three).')}>${groups.map((g) => `<a class="chip" href="${href(`/category/${g.id}`)}">${esc(g.name)}</a>`).join('')}</div>`;
   } else if (ctx.kind === 'group' || ctx.kind === 'category') {
     const g = ctx.group;
     crumbs = ctx.kind === 'group' ? [home, prods, [g.name]] : [home, prods, [g.name, href(`/category/${g.id}`)], [ctx.cat.name]];
@@ -257,10 +258,10 @@ function header(ctx, base, selC, url) {
     sub =
       ctx.kind === 'group'
         ? `All ${g.name.toLowerCase()} products, across ${categoriesIn(g.id).length} categor${categoriesIn(g.id).length === 1 ? 'y' : 'ies'}.`
-        : `${base.length} product${base.length === 1 ? '' : 's'} in ${g.name}.`;
+        : `${ctx.cat.desc} ${base.length} product${base.length === 1 ? '' : 's'}.`;
     const sibs = categoriesIn(g.id);
     if (sibs.length > 1)
-      extra = `<div class="mt-6" ${note('Category navigation within the group: these are links to sibling category pages (not filters), so each category keeps its own URL for SEO. Scrolls sideways on mobile.')}><nav class="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0" aria-label="${esc(g.name)} categories">
+      extra = `<div class="mt-6" ${change('Categories follow the client’s new 6-group hierarchy (20 categories). Each category page shows the client’s description under the title. Same listing layout as before: no new page types.')} ${note('Category navigation within the group: these are links to sibling category pages (not filters), so each category keeps its own URL for SEO. Scrolls sideways on mobile.')}><nav class="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0" aria-label="${esc(g.name)} categories">
         <ul class="flex w-max gap-2 sm:w-auto sm:flex-wrap">
           <li><a class="chip ${ctx.kind === 'group' ? 'is-on' : ''}" href="${href(`/category/${g.id}`)}">All ${esc(g.name)}</a></li>
           ${sibs
@@ -304,7 +305,7 @@ function brandHeader(ctx, base, selC, url) {
   const b = ctx.brand;
   const cats = categories.filter((c) => base.some((p) => p.category === c.id));
   const tabs = `
-    <div ${note('Brand categories are derived from the brand’s own products (e.g. Google: Mobile Phones and Smart Watches), so this always reflects real data. Tapping one filters the list below. The homepage brand chips use the same data.')}><nav class="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0" aria-label="${esc(b.name)} categories">
+    <div ${note('Brand categories are derived from the brand’s own products (e.g. Nikon: Mirrorless & DSLR Cameras and Lenses & Optics), so this always reflects real data. Tapping one filters the list below. The homepage brand chips use the same data.')}><nav class="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0" aria-label="${esc(b.name)} categories">
       <ul class="flex w-max gap-2 sm:w-auto sm:flex-wrap">
         <li><a class="chip ${selC.length ? '' : 'is-on'}" href="${url({ cat: [], page: '' })}" data-keep-scroll>All <span class="count">${base.length}</span></a></li>
         ${cats
@@ -329,7 +330,8 @@ function brandHeader(ctx, base, selC, url) {
       <div class="grid gap-4">
         <div>
           <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">${esc(b.name)}</h1>
-          <p class="mt-2 max-w-3xl text-sub" ${note('Brand introduction: short admin-managed copy.')}>${esc(b.intro)}</p>
+          <p class="mt-2 max-w-3xl text-sub" ${note('Brand introduction: short admin-managed copy.')} ${change('Brand descriptions are now the client’s copy. 14 brands in total; Google removed.')}>${esc(b.intro)}</p>
+          ${b.inHouse ? `<div class="mt-4 flex flex-wrap items-center gap-2" ${note('In-house brands (SEEKEN, TEAM Appliances) are labelled as BMK’s own and link out to their own websites.')} ${change('New: in-house brand label and links to the brand’s own websites.')}><span class="chip is-on">BMK in-house brand</span>${b.sites.map(([d, l]) => `<a class="chip" href="https://${d}" target="_blank" rel="noopener">${esc(d)}${l ? ` (${esc(l)})` : ''} ↗</a>`).join('')}</div>` : ''}
         </div>
         <p class="text-sm text-sub"><strong class="text-ink">${base.length}</strong> products · <strong class="text-ink">${cats.length}</strong> categor${cats.length === 1 ? 'y' : 'ies'}</p>
         ${tabs}
@@ -344,14 +346,14 @@ function emptyState(ctx, base, url) {
     return `<div class="grid justify-items-start gap-4 rounded-xl border border-dashed border-line p-8" ${note('No results: suggest how to search and give routes back into the catalogue instead of a dead end.')}>
       <p class="text-lg font-semibold">No products match “${esc(ctx.q)}”</p>
       <p class="text-sub">Check the spelling, or search by model name (e.g. “X-T5”) or brand.</p>
-      <div class="flex flex-wrap gap-2">${['X-T5', 'Pixel', 'NIKKOR', 'instax'].map((t) => `<a class="chip" href="${href('/search', { q: t })}">${t}</a>`).join('')}</div>
+      <div class="flex flex-wrap gap-2">${['X-T5', 'Nikon Z8', 'NIKKOR', 'instax'].map((t) => `<a class="chip" href="${href('/search', { q: t })}">${t}</a>`).join('')}</div>
       <a class="btn btn-ghost btn-sm" href="${href('/products')}">Browse all products</a>
     </div>`;
   }
   if (!base.length) {
     const name = ctx.cat?.name || ctx.group?.name || ctx.brand?.name || 'this section';
     const alt = ctx.group ? categoriesIn(ctx.group.id).filter((c) => products.some((p) => p.category === c.id)) : [];
-    return `<div class="grid justify-items-start gap-4 rounded-xl border border-dashed border-line p-8" ${note('Empty category: categories can exist before products are added (all 14 from the client sheet are set up). Show a helpful empty state, not an error.')}>
+    return `<div class="grid justify-items-start gap-4 rounded-xl border border-dashed border-line p-8" ${note('Empty category: categories can exist before products are added (all 20 categories from the client’s hierarchy are set up). Show a helpful empty state, not an error.')}>
       <p class="text-lg font-semibold">No products in ${esc(name)} yet</p>
       <p class="text-sub">New products are added regularly. Meanwhile, explore related categories or send us an enquiry.</p>
       ${alt.length ? `<div class="flex flex-wrap gap-2">${alt.map((c) => `<a class="chip" href="${href(`/category/${c.id}`)}">${esc(c.name)}</a>`).join('')}</div>` : ''}

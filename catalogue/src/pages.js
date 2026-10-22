@@ -1,5 +1,5 @@
 // About Us, FAQ and Contact Us — homepage styles, wireframe structure and copy.
-import { intro, entities, milestones, enquiryTypes, faqTopics, faqs } from '../../wireframe/src/content.js';
+import { intro, entities, milestones, enquiryTypes, faqTopics, faqs } from '../../wireframe/v1/src/content.js';
 import { A, esc, href, arrow, icon, crumbs } from './ui.js';
 import { pillbar, wirePillbar } from './listing.js';
 

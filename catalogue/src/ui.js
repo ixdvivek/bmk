@@ -1,4 +1,4 @@
-import { brandOf, categoryOf, highlightsFor } from '../../wireframe/src/data.js';
+import { brandOf, categoryOf, highlightsFor } from '../../wireframe/v1/src/data.js';
 import { mediaOf, brandColor } from './media.js';
 
 /** Public assets live at the site root; this page is served from /catalogue/. */

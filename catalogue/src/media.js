@@ -1,5 +1,5 @@
 // Photography and brand styling for the catalogue. Kept apart from the shared
-// catalogue data (wireframe/src/data.js) so the wireframe stays image-free.
+// catalogue data (wireframe/v1/src/data.js) so the wireframe stays image-free.
 // Anything missing here falls back to the studio stage with a category glyph.
 const M = '../assets/catalogue/';
 

@@ -3,7 +3,9 @@
 //
 // Shape mirrors the planned Laravel/MySQL model so the wireframe proves the
 // structure, not just the visuals:
-//   group (4) → category (14) → spec template → product
+//   group (6) → category (20) → spec template → product
+// v2: groups and categories follow the client document of 21 Oct 2026
+// ("Final Product Categories Hierarchy"); Google products removed.
 // A product belongs to one brand and one category. Its spec sheet layout comes
 // entirely from its category's template, so new product types only need a new
 // template, never a new page layout.
@@ -14,29 +16,38 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const groups = [
-  { id: 'photography', name: 'Photography' },
-  { id: 'mobile', name: 'Mobile' },
-  { id: 'audio', name: 'Audio' },
-  { id: 'storage', name: 'Memory & Storage' },
+  { id: 'smart-devices', name: 'Smart Devices & Wearables' },
+  { id: 'audio', name: 'Audio & Entertainment' },
+  { id: 'imaging', name: 'Digital Imaging & Photography' },
+  { id: 'kitchen', name: 'Kitchen & Cooking Appliances' },
+  { id: 'home-utility', name: 'Home Utility & Climate Control' },
+  { id: 'accessories', name: 'Mobile & Computing Accessories' },
 ];
 
-// Client sheet category names, cleaned (the sheet has "MIRRORLESS  CAMERAS"
-// with and without a double space; both map here).
+// The client's final hierarchy (document of 21 Oct 2026). `desc` is their text.
+// A category points at a default spec template; a product can override it
+// (instax film and the Link printer share "Instant Cameras & Film").
 export const categories = [
-  { id: 'mirrorless-cameras', name: 'Mirrorless Cameras', group: 'photography', template: 'camera', card: ['pixels', 'burst', 'video'] },
-  { id: 'dslr-cameras', name: 'DSLR Cameras', group: 'photography', template: 'camera', card: ['pixels', 'burst', 'video'] },
-  { id: 'camera-lenses', name: 'Camera Lenses', group: 'photography', template: 'lens', card: ['focal', 'maxAperture', 'vr'] },
-  { id: 'camera-accessories', name: 'Camera Accessories', group: 'photography', template: 'generic', card: [] },
-  { id: 'action-cameras', name: 'Action Cameras', group: 'photography', template: 'generic', card: [] },
-  { id: 'mini-cameras', name: 'Mini Cameras', group: 'photography', template: 'instantCamera', card: ['film', 'shutter', 'power'] },
-  { id: 'mini-camera-paper', name: 'Mini Camera Paper', group: 'photography', template: 'film', card: ['pictureSize', 'exposures', 'iso'] },
-  { id: 'photo-printers', name: 'Photo Printers', group: 'photography', template: 'printer', card: ['printTime', 'connection', 'printsPerCharge'] },
-  { id: 'binoculars', name: 'Binoculars', group: 'photography', template: 'generic', card: [] },
-  { id: 'mobile-phones', name: 'Mobile Phones', group: 'mobile', template: 'phone', card: ['display', 'processor', 'rearCameras'] },
-  { id: 'smart-watches', name: 'Smart Watches', group: 'mobile', template: 'watch', card: ['caseSizes', 'batteryLife', 'durability'] },
-  { id: 'mobile-accessories', name: 'Mobile Accessories', group: 'mobile', template: 'generic', card: [] },
-  { id: 'speakers', name: 'Speakers', group: 'audio', template: 'generic', card: [] },
-  { id: 'memory-cards', name: 'Memory Cards', group: 'storage', template: 'generic', card: [] },
+  { id: 'smartwatches-fitness-bands', name: 'Smartwatches & Fitness Bands', group: 'smart-devices', template: 'watch', card: ['caseSizes', 'batteryLife', 'durability'], desc: 'AMOLED calling smartwatches, rugged outdoor sports watches, health & fitness trackers.' },
+  { id: 'tablets-handhelds', name: 'Tablets & Smart Handhelds', group: 'smart-devices', template: 'generic', card: [], desc: 'Wi-Fi and 4G calling tablets, e-learning smart devices.' },
+  { id: 'mobile-feature-phones', name: 'Mobile Phones & Feature Phones', group: 'smart-devices', template: 'phone', card: ['display', 'processor', 'rearCameras'], desc: 'Dual-SIM smartphones, long-battery standby feature phones.' },
+  { id: 'personal-audio', name: 'Personal Audio', group: 'audio', template: 'generic', card: [], desc: 'True Wireless Stereo (TWS) earbuds, neckbands, on-ear wireless headphones.' },
+  { id: 'party-home-audio', name: 'Party & Home Audio', group: 'audio', template: 'generic', card: [], desc: 'Portable Bluetooth speakers, party trolley speakers with wireless microphones, soundbars.' },
+  { id: 'tvs-home-cinema', name: 'Televisions & Home Cinema', group: 'audio', template: 'generic', card: [], desc: 'Smart LED TVs, 4K displays, and audio-visual setups.' },
+  { id: 'mirrorless-dslr-cameras', name: 'Mirrorless & DSLR Cameras', group: 'imaging', template: 'camera', card: ['pixels', 'burst', 'video'], desc: 'Full-frame and APS-C enthusiast & professional camera bodies.' },
+  { id: 'instant-cameras-film', name: 'Instant Cameras & Film', group: 'imaging', template: 'instantCamera', card: ['film', 'shutter', 'power'], desc: 'Instant photo cameras and compatible instant film packs.' },
+  { id: 'lenses-optics', name: 'Lenses & Optics', group: 'imaging', template: 'lens', card: ['focal', 'maxAperture', 'vr'], desc: 'Prime lenses, telephoto zoom lenses, wide-angle lenses, and lens filters.' },
+  { id: 'camera-accessories', name: 'Camera Accessories', group: 'imaging', template: 'generic', card: [], desc: 'Camera bags, tripods, rechargeable lithium battery packs, memory cards, and cleaning kits.' },
+  { id: 'food-preparation', name: 'Food Preparation', group: 'kitchen', template: 'generic', card: [], desc: 'Heavy-duty mixer grinders, juicer mixer grinders, blenders, choppers, and hand blenders.' },
+  { id: 'cooktops-small-appliances', name: 'Cooktops & Small Appliances', group: 'kitchen', template: 'generic', card: [], desc: 'Induction cooktops, electric kettles, sandwich makers, toasters, and rice cookers.' },
+  { id: 'cookware-pressure-cookers', name: 'Cookware & Pressure Cookers', group: 'kitchen', template: 'generic', card: [], desc: 'Hard-anodized pressure cookers, stainless steel cookware, and non-stick pans.' },
+  { id: 'air-cooling-ac', name: 'Air Cooling & Air Conditioning', group: 'home-utility', template: 'generic', card: [], desc: 'Inverter split ACs, window ACs, and portable desert & personal air coolers.' },
+  { id: 'refrigeration-laundry', name: 'Refrigeration & Laundry', group: 'home-utility', template: 'generic', card: [], desc: 'Multi-door refrigerators, deep freezers, and automatic washing machines.' },
+  { id: 'personal-grooming', name: 'Personal Grooming', group: 'home-utility', template: 'generic', card: [], desc: 'Cordless hair trimmers, beard stylers, and grooming kits.' },
+  { id: 'ironing-garment-care', name: 'Ironing & Garment Care', group: 'home-utility', template: 'generic', card: [], desc: 'Dry irons and steam irons.' },
+  { id: 'power-charging', name: 'Power & Charging', group: 'accessories', template: 'generic', card: [], desc: 'Efficient charging wall adapters (multi-port USB & Type-C), power banks, and braided fast-sync charging cables.' },
+  { id: 'storage-solutions', name: 'Storage Solutions', group: 'accessories', template: 'generic', card: [], desc: 'High-speed microSD cards, USB flash pen drives, and external portable SSDs.' },
+  { id: 'peripherals-gaming', name: 'Peripherals & Gaming', group: 'accessories', template: 'generic', card: [], desc: 'Ergonomic gaming headsets, wireless controllers, mouse pads, and protective device cases.' },
 ];
 
 // ── Spec templates ───────────────────────────────────────────────────────────
@@ -92,23 +103,23 @@ export const templates = {
   generic: [{ group: 'Specifications', fields: [] }],
 };
 
+// v2: the client's brand list. `inHouse` brands are BMK's own (link out to their
+// sites); `groups` drive the homepage brand filter. Logos are placeholders.
 export const brands = [
-  {
-    id: 'fujifilm',
-    name: 'FUJIFILM',
-    intro:
-      'Japanese imaging company behind the X Series mirrorless cameras and the instax instant range, from interchangeable-lens bodies to instant cameras, film and smartphone printers.',
-  },
-  {
-    id: 'nikon',
-    name: 'Nikon',
-    intro: 'Japanese imaging company known for its Z series full-frame mirrorless cameras and NIKKOR lenses.',
-  },
-  {
-    id: 'google',
-    name: 'Google',
-    intro: 'Pixel phones and Pixel Watch, designed by Google around Android and Wear OS, with long-term software support.',
-  },
+  { id: 'seeken', name: 'SEEKEN', inHouse: true, groups: ['smart-devices', 'audio', 'kitchen', 'accessories'], sites: [['seeken.com', 'Global'], ['seeken.co.in', 'India']], intro: 'BMK Group’s flagship consumer technology and smart lifestyle brand. SEEKEN delivers modern, accessible innovation across smartwatches, wireless audio, mobile accessories, and a specialized line of Made-in-India home and kitchen appliances designed for connected everyday living.' },
+  { id: 'team-appliances', name: 'TEAM Appliances', inHouse: true, groups: ['kitchen', 'home-utility'], sites: [['teamappliances.co', '']], intro: 'A dedicated domestic living and kitchen appliance brand acquired by BMK Group in 2023. TEAM Appliances focuses on dependable, efficient, and practical household solutions engineered for everyday home culinary and cleaning needs.' },
+  { id: 'nikon', name: 'Nikon', groups: ['imaging'], intro: 'A world-renowned Japanese optics and imaging pioneer. BMK Group serves as the official distributor of Nikon cameras, lenses, and optical accessories in Zambia via SEEKEN ELECTRONICS LIMITED.' },
+  { id: 'canon', name: 'Canon', groups: ['imaging'], intro: 'A global titan in professional and consumer digital imaging, broadcast optics, DSLR, mirrorless cameras, lenses, and printing technology.' },
+  { id: 'fujifilm', name: 'FUJIFILM', groups: ['imaging'], intro: 'A global leader in photography, digital mirrorless imaging, and instant print technology. BMK Group operates as the official distributor of Fujifilm cameras and accessories in the Democratic Republic of the Congo via ETS HB Trading & BMK Gulf.' },
+  { id: 'sony', name: 'Sony', groups: ['imaging', 'audio', 'accessories'], intro: 'A premier global brand in professional digital imaging, personal audio, home entertainment systems, and gaming peripherals.' },
+  { id: 'samsung', name: 'Samsung', groups: ['smart-devices', 'audio', 'home-utility'], intro: 'A global technology powerhouse recognized worldwide for market-leading televisions, digital home appliances, monitors, and consumer smart devices.' },
+  { id: 'lg', name: 'LG', groups: ['audio', 'home-utility'], intro: 'A global innovator in modern consumer electronics, OLED and ultra-high-definition displays, advanced home appliances, and residential climate control systems.' },
+  { id: 'sandisk', name: 'SanDisk', groups: ['accessories'], intro: 'An industry standard in digital storage solutions, delivering high-speed microSD cards, flash memory drives, and portable solid-state drives.' },
+  { id: 'prestige', name: 'Prestige', groups: ['kitchen'], intro: 'One of India’s most trusted kitchen appliance and cookware brands, renowned for pressure cookers, non-stick cookware, gas stoves, and modern induction cooktops.' },
+  { id: 'sujata', name: 'Sujata', groups: ['kitchen'], intro: 'India’s benchmark for heavy-duty mixer grinders, juicers, and commercial-grade food preparation appliances engineered for intensive daily performance.' },
+  { id: 'voltas', name: 'Voltas', groups: ['home-utility'], intro: 'A Tata enterprise and market leader in energy-efficient cooling solutions, specializing in split and window air conditioners, commercial refrigeration, and domestic air coolers.' },
+  { id: 'symphony', name: 'Symphony', groups: ['home-utility'], intro: 'The world’s pioneer and largest manufacturer of domestic, commercial, and industrial evaporative air coolers.' },
+  { id: 'sharp', name: 'Sharp', groups: ['audio', 'kitchen', 'home-utility'], intro: 'An established consumer electronics and technology brand offering reliable display solutions, microwave ovens, and essential home appliances.' },
 ];
 
 // ── Products ─────────────────────────────────────────────────────────────────
@@ -121,7 +132,7 @@ export const products = [
   {
     slug: 'fujifilm-x-h2s',
     brand: 'fujifilm',
-    category: 'mirrorless-cameras',
+    category: 'mirrorless-dslr-cameras',
     name: 'FUJIFILM X-H2S',
     model: 'X-H2S',
     modelNo: null,
@@ -153,7 +164,7 @@ export const products = [
   {
     slug: 'fujifilm-x-t5',
     brand: 'fujifilm',
-    category: 'mirrorless-cameras',
+    category: 'mirrorless-dslr-cameras',
     name: 'FUJIFILM X-T5',
     model: 'X-T5',
     modelNo: null,
@@ -190,7 +201,7 @@ export const products = [
   {
     slug: 'nikon-z8',
     brand: 'nikon',
-    category: 'mirrorless-cameras',
+    category: 'mirrorless-dslr-cameras',
     name: 'Nikon Z8',
     model: 'Z8',
     modelNo: null,
@@ -228,7 +239,7 @@ export const products = [
   {
     slug: 'nikon-zf',
     brand: 'nikon',
-    category: 'mirrorless-cameras',
+    category: 'mirrorless-dslr-cameras',
     name: 'Nikon Zf',
     model: 'Zf',
     modelNo: null,
@@ -260,7 +271,7 @@ export const products = [
   {
     slug: 'nikkor-z-50mm-f12-s',
     brand: 'nikon',
-    category: 'camera-lenses',
+    category: 'lenses-optics',
     name: 'NIKKOR Z 50mm f/1.2 S',
     model: 'Z 50mm f/1.2 S',
     modelNo: null,
@@ -292,7 +303,7 @@ export const products = [
   {
     slug: 'nikkor-z-70-200mm-f28-vr-s-ii',
     brand: 'nikon',
-    category: 'camera-lenses',
+    category: 'lenses-optics',
     name: 'NIKKOR Z 70-200mm f/2.8 VR S II',
     model: 'Z 70-200mm f/2.8 VR S II',
     modelNo: null,
@@ -324,7 +335,7 @@ export const products = [
   {
     slug: 'instax-mini-12',
     brand: 'fujifilm',
-    category: 'mini-cameras',
+    category: 'instant-cameras-film',
     name: 'instax mini 12',
     model: 'instax mini 12',
     modelNo: null,
@@ -354,7 +365,9 @@ export const products = [
   {
     slug: 'instax-mini-instant-film',
     brand: 'fujifilm',
-    category: 'mini-camera-paper',
+    category: 'instant-cameras-film',
+    template: 'film', // the category's default template is the instant camera one
+    card: ['pictureSize', 'exposures', 'iso'],
     name: 'instax mini Instant Film',
     model: 'instax mini film (10 exposures)',
     modelNo: null,
@@ -375,7 +388,9 @@ export const products = [
   {
     slug: 'instax-mini-link-3',
     brand: 'fujifilm',
-    category: 'photo-printers',
+    category: 'instant-cameras-film', // client hierarchy has no printer category
+    template: 'printer',
+    card: ['printTime', 'connection', 'printsPerCharge'],
     name: 'instax mini Link 3',
     model: 'instax mini Link 3',
     modelNo: null,
@@ -402,93 +417,6 @@ export const products = [
       weight: '210 g (excluding film)',
     },
   },
-  {
-    slug: 'google-pixel-10-pro',
-    brand: 'google',
-    category: 'mobile-phones',
-    name: 'Google Pixel 10 Pro',
-    model: 'Pixel 10 Pro',
-    modelNo: 'G4QUR',
-    released: '2025-08-20',
-    colours: ['Obsidian', 'Moonstone', 'Jade', 'Porcelain'],
-    images: ['Front', 'Back', 'Side', 'Camera bar'],
-    short: 'A 6.3-inch Pixel with Google Tensor G5, 16 GB of memory and a 5× telephoto camera.',
-    overview: [
-      'Pixel 10 Pro runs on Google Tensor G5 with 16 GB of memory and a 6.3-inch Super Actua display that reaches 3,300 nits at peak.',
-      'A triple rear camera system with a 48 MP 5× telephoto and up to 100× Pro Zoom, plus seven years of OS and security updates.',
-    ],
-    features: [
-      { title: 'Triple rear camera', text: '50 MP wide, 48 MP ultrawide and 48 MP 5× telephoto.' },
-      { title: 'Google Tensor G5', text: 'With Titan M2 security coprocessor.' },
-      { title: '7 years of updates', text: 'OS, security and Pixel Drop updates.' },
-    ],
-    specs: {
-      display: '6.3-inch Super Actua LTPO OLED, 1280 × 2856, 1–120 Hz',
-      brightness: 'Up to 2,200 nits (HDR), 3,300 nits peak',
-      glass: 'Corning Gorilla Glass Victus 2',
-      processor: 'Google Tensor G5, Titan M2 security coprocessor',
-      memory: '16 GB',
-      storage: ['128 GB', '256 GB', '512 GB', '1 TB'],
-      rearCameras: ['50 MP wide, ƒ/1.68', '48 MP ultrawide with macro focus, ƒ/1.7', '48 MP 5× telephoto, ƒ/2.8, OIS'],
-      frontCamera: '42 MP ultrawide, ƒ/2.2, autofocus',
-      zoom: '5× optical, up to 100× Pro Zoom',
-      battery: '4,870 mAh (typical)',
-      wired: 'Up to 55% in about 30 minutes (30 W charger)',
-      wireless: 'Qi2-certified, up to 15 W (Pixelsnap)',
-      os: 'Android 16',
-      updates: '7 years of OS and security updates',
-      network: '5G (Sub-6 GHz and mmWave)',
-      wifi: 'Wi-Fi 7',
-      bluetooth: 'Bluetooth 6',
-      otherConn: ['NFC', 'Ultra-wideband', 'Dual eSIM'],
-      durability: 'IP68 dust and water resistance',
-      dimensions: '152.8 × 72.0 × 8.6 mm',
-      weight: '207 g',
-    },
-  },
-  {
-    slug: 'google-pixel-watch-4',
-    brand: 'google',
-    category: 'smart-watches',
-    name: 'Google Pixel Watch 4',
-    model: 'Pixel Watch 4',
-    modelNo: null,
-    released: '2025-10-09',
-    colours: ['Matte Black', 'Polished Silver', 'Champagne Gold', 'Satin Moonstone'],
-    variants: ['41 mm', '45 mm'],
-    images: ['Front', 'Side', 'Back (sensors)', 'On wrist', 'Charging dock'],
-    short: 'Domed Actua 360 display, health sensors and up to 40 hours of battery in two case sizes.',
-    overview: [
-      'Pixel Watch 4 comes in 41 mm and 45 mm sizes with a domed Actua 360 AMOLED display reaching 3,000 nits.',
-      'Snapdragon W5 Gen 2 runs Wear OS 6, with ECG, SpO2, skin temperature and multi-path heart rate sensing.',
-    ],
-    specs: {
-      display: 'Actua 360 AMOLED LTPO, 320 ppi, 1–60 Hz',
-      brightness: 'Up to 3,000 nits',
-      processor: 'Qualcomm Snapdragon W5 Gen 2 with Cortex-M55 co-processor',
-      memory: '32 GB eMMC, 2 GB SDRAM',
-      os: 'Wear OS 6',
-      capacity: { '41 mm': '325 mAh', '45 mm': '455 mAh' },
-      batteryLife: { '41 mm': 'Up to 30 hours', '45 mm': 'Up to 40 hours' },
-      saver: { '41 mm': 'Up to 48 hours', '45 mm': 'Up to 72 hours' },
-      charging: 'About 15 minutes to 50% (Quick Charge Dock)',
-      sensors: [
-        'Multi-path optical heart rate',
-        'ECG-compatible electrical sensors',
-        'SpO2 (red and infrared)',
-        'Skin temperature',
-        'Skin conductance (cEDA)',
-        'Compass, altimeter, barometer',
-        'Accelerometer, gyroscope, ambient light',
-      ],
-      connectivity: ['4G LTE', 'Wi-Fi 6 (2.4 / 5 GHz)', 'Bluetooth 6.0', 'NFC', 'Ultra-wideband', 'Satellite SOS', 'Dual-frequency GPS'],
-      compatibility: 'Android 11.0 or newer; Google Account and Pixel Watch app',
-      caseSizes: '41 mm, 45 mm',
-      durability: '5 ATM, IP68',
-      weight: { '41 mm': '31.0 g', '45 mm': '36.7 g' },
-      materials: '100% recycled aluminium case',
-    },
-  },
 ];
 
 // ── Lookups & helpers ────────────────────────────────────────────────────────
@@ -498,6 +426,11 @@ export const categoryOf = (p) => byId(categories, p.category);
 export const groupOf = (c) => byId(groups, c.group);
 export const productBySlug = (slug) => products.find((p) => p.slug === slug);
 export const categoriesIn = (groupId) => categories.filter((c) => c.group === groupId);
+/** Spec template and card highlights: the product's own, else its category's. */
+export const templateOf = (p) => p.template || categoryOf(p).template;
+export const cardFieldsOf = (p) => p.card || categoryOf(p).card;
+export const inHouseBrands = brands.filter((b) => b.inHouse);
+export const partnerBrands = brands.filter((b) => !b.inHouse);
 
 /** Field label lookup across a template. */
 export function fieldLabel(templateId, key) {
@@ -515,10 +448,9 @@ export function shortValue(v) {
 
 /** Highlights for a product card: label + short value, from the category config. */
 export function highlightsFor(p) {
-  const c = categoryOf(p);
-  return c.card
+  return cardFieldsOf(p)
     .filter((k) => p.specs[k] != null)
-    .map((k) => ({ label: fieldLabel(c.template, k), value: shortValue(p.specs[k]) }));
+    .map((k) => ({ label: fieldLabel(templateOf(p), k), value: shortValue(p.specs[k]) }));
 }
 
 /** Count of filled spec fields — used in notes to show template sizes. */
