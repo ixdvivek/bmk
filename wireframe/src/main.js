@@ -6,7 +6,7 @@ import { renderProduct } from './product.js';
 import { renderScreens } from './screens.js';
 import { initNotes, refreshNotes } from './notes.js';
 import { openEnquiry } from './enquiry.js';
-import { href, toast } from './ui.js';
+import { href, toast, VERSION } from './ui.js';
 
 const view = document.getElementById('view');
 let lastPath = null;
@@ -45,7 +45,7 @@ function render() {
 
   const page = resolve(route) || {
     title: 'Not found',
-    html: `<div class="wrap py-24"><h1 class="text-3xl font-semibold">Page not found</h1><p class="mt-3 text-sub">This screen isn’t in the wireframe. <a class="underline" href="#/">Back to the index</a>.</p></div>`,
+    html: `<div class="wrap py-24"><h1 class="text-3xl font-semibold">Page not found</h1><p class="mt-3 text-sub">This screen isn’t in this version of the wireframe. <a class="underline" href="#/">Back to the index</a>.</p></div>`,
   };
   const y = scrollY;
   view.innerHTML = page.html;
@@ -60,25 +60,35 @@ function render() {
 function toolbar() {
   const el = document.getElementById('wf-toolbar');
   el.innerHTML = `
-  <div class="fixed bottom-[76px] left-3 z-[65] sm:bottom-4 sm:left-4 flex items-center gap-1 rounded-full border border-line bg-white p-1 text-[13px] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.3)]">
+  <div class="fixed bottom-[76px] left-3 z-[65] sm:bottom-4 sm:left-4 flex flex-wrap items-center gap-1 rounded-full border border-line bg-white p-1 text-[13px] shadow-[0_8px_24px_-8px_rgba(0,0,0,0.3)]">
     <a href="#/" class="rounded-full px-3 py-1.5 font-semibold hover:bg-wash">Screens</a>
-    <button type="button" id="notes-toggle" class="rounded-full px-3 py-1.5 hover:bg-wash" aria-pressed="true">Notes: on</button>
+    <span class="flex items-center rounded-full bg-wash p-0.5" aria-label="Wireframe version"><a href="v1/" data-version-link class="rounded-full px-2.5 py-1 hover:bg-white">v1</a><span class="rounded-full bg-ink px-2.5 py-1 font-semibold text-white" aria-current="true">${VERSION.id}</span></span>
+    <button type="button" data-toggle="notes" class="rounded-full px-3 py-1.5 hover:bg-wash" aria-pressed="true">Notes: on</button>
+    <button type="button" data-toggle="changes" class="rounded-full px-3 py-1.5 hover:bg-wash" aria-pressed="true"><span class="mr-1 inline-block size-2 rounded-full bg-[#ffd43b] align-middle"></span>Changes: on</button>
   </div>`;
-  const btn = document.getElementById('notes-toggle');
-  const set = (on) => {
-    document.body.classList.toggle('notes-on', on);
-    btn.setAttribute('aria-pressed', String(on));
-    btn.textContent = `Notes: ${on ? 'on' : 'off'}`;
+  // Keep the current screen when switching versions
+  const vl = el.querySelector('[data-version-link]');
+  vl.addEventListener('click', () => (vl.href = `v1/${location.hash}`));
+  const toggle = (kind, label) => {
+    const btn = el.querySelector(`[data-toggle="${kind}"]`);
+    const key = `wf-${kind}`;
+    const set = (on) => {
+      document.body.classList.toggle(`${kind}-on`, on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.lastChild.textContent = `${label}: ${on ? 'on' : 'off'}`;
+      try {
+        localStorage.setItem(key, on ? '1' : '0');
+      } catch {}
+    };
+    let saved = '1';
     try {
-      localStorage.setItem('wf-notes', on ? '1' : '0');
+      saved = localStorage.getItem(key) ?? '1';
     } catch {}
+    set(saved === '1');
+    btn.addEventListener('click', () => set(!document.body.classList.contains(`${kind}-on`)));
   };
-  let saved = '1';
-  try {
-    saved = localStorage.getItem('wf-notes') ?? '1';
-  } catch {}
-  set(saved === '1');
-  btn.addEventListener('click', () => set(!document.body.classList.contains('notes-on')));
+  toggle('notes', 'Notes');
+  toggle('changes', 'Changes');
 }
 
 // In-page anchors (#overview etc.) must not trigger the hash router.

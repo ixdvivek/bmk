@@ -18,6 +18,10 @@
   }
   body {
     @apply bg-white font-sans text-[15px] leading-relaxed text-ink;
+    overflow-x: clip; /* note badges sit just outside their element */
+  }
+  html {
+    overflow-x: clip;
   }
   :focus-visible {
     outline: 2px solid var(--color-ink);
@@ -141,6 +145,42 @@
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 body:not(.notes-on) .note-badge {
+  display: none;
+}
+
+/* v2 change markers: what changed since the previous version (toggle: Changes) */
+.change-badge {
+  position: absolute;
+  z-index: 31;
+  top: -26px;
+  left: -8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #ffd43b;
+  color: #111;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 0 0 3px #fff;
+}
+.change-badge span {
+  font-weight: 500;
+  opacity: 0.7;
+}
+.change-pop {
+  background: #fff8d6;
+  color: #111;
+  border: 1px solid #f0c419;
+}
+body.changes-on [data-change] {
+  outline: 2px dashed #f0c419;
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+body:not(.changes-on) .change-badge {
   display: none;
 }
 

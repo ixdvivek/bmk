@@ -1,14 +1,14 @@
 // Universal product details page. Everything below the summary is driven by the
 // product's category template, so a 6-field film pack and a 21-field phone use
 // the same layout without any per-product design work.
-import { products, templates, productBySlug, brandOf, categoryOf, groupOf, fieldLabel, shortValue } from './data.js';
+import { products, templates, productBySlug, brandOf, categoryOf, groupOf, fieldLabel, shortValue, templateOf, cardFieldsOf } from './data.js';
 import { esc, href, icons, ph, note, productCard } from './ui.js';
 import { openEnquiry } from './enquiry.js';
 
 /** Spec groups for a product: template order, empty fields and groups dropped,
  *  and any filled field the template doesn't know lands in "Other" so nothing is lost. */
 export function specGroups(p) {
-  const tpl = templates[categoryOf(p).template] || [];
+  const tpl = templates[templateOf(p)] || [];
   const used = new Set();
   const out = tpl
     .map((g) => ({
@@ -45,11 +45,11 @@ export function renderProduct(slug) {
   const fromBrand = products.filter((x) => x.brand === p.brand && x.slug !== p.slug).slice(0, 4);
   const related = products.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 4);
 
-  const hl = c.card.filter((k) => p.specs[k] != null);
+  const hl = cardFieldsOf(p).filter((k) => p.specs[k] != null);
   const tile = (k) => {
     const v = p.specs[k];
     const val = v && typeof v === 'object' && !Array.isArray(v) ? v[state.variant] ?? shortValue(v) : shortValue(v);
-    return `<div class="rounded-lg border border-line p-3"><p class="text-xs text-faint">${esc(fieldLabel(c.template, k))}</p><p class="mt-1 text-sm leading-snug font-semibold" data-tile="${k}">${esc(val)}</p></div>`;
+    return `<div class="rounded-lg border border-line p-3"><p class="text-xs text-faint">${esc(fieldLabel(templateOf(p), k))}</p><p class="mt-1 text-sm leading-snug font-semibold" data-tile="${k}">${esc(val)}</p></div>`;
   };
 
   const specRows = (rows) =>
@@ -181,7 +181,7 @@ export function renderProduct(slug) {
       <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 class="text-2xl font-semibold tracking-tight">Specifications</h2>
-          <p class="mt-1 text-sm text-sub" ${note(`Universal spec layout. Fields and groups come from the category’s spec template (this product: “${c.template}” template, ${fieldCount} filled fields in ${groupsList.length} group${groupsList.length === 1 ? '' : 's'}). Empty fields and groups are hidden automatically; values can be text, lists, or per-variant values. New product types only need a new template, never a new page design.`)}>${fieldCount} specifications${manyGroups ? ` in ${groupsList.length} groups` : ''}</p>
+          <p class="mt-1 text-sm text-sub" ${note(`Universal spec layout. Fields and groups come from the category’s spec template (this product: “${templateOf(p)}” template, ${fieldCount} filled fields in ${groupsList.length} group${groupsList.length === 1 ? '' : 's'}). Empty fields and groups are hidden automatically; values can be text, lists, or per-variant values. New product types only need a new template, never a new page design.`)}>${fieldCount} specifications${manyGroups ? ` in ${groupsList.length} groups` : ''}</p>
         </div>
         ${manyGroups ? `<div class="flex gap-2"><button type="button" class="chip" data-expand="1">Expand all</button><button type="button" class="chip" data-expand="0">Collapse all</button></div>` : ''}
       </div>
@@ -190,7 +190,7 @@ export function renderProduct(slug) {
     </div>
   </section>
 
-  <section id="related" class="wrap scroll-mt-36 py-14" data-section ${note('Two “more” strips on every product: more from the same brand, then more in the same category. If either has nothing else yet, it says so and links onward instead of disappearing (try the Pixel Watch 4). Scroll sideways on mobile.')}>
+  <section id="related" class="wrap scroll-mt-36 py-14" data-section ${note('Two “more” strips on every product: more from the same brand, then more in the same category. If either has nothing else yet, it says so and links onward instead of disappearing (try the instax mini Link 3). Scroll sideways on mobile.')}>
     ${relatedRow(`More from ${b.name}`, fromBrand, href(`/brand/${b.id}`), `No other ${b.name} products yet.`, ['View all products', href('/products')])}
     ${relatedRow(`More in ${c.name}`, related, href(`/category/${c.id}`), `No other ${c.name.toLowerCase()} yet.`, [`Browse ${g.name}`, href(`/category/${g.id}`)])}
   </section>

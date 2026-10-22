@@ -20,6 +20,9 @@ export const ph = (label = 'Image', cls = '', ratio = '4 / 3') =>
 
 /** Annotation marker: wrap any element's attributes with this. */
 export const note = (text) => `data-note="${esc(text)}"`;
+/** What changed in this version, on a section. Shown as a yellow "v2" marker (toggle: Changes). */
+export const change = (text) => `data-change="${esc(text)}"`;
+export const VERSION = { id: 'v2', date: '22 Oct 2026', source: 'BMK_WEBSITE_INFO_21.10.2026 (client document)' };
 
 const arrow = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 export const icons = {

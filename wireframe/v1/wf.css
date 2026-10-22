@@ -1,0 +1,173 @@
+/* Wireframe v1 (frozen copy, 22 Oct 2026). Greyscale only. Scans this folder only. */
+@import 'tailwindcss' source('.');
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --color-ink: #111111;
+  --color-sub: #5c5c5c;
+  --color-faint: #8a8a8a;
+  --color-line: #d9d9d9;
+  --color-hair: #ececec;
+  --color-wash: #f5f5f5;
+  --color-note: #111111;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-white font-sans text-[15px] leading-relaxed text-ink;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+  button {
+    cursor: pointer;
+  }
+  input[type='search']::-webkit-search-cancel-button {
+    appearance: none;
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-[1360px] px-4 sm:px-6 lg:px-10;
+  }
+
+  /* Image placeholder: classic wireframe cross + label */
+  .ph {
+    @apply relative grid place-items-center overflow-hidden bg-wash text-[11px] font-medium tracking-wide text-faint uppercase;
+    background-image:
+      linear-gradient(to top right, transparent calc(50% - 0.5px), var(--color-line) 50%, transparent calc(50% + 0.5px)),
+      linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--color-line) 50%, transparent calc(50% + 0.5px));
+  }
+  .ph > span {
+    @apply relative rounded-sm bg-wash px-2 py-0.5;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-colors;
+  }
+  .btn-primary {
+    @apply bg-ink text-white hover:bg-sub;
+  }
+  .btn-ghost {
+    @apply border border-ink text-ink hover:bg-ink hover:text-white;
+  }
+  .btn-sm {
+    @apply px-3.5 py-1.5 text-[13px];
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-[13px] whitespace-nowrap transition-colors hover:border-ink;
+  }
+  .chip[aria-pressed='true'],
+  .chip.is-on {
+    @apply border-ink bg-ink text-white;
+  }
+  .chip .count {
+    @apply text-faint;
+  }
+  .chip[aria-pressed='true'] .count,
+  .chip.is-on .count {
+    @apply text-white/60;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-semibold tracking-[0.12em] text-faint uppercase;
+  }
+  .crumbs {
+    @apply flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] text-sub;
+  }
+  .crumbs a:hover {
+    @apply text-ink underline;
+  }
+
+  .check {
+    @apply flex cursor-pointer items-center gap-2.5 py-1 text-sm;
+  }
+  .check input {
+    @apply size-4 accent-black;
+  }
+  .check .count {
+    @apply ml-auto text-xs text-faint;
+  }
+  .check.is-empty {
+    @apply cursor-default text-faint;
+  }
+
+  .card {
+    @apply relative flex flex-col rounded-lg border border-line bg-white transition-[border-color,box-shadow];
+  }
+  .card:hover {
+    @apply border-ink shadow-[0_8px_24px_-12px_rgba(0,0,0,0.25)];
+  }
+
+  /* Wireframe content conventions */
+  .tbc {
+    @apply rounded-sm border border-dashed border-faint px-1.5 text-[12px] text-faint;
+  }
+}
+
+/* Annotation markers (toggle: Notes) */
+.note-badge {
+  position: absolute;
+  z-index: 30;
+  top: -10px;
+  right: -10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-note);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 3px #fff;
+}
+.note-pop {
+  position: absolute;
+  z-index: 60;
+  width: min(300px, calc(100vw - 32px));
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.45;
+  padding: 10px 12px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+body:not(.notes-on) .note-badge {
+  display: none;
+}
+
+/* Site header: sticky, hides on scroll down and returns on scroll up (as on
+   the built site). --hdr is the visible header height that sticky bars sit under. */
+:root {
+  --hdr: 64px;
+}
+body.header-hidden {
+  --hdr: 0px;
+}
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: transform 0.3s ease;
+}
+body.header-hidden #site-header {
+  transform: translateY(-100%);
+}
+
+/* Overlay helpers */
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.35);
+}
+.no-scroll {
+  overflow: hidden;
+}

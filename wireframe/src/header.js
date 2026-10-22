@@ -1,5 +1,6 @@
-import { groups, categoriesIn, brands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from './data.js';
-import { esc, href, icons, ph, note, toast } from './ui.js';
+import { groups, categoriesIn, brands, inHouseBrands, partnerBrands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from './data.js';
+import { contact } from './content.js';
+import { esc, href, icons, ph, note, change, toast } from './ui.js';
 import { refreshNotes } from './notes.js';
 import { openEnquiry } from './enquiry.js';
 
@@ -36,34 +37,28 @@ export function renderHeader() {
 }
 
 function megaMenu() {
-  const photo = groups[0];
-  const rest = groups.slice(1);
   const catLink = (c) => {
     const n = countIn(c.id);
-    return `<li><a href="${href(`/category/${c.id}`)}" class="flex items-baseline justify-between gap-3 rounded px-2 py-1.5 text-sm hover:bg-wash ${n ? '' : 'text-faint'}">${esc(c.name)}<span class="text-xs text-faint">${n}</span></a></li>`;
+    return `<li><a href="${href(`/category/${c.id}`)}" class="flex items-baseline justify-between gap-3 rounded px-2 py-1 text-sm hover:bg-wash ${n ? '' : 'text-faint'}">${esc(c.name)}<span class="text-xs text-faint">${n}</span></a></li>`;
   };
   const groupHead = (g) =>
-    `<a href="${href(`/category/${g.id}`)}" class="mb-2 flex items-center gap-1.5 px-2 text-[13px] font-semibold tracking-wide uppercase hover:underline">${esc(g.name)} ${icons.arrow}</a>`;
+    `<a href="${href(`/category/${g.id}`)}" class="mb-1.5 flex items-center gap-1.5 px-2 text-[12px] font-semibold tracking-wide uppercase hover:underline">${esc(g.name)} ${icons.arrow}</a>`;
+  const brandTile = (b) => `<li><a href="${href(`/brand/${b.id}`)}" class="flex flex-col gap-1.5 rounded-lg border border-line p-2 hover:border-ink">
+      ${ph(`${b.name} logo`, 'rounded', '3 / 1')}
+      <span class="flex items-baseline justify-between text-xs font-medium">${esc(b.name)}<span class="text-faint">${countBrand(b.id)}</span></span></a></li>`;
   return `
-  <div class="wrap grid grid-cols-12 gap-8 py-8">
-    <div class="col-span-8" ${note('Categories use the four-group structure. Group headings open a group listing (all its categories); each category opens its own listing. Counts come from live product data; empty categories stay visible but muted.')}>
+  <div class="wrap grid grid-cols-12 gap-8 py-7">
+    <div class="col-span-8" ${note('Categories: six groups, each opening a group listing; each category opens its own listing. Counts come from live product data; empty categories stay visible but muted.')} ${change('Six category groups and 20 categories from the client’s final hierarchy (was 4 groups / 14 categories). Laid out as a 3 × 2 grid.')}>
       <p class="eyebrow mb-4 px-2">Product categories</p>
-      <div class="grid grid-cols-3 gap-x-6">
-        <div class="col-span-2">${groupHead(photo)}<ul class="grid grid-cols-2 gap-x-4">${categoriesIn(photo.id).map(catLink).join('')}</ul></div>
-        <div class="flex flex-col gap-6">${rest.map((g) => `<div>${groupHead(g)}<ul>${categoriesIn(g.id).map(catLink).join('')}</ul></div>`).join('')}</div>
+      <div class="grid grid-cols-3 gap-x-6 gap-y-6">
+        ${groups.map((g) => `<div>${groupHead(g)}<ul>${categoriesIn(g.id).map(catLink).join('')}</ul></div>`).join('')}
       </div>
     </div>
-    <div class="col-span-4 border-l border-hair pl-8" ${note('Brands: logo tiles link straight to each brand page. Grows as a scrollable grid when more brands are added.')}>
-      <p class="eyebrow mb-4">Brands</p>
-      <ul class="grid grid-cols-2 gap-3">
-        ${brands
-          .map(
-            (b) => `<li><a href="${href(`/brand/${b.id}`)}" class="flex flex-col gap-2 rounded-lg border border-line p-3 hover:border-ink">
-              ${ph(`${b.name} logo`, 'rounded', '3 / 1')}
-              <span class="flex items-baseline justify-between text-sm font-medium">${esc(b.name)}<span class="text-xs text-faint">${countBrand(b.id)}</span></span></a></li>`,
-          )
-          .join('')}
-      </ul>
+    <div class="col-span-4 border-l border-hair pl-8" ${note('Brands: logo tiles link to each brand page. BMK’s own brands are listed first, then partner brands.')} ${change('14 brands (was 3), split into BMK’s in-house brands and partner brands. Google removed. Logos are placeholders until BMK sends them.')}>
+      <p class="eyebrow mb-3">In-house brands</p>
+      <ul class="grid grid-cols-2 gap-2">${inHouseBrands.map(brandTile).join('')}</ul>
+      <p class="eyebrow mt-5 mb-3">Partner brands</p>
+      <ul class="grid max-h-[260px] grid-cols-3 gap-2 overflow-y-auto pr-1">${partnerBrands.map(brandTile).join('')}</ul>
     </div>
   </div>
   <div class="border-t border-hair">
@@ -74,7 +69,7 @@ function megaMenu() {
   </div>`;
 }
 
-const POPULAR = ['X-T5', 'Pixel', 'NIKKOR', 'instax'];
+const POPULAR = ['X-T5', 'Nikon Z8', 'NIKKOR', 'instax'];
 
 function searchPanel() {
   return `
@@ -146,7 +141,7 @@ function drawer() {
       <nav class="text-[17px]" aria-label="Mobile">
         <a href="#/home" class="block border-b border-hair py-3">Home</a>
         <a href="#/about" class="block border-b border-hair py-3">About Us</a>
-        <details class="border-b border-hair" open ${note('Mobile: the mega menu becomes nested accordions inside the menu drawer: category groups, then brands, then View all products.')}>
+        <details class="border-b border-hair" open ${note('Mobile: the mega menu becomes nested accordions inside the menu drawer: category groups, then brands, then View all products.')} ${change('Six category groups and 14 brands, in-house brands first.')}>
           <summary class="flex cursor-pointer list-none items-center justify-between py-3 font-semibold">Brands &amp; Products ${icons.chevron}</summary>
           <div class="pb-3 pl-3">
             ${groups
@@ -159,8 +154,10 @@ function drawer() {
                   </ul></details>`,
               )
               .join('')}
-            <p class="eyebrow mt-4 mb-2">Brands</p>
-            <div class="flex flex-wrap gap-2">${brands.map((b) => `<a class="chip" href="${href(`/brand/${b.id}`)}">${esc(b.name)}</a>`).join('')}</div>
+            <p class="eyebrow mt-4 mb-2">In-house brands</p>
+            <div class="flex flex-wrap gap-2">${inHouseBrands.map((b) => `<a class="chip" href="${href(`/brand/${b.id}`)}">${esc(b.name)}</a>`).join('')}</div>
+            <p class="eyebrow mt-4 mb-2">Partner brands</p>
+            <div class="flex flex-wrap gap-2">${partnerBrands.map((b) => `<a class="chip" href="${href(`/brand/${b.id}`)}">${esc(b.name)}</a>`).join('')}</div>
             <a href="${href('/products')}" class="btn btn-ghost btn-sm mt-4 w-full">View all products (${products.length})</a>
           </div>
         </details>
@@ -281,10 +278,11 @@ export function renderFooter() {
         <ul class="mt-2 flex gap-3" aria-label="Social media">${['Facebook', 'Instagram', 'LinkedIn', 'X'].map((n) => `<li><span class="ph grid size-8 rounded-full text-[8px]" style="aspect-ratio:1" aria-label="${n}"></span></li>`).join('')}</ul></div>
       <div><p class="mb-3 font-semibold">Quick links</p><ul class="grid gap-1.5 text-sub">
         ${link('#/home', 'Home')}${link('#/about', 'About Us')}${link(href('/products'), 'Brands &amp; Products')}${link('#/faq', 'FAQ')}${link('#/contact', 'Contact Us')}</ul></div>
-      <div><p class="mb-3 font-semibold">Categories</p><ul class="grid gap-1.5 text-sub">${groups.map((g) => link(href(`/category/${g.id}`), esc(g.name))).join('')}</ul></div>
+      <div ${change('Category links follow the six new groups.')}><p class="mb-3 font-semibold">Categories</p><ul class="grid gap-1.5 text-sub">${groups.map((g) => link(href(`/category/${g.id}`), esc(g.name))).join('')}</ul></div>
       <div ${note('Business enquiry links for the four types, per the homepage feedback. Each opens the enquiry popup with its type selected.')}><p class="mb-3 font-semibold">Business enquiries</p><ul class="grid gap-1.5 text-sub">
         ${['Distribution Enquiry', 'Dealership Enquiry', 'Retail Sales Enquiry', 'General Enquiry'].map((t) => `<li><button type="button" class="text-left hover:text-ink hover:underline" data-enquiry-type="${t}">${t.replace(' Enquiry', '') === 'General' ? 'General Enquiry' : t.replace(' Enquiry', '')}</button></li>`).join('')}</ul></div>
-      <div><p class="mb-3 font-semibold">Contact</p><address class="grid gap-1.5 text-sub not-italic"><span>BMK GULF FZE<br />Warehouse # RA08LB07, P.O. Box 261752, Jebel Ali Free Zone, Dubai, UAE</span><a class="hover:underline" href="tel:+97148870211">+971 4 887 0211</a><a class="hover:underline" href="mailto:info@bmkintl.com">info@bmkintl.com</a></address></div>
+      <div ${change('Head-office phone changed to +971 4 232 4747 (was +971 4 887 0211), per the client document. Address now includes “(JAFZA)”. In-house brand websites added.')}><p class="mb-3 font-semibold">Contact</p><address class="grid gap-1.5 text-sub not-italic"><span>${esc(contact.company)}<br />${esc(contact.address)}</span><a class="hover:underline" href="tel:${contact.phone.replace(/\s/g, '')}">${esc(contact.phone)}</a><a class="hover:underline" href="mailto:${contact.email}">${esc(contact.email)}</a></address>
+        <p class="mt-4 mb-2 font-semibold">Our brands online</p><ul class="grid gap-1 text-sub">${inHouseBrands.flatMap((b) => b.sites.map(([d, l]) => `<li><a class="hover:underline" href="https://${d}" target="_blank" rel="noopener">${esc(b.name)}${l ? ` (${esc(l)})` : ''} ↗</a></li>`)).join('')}</ul></div>
     </div>
     <div class="border-t border-line">
       <div class="wrap flex flex-col gap-3 py-5 text-xs text-faint md:flex-row md:items-center md:justify-between">
@@ -296,7 +294,7 @@ export function renderFooter() {
   document.getElementById('site-footer').addEventListener('click', (e) => {
     if (e.target.closest('[data-stub]')) {
       e.preventDefault();
-      toast('Legal pages are not part of the Phase 1 page templates');
+      toast('Legal pages are designed separately (see the catalogue designs)');
     }
   });
 }
