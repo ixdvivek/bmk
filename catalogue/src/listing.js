@@ -1,5 +1,5 @@
 // Listing: category, group, all products, search results, and the brand page.
-import { products, brands, groups, categories, categoriesIn, byId, groupOf, searchProducts, searchBrands, searchCategories } from '../../wireframe/v1/src/data.js';
+import { products, brands, groups, categories, categoriesIn, byId, groupOf, searchProducts, searchBrands, searchCategories } from '../../wireframe/src/data.js';
 import { esc, href, arrow, icon, crumbs, productCard, brandMark, brandVars } from './ui.js';
 import { brandStyle, categoryHero } from './media.js';
 
@@ -212,7 +212,7 @@ function pageHero(ctx, base) {
     trail = ctx.kind === 'group' ? [home, prods, [g.name]] : [home, prods, [g.name, href(`/category/${g.id}`)], [ctx.cat.name]];
     eyebrow = ctx.kind === 'group' ? 'Category' : g.name;
     title = ctx.kind === 'group' ? g.name : ctx.cat.name;
-    sub = ctx.kind === 'group' ? `Every ${g.name.toLowerCase()} product BMK Group handles, across ${categoriesIn(g.id).length} categories.` : `${base.length} product${base.length === 1 ? '' : 's'} from the brands BMK Group handles.`;
+    sub = ctx.kind === 'group' ? `Every ${g.name.toLowerCase()} product BMK Group handles, across ${categoriesIn(g.id).length} categories.` : ctx.cat.desc;
     const img = categoryHero[ctx.cat?.id] || categoryHero[g.id];
     // Empty categories are left out of the pills (the current one always shows)
     const sibs = categoriesIn(g.id)
@@ -253,7 +253,7 @@ function brandHero(ctx, base, selC, url) {
   const b = ctx.brand;
   const cats = categories.filter((c) => base.some((p) => p.category === c.id));
   const img = brandStyle[b.id]?.hero;
-  const tabs = pillbar(
+  const tabs = !base.length ? '<div class="h-0"></div>' : pillbar(
     `${b.name} categories`,
     `<li><a class="pill-dark is-brand ${selC.length ? '' : 'is-on'}" href="${url({ cat: [], page: '' })}">All <span class="n">${base.length}</span></a></li>
     ${cats.map((c) => {
@@ -263,7 +263,7 @@ function brandHero(ctx, base, selC, url) {
     brandVars(b.id),
   );
   return `
-  <section class="photo-hero pt-[clamp(128px,11vw,176px)] pb-[146px]" style="--hero-overlay:linear-gradient(90deg,rgb(0 0 0/.55) 0%,rgb(0 0 0/.15) 55%,rgb(0 0 0/0) 100%)">
+  <section class="photo-hero pt-[clamp(128px,11vw,176px)] ${base.length ? 'pb-[146px]' : 'pb-[clamp(56px,5vw,80px)]'}" style="--hero-overlay:linear-gradient(90deg,rgb(0 0 0/.55) 0%,rgb(0 0 0/.15) 55%,rgb(0 0 0/0) 100%)">
     ${img ? `<img class="photo-hero-img object-[70%_top]" src="${img}" alt="" fetchpriority="high" />` : ''}
     <div class="shell">
       ${crumbs([['Home', '../'], ['Brands & Products', href('/products')], [b.name]], true)}
@@ -271,10 +271,19 @@ function brandHero(ctx, base, selC, url) {
         <div class="rounded-xl bg-white px-4 py-4">${brandMark(b, { cls: 'h-[42px]' })}</div>
         <h1 class="t-display">${esc(b.name)}</h1>
         <p class="t-body text-white/75">${esc(b.intro)}</p>
-        <dl class="flex gap-12">
+        ${
+          b.inHouse
+            ? `<div class="flex flex-wrap items-center gap-2"><span class="pill-dark !bg-accent !border-accent">BMK in-house brand</span>${b.sites.map(([d, l]) => `<a class="pill-dark" href="https://${d}" target="_blank" rel="noopener">${esc(d)}${l ? ` · ${esc(l)}` : ''} ↗</a>`).join('')}</div>`
+            : ''
+        }
+        ${
+          base.length
+            ? `<dl class="flex gap-12">
           <div><dt class="text-[11px] tracking-[0.14em] text-white/60 uppercase">Products</dt><dd class="mt-1 text-[32px] leading-10 tracking-[-0.02em]">${base.length}</dd></div>
           <div><dt class="text-[11px] tracking-[0.14em] text-white/60 uppercase">Categories</dt><dd class="mt-1 text-[32px] leading-10 tracking-[-0.02em]">${cats.length}</dd></div>
-        </dl>
+        </dl>`
+            : ''
+        }
       </div>
     </div>
   </section>
@@ -288,14 +297,20 @@ function empty(ctx, base, url) {
     return box(
       `No products match “${esc(ctx.q)}”`,
       'Check the spelling, or search by model name or brand.',
-      `${['X-T5', 'Pixel', 'NIKKOR', 'instax'].map((t) => `<a class="pill" href="${href('/search', { q: t })}">${t}</a>`).join('')}<a class="btn btn-navy" href="${href('/products')}">Browse all products ${arrow('orange')}</a>`,
+      `${['X-T5', 'Nikon Z8', 'NIKKOR', 'instax'].map((t) => `<a class="pill" href="${href('/search', { q: t })}">${t}</a>`).join('')}<a class="btn btn-navy" href="${href('/products')}">Browse all products ${arrow('orange')}</a>`,
     );
   if (!base.length) {
     const name = ctx.cat?.name || ctx.group?.name || ctx.brand?.name;
-    const alt = ctx.group ? categoriesIn(ctx.group.id).filter((c) => products.some((p) => p.category === c.id)) : [];
+    const alt = ctx.brand
+      ? groups.filter((g) => ctx.brand.groups.includes(g.id)).map((g) => ({ id: g.id, name: g.name }))
+      : ctx.group
+        ? categoriesIn(ctx.group.id).filter((c) => products.some((p) => p.category === c.id))
+        : [];
     return box(
-      `New ${esc(name.toLowerCase())} are on the way`,
-      'Products for this category are being added. Explore related categories, or ask our team what’s available.',
+      ctx.brand ? `${esc(name)} products are coming soon` : `${esc(name)}: products coming soon`,
+      ctx.brand
+        ? `We’re adding the ${esc(name)} range to the catalogue. Meanwhile, browse the categories it covers, or ask our team what’s available.`
+        : 'Products for this category are being added. Explore related categories, or ask our team what’s available.',
       `${alt.map((c) => `<a class="pill" href="${href(`/category/${c.id}`)}">${esc(c.name)}</a>`).join('')}<button type="button" class="btn btn-navy" data-enquire>Make an enquiry ${arrow('orange')}</button>`,
     );
   }
