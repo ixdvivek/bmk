@@ -16,5 +16,5 @@ export const brands = [...all.filter((b) => b.inHouse), ...all.filter((b) => !b.
   description: b.intro,
   inHouse: !!b.inHouse,
   sites: b.sites || [],
-  href: `./catalogue/#/brand/${b.id}`,
+  href: '#', // homepage stays standalone for now (no links into the catalogue)
 }));
