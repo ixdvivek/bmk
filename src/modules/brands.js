@@ -26,7 +26,6 @@ export function initBrands({ reduced }) {
         <div class="flex w-full flex-col gap-3">
           <h3 class="text-[32px] leading-8 font-semibold">${b.name}</h3>
           <p class="t-body line-clamp-4 text-black/50">${b.description}</p>
-          ${b.sites.length ? `<p class="flex flex-wrap gap-x-4 text-sm">${b.sites.map(([d]) => `<a class="underline decoration-black/20 underline-offset-4 hover:decoration-black" href="https://${d}" target="_blank" rel="noopener">${d} ↗</a>`).join('')}</p>` : ''}
           <a href="${b.href}" class="brand-cta">${b.name} Products
             <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
           </a>

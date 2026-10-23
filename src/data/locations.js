@@ -17,7 +17,7 @@ export const locations = countries.map((c) => ({
   ...c,
   ...countryVisual[c.id],
   companies: entitiesIn(c.id),
-  href: `./catalogue/#/about?section=${c.id}`,
+  href: '#contact', // homepage stays standalone for now
 }));
 
 export const defaultLocation = 'uae';
