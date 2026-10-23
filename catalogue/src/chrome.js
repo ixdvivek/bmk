@@ -1,5 +1,6 @@
 // Navbar (homepage pill), mega menu, search overlay, mobile menu, footer, enquiry popup.
-import { groups, categoriesIn, brands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../wireframe/v1/src/data.js';
+import { groups, categoriesIn, brands, inHouseBrands, partnerBrands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../wireframe/src/data.js';
+import { contact } from '../../wireframe/src/content.js';
 import { A, esc, href, arrow, icon, brandMark, stage } from './ui.js';
 import { mediaOf } from './media.js';
 
@@ -35,18 +36,19 @@ export function renderChrome() {
     <div class="grid grid-cols-12 gap-10 p-10">
       <div class="col-span-8">
         <p class="mb-5 text-xs tracking-[0.14em] text-muted uppercase">Product categories</p>
-        <div class="grid grid-cols-3 gap-x-8 gap-y-6">
-          <div class="col-span-2">${groupBlock(groups[0], true)}</div>
-          <div class="grid content-start gap-6">${groups.slice(1).map((g) => groupBlock(g)).join('')}</div>
-        </div>
+        <div class="grid grid-cols-3 gap-x-8 gap-y-7">${groups.map((g) => groupBlock(g)).join('')}</div>
       </div>
       <div class="col-span-4 border-l border-line pl-10">
-        <p class="mb-5 text-xs tracking-[0.14em] text-muted uppercase">Brands</p>
-        <ul class="grid gap-3">${brands
+        <p class="mb-4 text-xs tracking-[0.14em] text-muted uppercase">Our brands</p>
+        <ul class="grid gap-2">${inHouseBrands
           .map(
-            (b) => `<li><a href="${href(`/brand/${b.id}`)}" class="group flex items-center justify-between rounded-xl border border-line px-5 py-4 transition-colors hover:border-ink">
-              ${brandMark(b, { cls: 'h-6' })}<span class="flex items-center gap-3 text-xs text-muted">${countBrand(b.id)} products ${arrow('orange')}</span></a></li>`,
+            (b) => `<li><a href="${href(`/brand/${b.id}`)}" class="group flex items-center justify-between rounded-xl border border-line px-4 py-3 transition-colors hover:border-ink">
+              ${brandMark(b, { cls: 'h-6' })}<span class="flex items-center gap-2 text-xs text-muted">In-house ${arrow('orange')}</span></a></li>`,
           )
+          .join('')}</ul>
+        <p class="mt-6 mb-4 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
+        <ul class="grid grid-cols-3 gap-2">${partnerBrands
+          .map((b) => `<li><a href="${href(`/brand/${b.id}`)}" class="mega-brand" title="${esc(b.name)}">${brandMark(b, { cls: 'h-4 !text-[13px]' })}</a></li>`)
           .join('')}</ul>
       </div>
     </div>
@@ -82,8 +84,10 @@ export function renderChrome() {
                   ${categoriesIn(g.id).map((c) => `<li><a class="flex justify-between py-1.5 ${countIn(c.id) ? '' : 'text-ink/40'}" href="${href(`/category/${c.id}`)}">${esc(c.name)}<span class="text-xs text-muted">${countIn(c.id)}</span></a></li>`).join('')}</ul></details>`,
               )
               .join('')}
-            <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Brands</p>
-            <div class="flex flex-wrap gap-2">${brands.map((b) => `<a class="pill" href="${href(`/brand/${b.id}`)}">${esc(b.name)}</a>`).join('')}</div>
+            <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Our brands</p>
+            <div class="flex flex-wrap gap-2">${inHouseBrands.map((b) => `<a class="pill" href="${href(`/brand/${b.id}`)}">${esc(b.name)}</a>`).join('')}</div>
+            <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
+            <div class="flex flex-wrap gap-2">${partnerBrands.map((b) => `<a class="pill" href="${href(`/brand/${b.id}`)}">${esc(b.name)}</a>`).join('')}</div>
             <a href="${href('/products')}" class="btn btn-navy mt-5">View all products ${arrow('orange')}</a>
           </div>
         </details>
@@ -119,7 +123,7 @@ function groupBlock(g, wide = false) {
       .join('')}</ul></div>`;
 }
 
-const POPULAR = ['X-T5', 'Pixel', 'NIKKOR', 'instax'];
+const POPULAR = ['X-T5', 'Nikon Z8', 'NIKKOR', 'instax'];
 function suggestions(q) {
   if (!q.trim())
     return `<div class="grid gap-6 sm:grid-cols-2">
@@ -246,9 +250,9 @@ function footer() {
         <ul class="flex flex-col gap-1.5 leading-6">${groups.map((g) => `<li><a class="footer-link" href="${href(`/category/${g.id}`)}">${esc(g.name)}</a></li>`).join('')}</ul></nav>
       <div class="flex flex-col gap-5 text-[15px]"><p class="leading-5 font-bold">CONTACT</p>
         <address class="flex flex-col gap-1.5 leading-6 not-italic">
-          <p class="flex gap-2"><img src="${A}icons/location.svg" alt="" class="size-6 shrink-0" width="24" height="24" /><span>BMK GULF FZE<br />Warehouse # RA08LB07, P.O. Box 261752, Jebel Ali Free Zone, Dubai, UAE</span></p>
-          <a class="footer-link flex gap-2" href="tel:+97148870211"><img src="${A}icons/call.svg" alt="" class="size-6 shrink-0" width="24" height="24" />+971 4 887 0211</a>
-          <a class="footer-link flex gap-2" href="mailto:info@bmkintl.com"><img src="${A}icons/email.svg" alt="" class="size-6 shrink-0" width="24" height="24" />info@bmkintl.com</a>
+          <p class="flex gap-2"><img src="${A}icons/location.svg" alt="" class="size-6 shrink-0" width="24" height="24" /><span>${esc(contact.company)}<br />${esc(contact.address)}</span></p>
+          <a class="footer-link flex gap-2" href="tel:${contact.phone.replace(/\s/g, '')}"><img src="${A}icons/call.svg" alt="" class="size-6 shrink-0" width="24" height="24" />${esc(contact.phone)}</a>
+          <a class="footer-link flex gap-2" href="mailto:${contact.email}"><img src="${A}icons/email.svg" alt="" class="size-6 shrink-0" width="24" height="24" />${esc(contact.email)}</a>
         </address>
         <ul class="flex gap-6 pl-8">${['facebook', 'instagram', 'linkedin', 'x'].map((s) => `<li><a href="#" class="social" aria-label="${s}"><img src="${A}icons/${s}.svg" alt="" width="20" height="20" /></a></li>`).join('')}</ul>
       </div>

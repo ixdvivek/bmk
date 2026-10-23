@@ -1,52 +1,23 @@
-// Group entities shown on the presence map.
-// x / y are the pin centres from Figma, as % of the 1200×620 map frame.
-// Copy and icons from the Figma location cards (Section 1, node 41:18060).
-// `address` is optional: only shown when set.
-export const locations = [
-  {
-    id: 'london',
-    x: 46.54,
-    y: 31.9,
-    entity: 'BMK Europe Ltd.',
-    city: 'London, United Kingdom',
-    address: '',
-    summary: 'European operations and brand management office.',
-    icon: 'assets/icons/loc-london.svg',
-    href: '#contact',
-  },
-  {
-    id: 'dubai',
-    x: 60.42,
-    y: 47.1,
-    entity: 'BMK Middle East FZE',
-    city: 'Dubai, UAE',
-    address: '',
-    summary: 'MENA region trade and distribution entity - United Arab Emirates.',
-    icon: 'assets/icons/loc-dubai.svg',
-    href: '#contact',
-  },
-  {
-    id: 'kuala-lumpur',
-    x: 75.83,
-    y: 60.16,
-    entity: 'BMK Global Sdn. Bhd.',
-    city: 'Kuala Lumpur, Malaysia',
-    address: 'Kuala Lumpur, Malaysia',
-    summary: 'Regional HQ and principal trading entity.',
-    icon: 'assets/icons/petronas.svg',
-    href: '#contact',
-  },
-  {
-    id: 'singapore',
-    x: 77.33,
-    y: 62.74,
-    entity: 'BMK Asia Pte. Ltd.',
-    city: 'Singapore',
-    address: '',
-    summary: 'Distribution and logistics hub for Southeast Asia.',
-    icon: 'assets/icons/loc-singapore.svg',
-    href: '#contact',
-  },
-];
+// Group presence: one pin per country (client document of 21 Oct 2026).
+// Companies come from the shared content file; this adds what only the
+// visual design needs: pin positions on the 1200×620 dot map (as % of the
+// frame), city icons and city photos.
+import { countries, entitiesIn } from '../../wireframe/src/content.js';
 
-export const defaultLocation = 'kuala-lumpur';
+export const countryVisual = {
+  uae: { x: 60.42, y: 47.1, icon: 'assets/icons/loc-dubai.svg', photo: 'assets/images/milestone-2018.webp' },
+  india: { x: 68.0, y: 59.2, icon: 'assets/icons/loc-kochi.svg' },
+  singapore: { x: 77.33, y: 62.74, icon: 'assets/icons/loc-singapore.svg', photo: 'assets/images/milestone-2008.webp' },
+  malaysia: { x: 75.7, y: 60.16, icon: 'assets/icons/petronas.svg' },
+  zambia: { x: 54.75, y: 72.7, icon: 'assets/icons/loc-lusaka.svg' },
+  drc: { x: 51.1, y: 65.4, icon: 'assets/icons/loc-kinshasa.svg' },
+};
+
+export const locations = countries.map((c) => ({
+  ...c,
+  ...countryVisual[c.id],
+  companies: entitiesIn(c.id),
+  href: `./catalogue/#/about?section=${c.id}`,
+}));
+
+export const defaultLocation = 'uae';

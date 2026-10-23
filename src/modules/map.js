@@ -123,11 +123,11 @@ export function initMap({ reduced }) {
     btn.style.left = `${loc.x}%`;
     btn.style.top = `${loc.y}%`;
     btn.setAttribute('aria-pressed', 'false');
-    btn.setAttribute('aria-label', `${loc.entity}, ${loc.city}`);
+    btn.setAttribute('aria-label', `${loc.name}: ${loc.companies.length} compan${loc.companies.length === 1 ? 'y' : 'ies'}`);
     btn.innerHTML = `
       <span class="pin-ring"></span>
       <span class="pin-dot"></span>
-      <span class="pointer-events-none absolute bottom-full left-1/2 mb-1 -translate-x-1/2 translate-y-1 rounded-full bg-ink px-3 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">${loc.city}</span>`;
+      <span class="pointer-events-none absolute bottom-full left-1/2 mb-1 -translate-x-1/2 translate-y-1 rounded-full bg-ink px-3 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">${loc.short}</span>`;
     btn.addEventListener('click', () => select(i));
     pinLayer.appendChild(btn);
     return btn;
@@ -139,18 +139,21 @@ export function initMap({ reduced }) {
     body: card.querySelector('.loc-body'),
     entity: card.querySelector('.loc-entity'),
     city: card.querySelector('.loc-city'),
-    address: card.querySelector('.loc-address'),
-    summary: card.querySelector('.loc-summary'),
+    list: card.querySelector('.loc-list'),
     link: card.querySelector('.loc-link'),
   };
   let current = -1;
 
   const fill = (loc) => {
-    el.entity.textContent = loc.entity;
-    el.city.textContent = loc.city;
-    el.address.textContent = loc.address || '';
-    el.address.hidden = !loc.address;
-    el.summary.textContent = loc.summary;
+    el.entity.textContent = loc.name;
+    el.city.textContent = loc.region;
+    el.list.innerHTML = loc.companies
+      .map(
+        (c) => `<li class="flex flex-col gap-0.5 rounded-lg bg-fog px-4 py-3">
+          <span class="text-[15px] leading-5 font-semibold text-black">${c.name}</span>
+          <span class="text-[13px] leading-5 text-black/50">${c.kind} · ${c.city}</span></li>`,
+      )
+      .join('');
     el.link.href = loc.href;
     el.icon.innerHTML = loc.icon
       ? `<img src="${loc.icon}" alt="" width="64" height="64" class="size-16" />`
@@ -164,7 +167,7 @@ export function initMap({ reduced }) {
   const section = root.closest('section');
   const heading = section.querySelector('#presence-title')?.parentElement;
   const desktop = matchMedia('(min-width: 1280px)');
-  const GAP = 40; // clears neighbouring pins (KL ↔ Singapore are 20px apart)
+  const GAP = 40; // clears neighbouring pins (Petaling Jaya ↔ Singapore are ~20px apart)
   const EDGE = 24;
 
   const place = () => {
@@ -197,14 +200,29 @@ export function initMap({ reduced }) {
     const ys = [py - h / 2, py - 48, py - h + 48].map(clampY);
     let x = xs[0] ?? px + GAP;
     let y = ys[0];
+    let found = false;
     search: for (const cx of xs) {
       for (const cy of ys) {
         if (!hits(cx, cy)) {
           x = cx;
           y = cy;
+          found = true;
           break search;
         }
       }
+    }
+    // Pins are close together (Africa to Southeast Asia): if no spot beside the
+    // pin is free, park the card in a clear corner of the section instead.
+    if (!found) {
+      const self = { l: px - pad - 16, t: py - pad - 16, r: px + pad + 16, b: py + pad + 16 };
+      others.push(self);
+      const corners = [
+        [EDGE, EDGE],
+        [s.width - w - EDGE, EDGE],
+        [s.width - w - EDGE, s.height - h - EDGE],
+      ];
+      const free = corners.find(([cx, cy]) => !hits(cx, cy));
+      if (free) [x, y] = free;
     }
     const originX = x > px ? '0%' : '100%';
     card.style.left = `${Math.round(x)}px`;

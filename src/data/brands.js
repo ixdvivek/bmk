@@ -1,19 +1,20 @@
-// Brand cards for the "Our Brands" section.
-// Descriptions are the design's placeholder copy; category assignments are a
-// best guess. Add more brands here and they appear in the filter + carousel.
-export const brandFilters = [
-  { id: 'all', label: 'All' },
-  { id: 'cameras', label: 'Cameras & Imaging' },
-  { id: 'mobile', label: 'Mobile Accessories' },
-  { id: 'watches', label: 'Smart Watches' },
-  { id: 'other', label: 'Other' },
-];
+// Brand cards for the "Our Brands" section (client document of 21 Oct 2026).
+// Brands and descriptions come from the shared catalogue data; filters are the
+// six category groups. BMK's own brands come first. Logos: real files where we
+// have them, otherwise a wordmark until BMK supplies them.
+import { brands as all, groups } from '../../wireframe/src/data.js';
 
-const placeholder = 'Short brand description placeholder. One or two lines of supporting text.';
+const logos = { nikon: 'assets/brands/nikon.svg', canon: 'assets/brands/canon.svg', sony: 'assets/brands/sony.svg' };
 
-export const brands = [
-  { id: 'nikon', name: 'Nikon', logo: 'assets/brands/nikon.svg', categories: ['cameras'], description: placeholder, href: '#' },
-  { id: 'sony', name: 'Sony', logo: 'assets/brands/sony.svg', categories: ['cameras', 'mobile'], description: placeholder, href: '#' },
-  { id: 'canon', name: 'Canon', logo: 'assets/brands/canon.svg', categories: ['cameras'], description: placeholder, href: '#' },
-  { id: 'leica', name: 'Leica', logo: 'assets/brands/leica.svg', categories: ['cameras'], description: placeholder, href: '#' },
-];
+export const brandFilters = [{ id: 'all', label: 'All' }, ...groups.map((g) => ({ id: g.id, label: g.name }))];
+
+export const brands = [...all.filter((b) => b.inHouse), ...all.filter((b) => !b.inHouse)].map((b) => ({
+  id: b.id,
+  name: b.name,
+  logo: logos[b.id] || null,
+  categories: b.groups,
+  description: b.intro,
+  inHouse: !!b.inHouse,
+  sites: b.sites || [],
+  href: `./catalogue/#/brand/${b.id}`,
+}));

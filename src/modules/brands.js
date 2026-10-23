@@ -19,10 +19,14 @@ export function initBrands({ reduced }) {
       (b) => `
     <li class="brand-card" data-categories="${b.categories.join(' ')}">
       <div class="brand-inner">
-        <img class="brand-logo" src="${b.logo}" alt="${b.name} logo" width="120" height="44" loading="lazy" />
+        <div class="flex w-full items-start justify-between gap-4">
+          ${b.inHouse ? '<span class="brand-tag">BMK brand</span>' : '<span></span>'}
+          ${b.logo ? `<img class="brand-logo" src="${b.logo}" alt="${b.name} logo" width="120" height="44" loading="lazy" />` : `<span class="brand-wordmark" aria-hidden="true">${b.name}</span>`}
+        </div>
         <div class="flex w-full flex-col gap-3">
           <h3 class="text-[32px] leading-8 font-semibold">${b.name}</h3>
-          <p class="t-body text-black/50">${b.description}</p>
+          <p class="t-body line-clamp-4 text-black/50">${b.description}</p>
+          ${b.sites.length ? `<p class="flex flex-wrap gap-x-4 text-sm">${b.sites.map(([d]) => `<a class="underline decoration-black/20 underline-offset-4 hover:decoration-black" href="https://${d}" target="_blank" rel="noopener">${d} ↗</a>`).join('')}</p>` : ''}
           <a href="${b.href}" class="brand-cta">${b.name} Products
             <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
           </a>

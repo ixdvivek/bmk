@@ -1,5 +1,5 @@
 // Photography and brand styling for the catalogue. Kept apart from the shared
-// catalogue data (wireframe/v1/src/data.js) so the wireframe stays image-free.
+// catalogue data (wireframe/src/data.js) so the wireframe stays image-free.
 // Anything missing here falls back to the studio stage with a category glyph.
 const M = '../assets/catalogue/';
 
@@ -8,13 +8,13 @@ const M = '../assets/catalogue/';
 export const brandStyle = {
   nikon: { color: '#ffec33', on: '#121212', hero: `${M}heroes/brand-nikon.webp` },
   fujifilm: { color: '#e60012', on: '#ffffff' },
-  google: { color: '#4285f4', on: '#ffffff' },
 };
 export const brandColor = (id) => brandStyle[id] || { color: '#1f487d', on: '#ffffff' };
 
 /** Hero photography per category (falls back to its group, then to no image). */
 export const categoryHero = {
-  'mirrorless-cameras': `${M}heroes/category-mirrorless-cameras.webp`,
+  'mirrorless-dslr-cameras': `${M}heroes/category-mirrorless-cameras.webp`,
+  imaging: `${M}heroes/category-mirrorless-cameras.webp`,
 };
 
 /** Product photography.

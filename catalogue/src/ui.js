@@ -1,4 +1,4 @@
-import { brandOf, categoryOf, highlightsFor } from '../../wireframe/v1/src/data.js';
+import { brandOf, categoryOf, highlightsFor } from '../../wireframe/src/data.js';
 import { mediaOf, brandColor } from './media.js';
 
 /** Public assets live at the site root; this page is served from /catalogue/. */
@@ -63,9 +63,10 @@ export function stage(p, { label = '', ratio = '4 / 3', dark = false, cls = '', 
 }
 
 /** Brand mark: the client's logo where we have it, otherwise a clean wordmark. */
-const logos = { nikon: 'brands/nikon.svg' };
+// Logos we have so far; the rest show a wordmark until BMK sends them.
+const logos = { nikon: 'brands/nikon.svg', canon: 'brands/canon.svg', sony: 'brands/sony.svg' };
 export function brandMark(b, { light = false, cls = 'h-7' } = {}) {
-  if (logos[b.id]) return `<img src="${A}${logos[b.id]}" alt="${esc(b.name)}" class="${cls} w-auto ${light ? 'brightness-0 invert' : ''}" />`;
+  if (logos[b.id]) return `<img src="${A}${logos[b.id]}" alt="${esc(b.name)}" class="${cls} w-auto max-w-[150px] object-contain ${light ? 'brightness-0 invert' : ''}" />`;
   return `<span class="${cls} inline-flex items-center text-[22px] leading-none font-bold tracking-[-0.03em] ${light ? 'text-white' : 'text-ink'}">${esc(b.name)}</span>`;
 }
 

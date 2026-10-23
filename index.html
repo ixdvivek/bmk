@@ -29,10 +29,10 @@
         </a>
         <ul class="hidden items-center gap-5 text-sm leading-5 text-black lg:flex">
           <li><a class="nav-link font-bold" href="#top" aria-current="page">Home</a></li>
-          <li><a class="nav-link" href="#about">About Us</a></li>
-          <li><a class="nav-link" href="#brands">Brands &amp; Products</a></li>
-          <li><a class="nav-link" href="#faq">FAQ</a></li>
-          <li><a class="nav-link" href="#contact">Contact Us</a></li>
+          <li><a class="nav-link" href="./catalogue/#/about">About Us</a></li>
+          <li><a class="nav-link" href="./catalogue/#/products">Brands &amp; Products</a></li>
+          <li><a class="nav-link" href="./catalogue/#/faq">FAQ</a></li>
+          <li><a class="nav-link" href="./catalogue/#/contact">Contact Us</a></li>
         </ul>
         <div class="flex items-center gap-2">
           <a href="#contact" class="btn btn-dark">
@@ -57,10 +57,10 @@
         <div class="menu-rule mx-1 mt-3 h-px origin-left bg-ink/10"></div>
         <ul class="flex flex-col px-1 pt-2 pb-3 text-[22px] leading-tight tracking-[-0.02em]">
           <li class="menu-item"><a class="block py-2.5 font-semibold" href="#top">Home</a></li>
-          <li class="menu-item"><a class="block py-2.5" href="#about">About Us</a></li>
-          <li class="menu-item"><a class="block py-2.5" href="#brands">Brands &amp; Products</a></li>
-          <li class="menu-item"><a class="block py-2.5" href="#faq">FAQ</a></li>
-          <li class="menu-item"><a class="block py-2.5" href="#contact">Contact Us</a></li>
+          <li class="menu-item"><a class="block py-2.5" href="./catalogue/#/about">About Us</a></li>
+          <li class="menu-item"><a class="block py-2.5" href="./catalogue/#/products">Brands &amp; Products</a></li>
+          <li class="menu-item"><a class="block py-2.5" href="./catalogue/#/faq">FAQ</a></li>
+          <li class="menu-item"><a class="block py-2.5" href="./catalogue/#/contact">Contact Us</a></li>
         </ul>
       </div>
     </header>
@@ -124,7 +124,7 @@
                 </div>
               </div>
               <div class="flex items-center gap-5 px-4 pb-4">
-                <p class="text-4xl leading-10 font-semibold"><span class="hero-count" data-count="25">25</span></p>
+                <p class="text-4xl leading-10 font-semibold"><span class="hero-count" data-count="24">24</span></p>
                 <p class="text-base leading-5 font-medium">Years of<br />Experience &amp; Trust</p>
               </div>
             </div>
@@ -158,17 +158,17 @@
               <h2 id="about-title" class="t-display" data-split>Built on trust. Driven by innovation.</h2>
               <div class="t-body space-y-6" data-reveal="up">
                 <p>
-                  BMK Group is a UAE-incorporated international trading company specialising in the wholesale import and export of consumer
-                  electronics. What began as a trading operation has evolved into a broader business focused on global partnerships, market
-                  expansion and product development.
+                  BMK Group has been a trusted leader across the UAE and international consumer electronics landscape since 2002. Originating as
+                  Island Valley Electronics LLC, it has evolved into a diversified global enterprise: global sourcing, authorized tier-one brand
+                  distribution, regional wholesale trade, retail showrooms and original product manufacturing.
                 </p>
                 <p>
-                  With business diversification beginning in 2004 and branches established in Singapore and India in 2010, BMK continues to build
-                  connections across markets, helping businesses access technology and opportunities worldwide.
+                  Today the group operates corporate entities, retail outlets and distribution hubs across six markets: the UAE, Singapore,
+                  Malaysia, Zambia, the DR Congo and India.
                 </p>
               </div>
             </div>
-            <a href="#history" class="btn btn-navy" data-reveal="up">
+            <a href="./catalogue/#/about" class="btn btn-navy" data-reveal="up">
               Discover Our Story <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
             </a>
           </div>
@@ -182,8 +182,8 @@
           <div class="max-w-[360px]">
             <h2 id="presence-title" class="t-display" data-split>BMK Group Presence</h2>
             <p class="t-body mt-3 tracking-normal" data-reveal="up">
-              BMK Group operates through distinct registered companies and business entities across multiple countries and regions. Click any
-              entity to view full company details.
+              Eight registered companies and business entities across six countries, from the Middle East to Southeast Asia and Africa. Select a
+              country to see the BMK companies there.
             </p>
           </div>
         </div>
@@ -201,7 +201,7 @@
         <!-- Mobile: card sits under the map. xl+: it becomes a popover placed beside the clicked pin (src/modules/map.js). -->
         <div class="shell mt-8 xl:pointer-events-none xl:absolute xl:inset-0 xl:z-10 xl:mt-0 xl:max-w-none xl:p-0" data-card-layer>
           <article
-            class="location-card pointer-events-auto flex w-full max-w-[360px] flex-col gap-16 rounded-xl bg-white p-6 drop-shadow-[0_20px_10px_rgba(0,0,0,0.08)] xl:absolute xl:top-0 xl:left-0 xl:w-[360px]"
+            class="location-card pointer-events-auto flex w-full max-w-[380px] flex-col gap-10 rounded-xl bg-white p-6 drop-shadow-[0_20px_10px_rgba(0,0,0,0.08)] xl:absolute xl:top-0 xl:left-0 xl:w-[380px]"
             aria-live="polite"
             data-location-card
           >
@@ -216,12 +216,13 @@
                 </button>
               </div>
             </div>
-            <div class="loc-body flex flex-col items-start gap-3">
-              <h3 class="text-2xl leading-7 font-semibold text-black">
-                <span class="loc-entity block"></span><span class="loc-city block"></span>
-              </h3>
-              <p class="t-body text-black/50"><span class="loc-address block"></span><span class="loc-summary block"></span></p>
-              <a href="#contact" class="loc-link btn btn-navy">
+            <div class="loc-body flex flex-col items-start gap-4">
+              <div>
+                <p class="loc-city text-xs tracking-[0.14em] text-black/50 uppercase"></p>
+                <h3 class="loc-entity mt-1 text-2xl leading-7 font-semibold text-black"></h3>
+              </div>
+              <ul class="loc-list flex w-full flex-col gap-2"></ul>
+              <a href="./catalogue/#/about" class="loc-link btn btn-navy">
                 View Details <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
               </a>
             </div>
@@ -236,7 +237,7 @@
             <div class="flex max-w-[640px] flex-col gap-6">
               <div class="flex flex-col gap-3">
                 <h2 id="brands-title" class="t-display" data-split>Our Brands</h2>
-                <p class="t-body" data-reveal="up">Explore the brands associated with and handled by BMK Group.</p>
+                <p class="t-body" data-reveal="up">BMK’s own brands, SEEKEN and TEAM Appliances, and the global names we distribute.</p>
               </div>
               <div class="flex flex-wrap gap-2" role="group" aria-label="Filter brands" data-brand-filters data-reveal="up"></div>
             </div>
@@ -290,7 +291,7 @@
                   </p>
                 </div>
               </div>
-              <a href="#about" class="btn btn-navy self-start md:self-auto" data-reveal="up">
+              <a href="./catalogue/#/about?section=journey" class="btn btn-navy self-start md:self-auto" data-reveal="up">
                 Discover About Us <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
               </a>
             </div>
@@ -303,57 +304,75 @@
             <div class="history-viewport -mx-[clamp(20px,7.5vw,120px)] overflow-x-auto px-[clamp(20px,7.5vw,120px)] [scrollbar-width:none] lg:overflow-visible [&::-webkit-scrollbar]:hidden">
               <ol class="history-track flex w-max gap-2 pb-6 will-change-transform">
                 <li class="milestone" data-tone="dark">
-                  <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2005.webp" alt="" loading="lazy" /></div>
+                  <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2018.webp" alt="" loading="lazy" /></div>
                   <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2005.svg" alt="" width="32" height="32" /></span>
                   <div class="m-text">
-                    <p class="m-year">2005</p>
-                    <p class="m-title">Founded</p>
-                    <p class="m-desc">BMK Group established as a trading company.</p>
+                    <p class="m-year">2002</p>
+                    <p class="m-title">Origins &amp; Early Success</p>
+                    <p class="m-desc">Founded as Island Valley Electronics LLC in Dubai, trading consumer electronics.</p>
                   </div>
                 </li>
-                <li class="milestone" data-tone="light">
-                  <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2008.webp" alt="" loading="lazy" /></div>
-                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2008.svg" alt="" width="32" height="32" /></span>
+                <li class="milestone" data-tone="dark">
+                  <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2005.webp" alt="" loading="lazy" /></div>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-camera.svg" alt="" width="32" height="32" /></span>
                   <div class="m-text">
-                    <p class="m-year">2008</p>
-                    <p class="m-title">First Expansion</p>
-                    <p class="m-desc">Expanded into Singapore and regional ASEAN markets.</p>
+                    <p class="m-year">2004</p>
+                    <p class="m-title">Portfolio Diversification</p>
+                    <p class="m-desc">Wholesale and retail expand into digital imaging and cameras.</p>
                   </div>
                 </li>
                 <li class="milestone" data-tone="dark">
                   <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2012.webp" alt="" loading="lazy" /></div>
                   <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2012.svg" alt="" width="32" height="32" /></span>
                   <div class="m-text">
-                    <p class="m-year">2012</p>
-                    <p class="m-title">Brand Partnerships</p>
-                    <p class="m-desc">Secured key international brand distribution rights.</p>
+                    <p class="m-year">2010</p>
+                    <p class="m-title">International Expansion</p>
+                    <p class="m-desc">BMK GULF FZE in JAFZA and BMK Electronics in Singapore.</p>
                   </div>
                 </li>
                 <li class="milestone" data-tone="dark">
-                  <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2015.webp" alt="" loading="lazy" /></div>
+                  <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2008.webp" alt="" loading="lazy" /></div>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2022.svg" alt="" width="32" height="32" /></span>
+                  <div class="m-text">
+                    <p class="m-year">2013</p>
+                    <p class="m-title">Launch of SEEKEN</p>
+                    <p class="m-desc">Flagship brand SEEKEN launches in Singapore with the ST100 tablet.</p>
+                  </div>
+                </li>
+                <li class="milestone" data-tone="dark">
+                  <div class="m-bg" aria-hidden="true"></div>
                   <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2015.svg" alt="" width="32" height="32" /></span>
                   <div class="m-text">
-                    <p class="m-year">2015</p>
-                    <p class="m-title">European Entry</p>
-                    <p class="m-desc">Opened BMK Europe Ltd. in London.</p>
+                    <p class="m-year">2018</p>
+                    <p class="m-title">Pan-African &amp; Southeast Asian Expansion</p>
+                    <p class="m-desc">Official Fujifilm and Nikon distribution in the DRC and Zambia.</p>
                   </div>
                 </li>
                 <li class="milestone" data-tone="dark">
-                  <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2018.webp" alt="" loading="lazy" /></div>
-                  <span class="m-icon-wrap"><img class="m-icon !w-auto px-[5.9px]" src="assets/icons/milestone-2018.svg" alt="" width="32" height="32" /></span>
+                  <div class="m-bg" aria-hidden="true"></div>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-watch.svg" alt="" width="32" height="32" /></span>
                   <div class="m-text">
-                    <p class="m-year">2018</p>
-                    <p class="m-title">MENA Launch</p>
-                    <p class="m-desc">Established presence in Dubai Free Zone.</p>
+                    <p class="m-year">2022</p>
+                    <p class="m-title">Wearables &amp; Premium Segments</p>
+                    <p class="m-desc">SEEKEN moves into premium smartwatches and advanced audio.</p>
+                  </div>
+                </li>
+                <li class="milestone" data-tone="dark">
+                  <div class="m-bg" aria-hidden="true"></div>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-home.svg" alt="" width="32" height="32" /></span>
+                  <div class="m-text">
+                    <p class="m-year">2023</p>
+                    <p class="m-title">Acquisition of TEAM Appliances</p>
+                    <p class="m-desc">BMK acquires home appliance brand TEAM Appliances.</p>
                   </div>
                 </li>
                 <li class="milestone" data-tone="dark">
                   <div class="m-bg" aria-hidden="true"><img src="assets/images/milestone-2022.webp" alt="" loading="lazy" /></div>
-                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-2022.svg" alt="" width="32" height="32" /></span>
+                  <span class="m-icon-wrap"><img class="m-icon" src="assets/icons/milestone-store.svg" alt="" width="32" height="32" /></span>
                   <div class="m-text">
-                    <p class="m-year">2022</p>
-                    <p class="m-title">Digital Growth</p>
-                    <p class="m-desc">Launched e-commerce and digital distribution channels.</p>
+                    <p class="m-year">Present</p>
+                    <p class="m-title">Global Distribution, India &amp; Retail</p>
+                    <p class="m-desc">BMK International and Bhome Appliances in Kerala; six markets.</p>
                   </div>
                 </li>
               </ol>
@@ -428,19 +447,21 @@
           <p class="leading-5 font-bold">Quick links</p>
           <ul class="flex flex-col gap-1.5 leading-6">
             <li><a class="footer-link" href="#top">Home</a></li>
-            <li><a class="footer-link" href="#about">About Us</a></li>
-            <li><a class="footer-link" href="#brands">Brands &amp; Products</a></li>
-            <li><a class="footer-link" href="#faq">FAQ</a></li>
-            <li><a class="footer-link" href="#contact">Contact Us</a></li>
+            <li><a class="footer-link" href="./catalogue/#/about">About Us</a></li>
+            <li><a class="footer-link" href="./catalogue/#/products">Brands &amp; Products</a></li>
+            <li><a class="footer-link" href="./catalogue/#/faq">FAQ</a></li>
+            <li><a class="footer-link" href="./catalogue/#/contact">Contact Us</a></li>
           </ul>
         </nav>
         <nav class="flex flex-col gap-5 text-[15px]" aria-label="Categories">
           <p class="leading-5 font-bold">Categories</p>
           <ul class="flex flex-col gap-1.5 leading-6">
-            <li><a class="footer-link" href="#brands">Photography</a></li>
-            <li><a class="footer-link" href="#brands">Audio</a></li>
-            <li><a class="footer-link" href="#brands">Memory &amp; Storage</a></li>
-            <li><a class="footer-link" href="#brands">Mobile Accessories</a></li>
+            <li><a class="footer-link" href="./catalogue/#/category/smart-devices">Smart Devices &amp; Wearables</a></li>
+            <li><a class="footer-link" href="./catalogue/#/category/audio">Audio &amp; Entertainment</a></li>
+            <li><a class="footer-link" href="./catalogue/#/category/imaging">Digital Imaging &amp; Photography</a></li>
+            <li><a class="footer-link" href="./catalogue/#/category/kitchen">Kitchen &amp; Cooking Appliances</a></li>
+            <li><a class="footer-link" href="./catalogue/#/category/home-utility">Home Utility &amp; Climate Control</a></li>
+            <li><a class="footer-link" href="./catalogue/#/category/accessories">Mobile &amp; Computing Accessories</a></li>
           </ul>
         </nav>
         <div class="flex flex-col gap-5 text-[15px]">
@@ -448,10 +469,10 @@
           <address class="flex flex-col gap-1.5 leading-6 not-italic">
             <p class="flex gap-2">
               <img src="assets/icons/location.svg" alt="" class="size-6 shrink-0" width="24" height="24" />
-              <span>BMK GULF FZE<br />Warehouse # RA08LB07, P.O. Box 261752, Jebel Ali Free Zone, Dubai, UAE</span>
+              <span>BMK GULF FZE<br />Warehouse # RA08LB07, P.O. Box 261752, Jebel Ali Free Zone (JAFZA), Dubai, UAE</span>
             </p>
-            <a class="footer-link flex gap-2" href="tel:+97148870211">
-              <img src="assets/icons/call.svg" alt="" class="size-6 shrink-0" width="24" height="24" />+971 4 887 0211
+            <a class="footer-link flex gap-2" href="tel:+97142324747">
+              <img src="assets/icons/call.svg" alt="" class="size-6 shrink-0" width="24" height="24" />+971 4 232 4747
             </a>
             <a class="footer-link flex gap-2" href="mailto:info@bmkintl.com">
               <img src="assets/icons/email.svg" alt="" class="size-6 shrink-0" width="24" height="24" />info@bmkintl.com
