@@ -230,8 +230,7 @@ function pageHero(ctx, base) {
     ${img ? `<img class="photo-hero-img" src="${img}" alt="" fetchpriority="high" />` : ''}
     <div class="shell">
       ${crumbs(trail, true)}
-      <span class="pill-dark mt-6">${esc(eyebrow)}</span>
-      <h1 class="t-display mt-4 max-w-4xl">${esc(title)}</h1>
+      <h1 class="t-display mt-6 max-w-4xl">${esc(title)}</h1>
       <p class="t-body mt-2 max-w-2xl text-mist">${esc(sub)}</p>
     </div>
   </section>

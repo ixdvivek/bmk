@@ -65,17 +65,25 @@ const enquiryBlock = (title = 'Let’s do business together', sub = 'Have a busi
     </div>
   </section>`;
 
-/** Light page hero (FAQ, Contact): same rhythm as the listing heroes. */
-const lightHero = (trail, chip, title, sub, extra = '') => `
-  <section class="bg-mist pt-[clamp(128px,11vw,176px)] pb-[clamp(48px,5vw,80px)]">
+/** Photo page hero (FAQ, Contact; Figma). */
+const pageHero = (trail, title, sub, img, extra = '', pos = 'center') => `
+  <section class="photo-hero pt-[clamp(128px,11vw,176px)] pb-[clamp(48px,5vw,80px)]" style="--hero-overlay:linear-gradient(90deg,rgb(0 0 0/.6) 0%,rgb(0 0 0/.25) 60%,rgb(0 0 0/.05) 100%)">
+    <img class="photo-hero-img" src="${A}images/${img}.webp" alt="" fetchpriority="high" style="object-position:${pos}" />
     <div class="shell">
-      ${crumbs(trail)}
-      <span class="chip mt-6 border-line bg-white text-ink">${esc(chip)}</span>
-      <h1 class="t-display mt-4 max-w-4xl">${esc(title)}</h1>
-      <p class="t-body mt-3 max-w-2xl text-ink/80">${esc(sub)}</p>
+      ${crumbs(trail, true)}
+      <h1 class="t-display mt-6 max-w-4xl">${esc(title)}</h1>
+      <p class="t-body mt-3 max-w-2xl text-mist">${esc(sub)}</p>
       ${extra}
     </div>
   </section>`;
+
+/** Office map: static map preview with a pin (Google Maps embed to come). */
+const officeMap = (label) => `
+  <div class="relative aspect-[672/370] overflow-hidden rounded-2xl bg-mist" role="img" aria-label="Map of ${esc(label)} (Google Map to come)">
+    <img src="${A}images/map-placeholder.webp" alt="" class="size-full object-cover" loading="lazy" />
+    <img src="${A}icons/map-pin-orange.svg" alt="" width="32" height="42" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full drop-shadow-md" />
+    <span class="map-ph-label">Map preview · ${esc(label)}</span>
+  </div>`;
 
 /** Highlight the in-page pill for the section in view. */
 function wireSections(root) {
@@ -369,14 +377,15 @@ export function renderFaq() {
   return {
     title: 'FAQ',
     html: `
-    ${lightHero(
+    ${pageHero(
       [['Home', '../'], ['FAQ']],
-      'FAQ',
       'Frequently asked questions',
       'Answers to common questions about BMK Group, our brands and partnering with us.',
-      `<label class="mt-8 flex max-w-xl items-center gap-3 rounded-full border border-ink/15 bg-white py-1.5 pr-1.5 pl-5 transition-colors focus-within:border-navy">
+      'faq-hero',
+      `<label class="mt-8 flex max-w-xl items-center gap-3 rounded-full border border-ink/15 bg-white py-1.5 pr-1.5 pl-5 text-ink transition-colors focus-within:border-navy">
         ${icon.search}<input data-faq-search type="search" placeholder="Search questions" class="min-w-0 flex-1 bg-transparent py-2.5 outline-none" aria-label="Search questions" />
       </label>`,
+      '75% center',
     )}
     <section class="shell section-y !pt-12">
       <div class="mb-10 flex flex-wrap gap-2" role="group" aria-label="Topics">
@@ -395,10 +404,10 @@ export function renderFaq() {
             .join('')}
           <div data-faq-empty class="hidden rounded-2xl bg-mist p-10"><p class="text-[28px] leading-tight tracking-[-0.04em]">No questions match your search</p><p class="t-body mt-3 text-muted">Try other words, or ask our team directly.</p></div>
         </div>
-        <aside class="relative isolate h-fit overflow-hidden rounded-3xl bg-navy p-8 text-white lg:sticky lg:top-32">
-          <img src="${A}patterns/history-mark-1.svg" alt="" class="absolute -top-16 -right-16 -z-10 w-56 opacity-20" />
-          <p class="text-[28px] leading-tight tracking-[-0.04em]">Still have a question?</p>
-          <p class="t-body mt-3 text-white/75">Call ${esc(contact.phone)} or send us an enquiry, and our team will get back to you.</p>
+        <aside class="h-fit rounded-3xl bg-navy p-8 text-white lg:sticky lg:top-32">
+          <img src="${A}images/faq-help.webp" alt="" class="aspect-[296/280] w-full rounded-2xl object-cover" loading="lazy" />
+          <p class="mt-3 text-[28px] leading-tight tracking-[-0.04em]">Still have a question?</p>
+          <p class="t-body mt-3 text-white/75">Our team will get back to you.</p>
           <div class="mt-8 grid gap-3">
             <button type="button" class="btn bg-white text-ink hover:bg-accent hover:text-white" data-enquire="General Enquiry">Send an enquiry ${arrow('orange')}</button>
             <a class="btn btn-outline-light" href="${href('/contact')}">Contact us</a>
@@ -443,52 +452,44 @@ export function renderContact(params) {
     const v = visual(c);
     const list = entitiesIn(cid);
     return `
-      <div class="flex items-center gap-4 px-2 pt-2 pb-1">
-        <span class="grid size-14 shrink-0 place-items-center rounded-full bg-white"><img src="${v.icon}" alt="" width="32" height="32" /></span>
-        <div><p class="text-xs tracking-[0.14em] text-muted uppercase">${esc(c.region)}</p><p class="mt-1 text-2xl leading-7 font-semibold tracking-[-0.02em]">${esc(c.name)}</p></div>
-      </div>
-      ${map(c.city, 'aspect-[16/8]', list.length)}
       ${list
         .map(
           (e) => `<div class="rounded-2xl bg-white p-6 sm:p-8 ${fromOffice?.id === e.id ? 'ring-2 ring-navy' : ''}" data-entity="${e.id}">
-            <div class="flex flex-wrap items-center gap-x-3 gap-y-2"><p class="text-xl leading-7 font-semibold tracking-[-0.02em]">${esc(e.name)}</p>${kindTag(e)}</div>
-            <p class="mt-2 text-[15px] leading-6 text-muted">${esc(e.mandate || e.role)}</p>
+            <div class="flex items-start gap-4 max-sm:flex-col">
+              <span class="grid size-16 shrink-0 place-items-center rounded-full bg-mist"><img src="${v.icon}" alt="" width="36" height="36" /></span>
+              <div class="min-w-0">
+                <p class="text-xs tracking-[0.14em] text-muted uppercase">${esc(c.city)}</p>
+                <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2"><p class="text-xl leading-7 font-semibold tracking-[-0.02em]">${esc(e.name)}</p>${kindTag(e)}</div>
+                <p class="mt-1 text-[15px] leading-6 text-muted">${esc(e.mandate || e.role)}</p>
+              </div>
+            </div>
             <div class="mt-5 border-t border-line pt-5">${contactRows(e)}</div>
             <a class="group mt-5 inline-flex items-center gap-2 text-sm font-semibold" href="https://www.google.com/maps/search/${encodeURIComponent(e.address)}" target="_blank" rel="noopener">Get directions ${arrow('orange')}</a>
           </div>`,
         )
-        .join('')}`;
+        .join('')}
+      ${officeMap(c.city)}`;
   };
 
   return {
     title: 'Contact Us',
     html: `
-    ${lightHero([['Home', '../'], ['Contact Us']], 'Contact Us', 'Get in touch', 'Reach the right BMK Group company, or send us a message.')}
-    <section class="shell pt-12">
-      <div class="flex flex-col gap-6 rounded-3xl bg-navy p-6 text-white sm:p-8 lg:flex-row lg:items-center lg:justify-between">
-        <div class="flex items-center gap-4">
-          <span class="grid size-14 shrink-0 place-items-center rounded-full bg-white"><img src="${A}icons/loc-dubai.svg" alt="" width="32" height="32" /></span>
-          <div><p class="text-xs tracking-[0.14em] text-white/60 uppercase">Head office</p><p class="mt-1 text-xl leading-7 font-semibold">${esc(contact.company)} · Jebel Ali Free Zone, Dubai</p></div>
-        </div>
-        <div class="flex flex-wrap gap-3">
-          <a class="btn bg-white text-ink hover:bg-accent hover:text-white" href="tel:${contact.phone.replace(/\s/g, '')}">${ico.phone} ${esc(contact.phone)}</a>
-          <a class="btn btn-outline-light" href="mailto:${contact.email}">${ico.mail} ${esc(contact.email)}</a>
-        </div>
-      </div>
-    </section>
+    ${pageHero([['Home', '../'], ['Contact Us']], 'Get in touch', 'Reach the right BMK Group company, or send us a message.', 'contact-hero')}
     <section class="shell section-y !pt-12">
-      <div class="grid items-start gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+      <div class="grid items-start gap-10 lg:grid-cols-[688fr_608fr] lg:gap-16">
         <div>
-          <h2 class="text-[28px] leading-tight tracking-[-0.04em]">Our offices</h2>
-          <div class="mt-5 flex flex-wrap gap-2" role="tablist" aria-label="Countries">
-            ${countries.map((c) => `<button type="button" role="tab" class="pill ${c.id === country ? 'is-on' : ''}" aria-selected="${c.id === country}" data-country="${c.id}">${esc(c.short)} <span class="n">${entitiesIn(c.id).length}</span></button>`).join('')}
+          <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+            <h2 class="text-[28px] leading-tight tracking-[-0.04em]">Our offices</h2>
+            <div class="flex flex-wrap gap-2" role="tablist" aria-label="Countries">
+              ${countries.map((c) => `<button type="button" role="tab" class="pill ${c.id === country ? 'is-on' : ''}" aria-selected="${c.id === country}" data-country="${c.id}">${esc(c.short)}</button>`).join('')}
+            </div>
           </div>
-          <div class="mt-6 grid gap-2 rounded-3xl bg-mist p-2" data-panel role="tabpanel">${panel(country)}</div>
+          <div class="mt-5 grid gap-2 rounded-3xl border border-line bg-mist p-2" data-panel role="tabpanel">${panel(country)}</div>
         </div>
-        <div class="rounded-3xl border border-line bg-white p-6 sm:p-10 lg:sticky lg:top-32" data-contact-form-wrap>
-          <span class="chip border-line text-ink">Contact form</span>
-          <h2 class="mt-4 text-[28px] leading-tight tracking-[-0.04em]">Send us a message</h2>
-          <form class="mt-8 grid gap-4" data-contact-form>
+        <div class="lg:sticky lg:top-32">
+          <h2 class="text-[28px] leading-tight tracking-[-0.04em]">Send us a message</h2>
+          <div class="mt-5 rounded-3xl border border-line bg-white p-6 sm:p-10" data-contact-form-wrap>
+          <form class="grid gap-4" data-contact-form>
             <label class="grid gap-1.5 text-sm"><span class="font-medium">Full name</span><input required class="field" autocomplete="name" /></label>
             <div class="grid gap-4 sm:grid-cols-2">
               <label class="grid gap-1.5 text-sm"><span class="font-medium">Email</span><input type="email" required class="field" autocomplete="email" /></label>
@@ -501,6 +502,19 @@ export function renderContact(params) {
             <button class="btn btn-navy mt-2 w-full">Send message ${arrow('orange')}</button>
             <p class="text-center text-xs text-muted">We’ll reply by email.</p>
           </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="shell">
+      <div class="flex flex-col gap-6 rounded-3xl bg-navy p-6 text-white sm:p-8 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex items-center gap-4">
+          <span class="grid size-14 shrink-0 place-items-center rounded-full bg-white"><img src="${A}icons/loc-dubai.svg" alt="" width="32" height="32" /></span>
+          <div><p class="text-xs tracking-[0.14em] text-white/60 uppercase">Head office</p><p class="mt-1 text-xl leading-7 font-semibold">${esc(contact.company)} · Jebel Ali Free Zone, Dubai</p></div>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a class="btn bg-white text-ink hover:bg-accent hover:text-white" href="tel:${contact.phone.replace(/\s/g, '')}">${ico.phone} ${esc(contact.phone)}</a>
+          <a class="btn btn-outline-light" href="mailto:${contact.email}">${ico.mail} ${esc(contact.email)}</a>
         </div>
       </div>
     </section>
