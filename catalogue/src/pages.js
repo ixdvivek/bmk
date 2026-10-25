@@ -216,13 +216,19 @@ export function renderAbout(params) {
 
   const brandTile = (b) => {
     const n = products.filter((p) => p.brand === b.id).length;
+    // Same card as the homepage "Our Brands" (white, grey outline)
     return `<article class="ih-card">
-      <div class="flex items-start justify-between gap-4"><span class="rounded-xl bg-white px-4 py-3">${brandMark(b, { cls: 'h-7' })}</span><span class="pill-dark !border-accent !bg-accent">BMK brand</span></div>
-      <p class="mt-10 text-[clamp(1.75rem,1.4rem+1vw,2.25rem)] leading-tight font-semibold tracking-[-0.03em]">${esc(b.name)}</p>
-      <p class="t-body mt-3 text-white/75">${esc(b.intro)}</p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a class="btn bg-white text-ink hover:bg-accent hover:text-white" href="${href(`/brand/${b.id}`)}">${n ? `View ${n} products` : 'View brand'} ${arrow('orange')}</a>
-        ${b.sites.map(([d, l]) => `<a class="btn btn-outline-light" href="https://${d}" target="_blank" rel="noopener">${esc(d)}${l ? ` · ${esc(l)}` : ''} ↗</a>`).join('')}
+      <div class="flex items-center justify-between gap-6">
+        <span class="brand-tag">BMK brand</span>
+        ${brandMark(b, { cls: 'h-[57px] !max-w-40 object-right' })}
+      </div>
+      <div class="mt-auto flex flex-col items-start gap-3 pt-16">
+        <h3 class="text-[32px] leading-8 font-semibold">${esc(b.name)}</h3>
+        <p class="t-body text-black/50">${esc(b.intro)}</p>
+        <div class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <a class="brand-cta" href="${href(`/brand/${b.id}`)}">${n ? `View ${n} products` : 'View brand'} <img src="${A}icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" /></a>
+          ${b.sites.map(([d]) => `<a class="text-sm text-black/70 underline decoration-black/20 underline-offset-4 transition-colors hover:text-ink hover:decoration-accent" href="https://${d}" target="_blank" rel="noopener">${esc(d)} ↗</a>`).join('')}
+        </div>
       </div>
     </article>`;
   };
@@ -234,8 +240,7 @@ export function renderAbout(params) {
       <img class="photo-hero-img object-[66%_50%]" src="${A}images/about.webp" alt="" fetchpriority="high" />
       <div class="shell">
         ${crumbs([['Home', '../'], ['About Us']], true)}
-        <span class="pill-dark mt-6">About Us</span>
-        <h1 class="t-display mt-4 max-w-3xl">About BMK Group</h1>
+        <h1 class="t-display mt-6 max-w-3xl">About BMK Group</h1>
         <p class="t-body mt-3 max-w-2xl text-mist">Who we are, what we stand for, where we operate and how we got here.</p>
       </div>
     </section>
@@ -276,7 +281,7 @@ export function renderAbout(params) {
             ['Our mission', mission],
             ['Our vision', vision],
           ]
-            .map(([k, t]) => `<div class="flex flex-col items-start gap-6"><span class="pill-dark">${k}</span><p class="text-[clamp(1.5rem,1.1rem+1.1vw,2.25rem)] leading-tight tracking-[-0.03em]">${esc(t)}</p></div>`)
+            .map(([k, t]) => `<div class="flex flex-col items-start gap-6"><h2 class="text-xs tracking-[0.14em] text-white/60 uppercase">${k}</h2><p class="text-[clamp(1.5rem,1.1rem+1.1vw,2.25rem)] leading-tight tracking-[-0.03em]">${esc(t)}</p></div>`)
             .join('')}
         </div>
         <div class="mt-16 border-t border-white/15 pt-12">

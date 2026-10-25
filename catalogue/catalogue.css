@@ -592,8 +592,25 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 /* In-house brands and partner logos */
+/* BMK's own brands: same card as the homepage (white, grey outline) */
 .ih-card {
-  @apply relative isolate overflow-hidden rounded-3xl bg-navy p-8 text-white sm:p-10;
+  @apply flex min-h-[363px] flex-col rounded-xl border border-line bg-white p-8 text-black transition-[transform,box-shadow] duration-700;
+}
+.ih-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 40px -12px rgb(0 0 0 / 0.18);
+}
+.ih-card .brand-cta {
+  @apply w-auto gap-8;
+}
+.ih-card .brand-cta:hover {
+  @apply border-ink text-white;
+}
+.ih-card .brand-cta:hover::before {
+  clip-path: inset(0 0% 0 0 round 999px);
+}
+.ih-card .brand-cta:hover .btn-icon {
+  transform: translateX(4px);
 }
 .partner-tile {
   @apply flex h-20 items-center justify-center rounded-2xl border border-line bg-white px-4 transition-colors duration-300 hover:border-ink;
