@@ -389,6 +389,60 @@ body.nav-hidden #nav {
   }
 }
 
+/* ── About: dotted globe (globe.js) ─────────────────────────────────────── */
+.globe {
+  @apply relative aspect-[5/4] w-full touch-pan-y overflow-hidden select-none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+}
+.globe-canvas {
+  @apply absolute inset-0 size-full;
+}
+.globe-pins {
+  @apply pointer-events-none absolute inset-0;
+}
+.globe-pin {
+  @apply absolute top-0 left-0 will-change-transform;
+  transition: opacity 0.3s;
+}
+.globe-dot {
+  @apply absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-accent shadow-[0_2px_8px_rgb(247_115_53/0.45)];
+}
+.globe-dot::before {
+  content: '';
+  @apply absolute -inset-2.5 rounded-full bg-accent/25;
+  animation: map-pulse 2.4s var(--ease-soft) infinite;
+}
+.globe-tag {
+  --tx: -50%;
+  @apply absolute bottom-3 left-0 inline-flex items-center gap-2 rounded-full border border-line bg-white/90 px-3.5 py-2 text-[13px] leading-4 whitespace-nowrap text-ink shadow-[0_10px_24px_-12px_rgb(0_0_0/0.35)] backdrop-blur-md;
+  opacity: 0;
+  transform: translate(var(--tx), 6px);
+  transition:
+    opacity 0.45s var(--ease-soft),
+    transform 0.6s var(--ease-out-expo);
+}
+.globe-tag img {
+  @apply h-3.5 w-auto;
+}
+/* Neighbours (Petaling Jaya / Singapore, Kinshasa / Lusaka) open to opposite sides */
+.globe-tag.is-left {
+  --tx: calc(-100% + 10px);
+}
+.globe-tag.is-right {
+  --tx: -10px;
+}
+.globe-pin.show-tag .globe-tag {
+  opacity: 1;
+  transform: translate(var(--tx), 0);
+}
+.globe-hint {
+  @apply pointer-events-none absolute top-3 right-3 rounded-full bg-mist px-3 py-1 text-[11px] tracking-[0.06em] text-muted uppercase transition-opacity duration-500;
+}
+.globe.is-touched .globe-hint {
+  opacity: 0;
+}
+
 /* FAQ answers ease open and closed (heights animated in JS) */
 .faq-a {
   overflow: hidden;
@@ -658,33 +712,6 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 /* Region map (Who we are) */
-.region-map {
-  @apply relative aspect-[560/380] w-full;
-}
-.region-map canvas {
-  @apply absolute inset-0 size-full;
-}
-.region-flag {
-  @apply absolute flex -translate-x-1 -translate-y-full items-end;
-}
-.region-flag-pole {
-  @apply relative block h-12 w-px bg-ink/60;
-}
-.region-flag-pole::before {
-  content: '';
-  @apply absolute top-0 left-px h-4 w-6 bg-[#e53935];
-  clip-path: polygon(0 0, 100% 15%, 75% 50%, 100% 85%, 0 100%);
-}
-.region-flag.is-left {
-  @apply flex-row-reverse;
-  transform: translate(calc(-100% + 4px), -100%);
-}
-.region-flag.is-left .region-flag-label {
-  @apply mr-1 ml-0;
-}
-.region-flag-label {
-  @apply mb-[-14px] ml-1 rounded-md bg-navy/80 px-2.5 py-1 text-xs leading-4 whitespace-nowrap text-white backdrop-blur;
-}
 
 /* Mission & values */
 .value-card {
