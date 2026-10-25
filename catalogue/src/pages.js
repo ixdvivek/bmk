@@ -1,11 +1,11 @@
 // About Us, FAQ and Contact Us — homepage styles, wireframe structure and copy.
-import { intro, mission, vision, values, contact, countries, entities, entitiesIn, regions, milestones, enquiryTypes, faqTopics, faqs } from '../../wireframe/src/content.js';
+import { intro, mission, vision, values, contact, countries, entities, entitiesIn, milestones, enquiryTypes, faqTopics, faqs } from '../../wireframe/src/content.js';
 import { inHouseBrands, partnerBrands } from '../../wireframe/src/data.js';
 import { countryVisual } from '../../src/data/locations.js';
 import { milestoneVisual } from '../../src/data/milestones.js';
-import mapData from '../../src/data/map-dots.json';
 import { A, BASE, HOME, esc, href, arrow, icon, crumbs, brandMark } from './ui.js';
 import { pillbar } from './listing.js';
+import { globeMarkup, initGlobe } from './globe.js';
 
 // Line icons that take the text colour
 const ico = {
@@ -145,44 +145,6 @@ function wireRail(root) {
 
 /** Region map for "Who we are": the homepage dot map, cropped to where BMK
  *  operates, with a flag per region. Drawn on a canvas once. */
-const CROP = { x: 470, y: 150, w: 560, h: 380 };
-const regionPins = () =>
-  regions.map((r) => {
-    const cs = countries.filter((c) => c.region === r).map((c) => countryVisual[c.id]);
-    const x = cs.reduce((a, c) => a + c.x, 0) / cs.length;
-    const y = cs.reduce((a, c) => a + c.y, 0) / cs.length;
-    return { r, x: ((x / 100) * 1200 - CROP.x) / CROP.w * 100, y: ((y / 100) * 620 - CROP.y) / CROP.h * 100, n: cs.length };
-  });
-
-function drawRegionMap(canvas) {
-  const ctx = canvas.getContext('2d');
-  const draw = () => {
-    const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    canvas.width = Math.round(rect.width * dpr);
-    canvas.height = Math.round(rect.height * dpr);
-    const s = (rect.width / CROP.w) * dpr;
-    ctx.setTransform(s, 0, 0, s, -CROP.x * s, -CROP.y * s);
-    const { dots, r } = mapData;
-    ctx.fillStyle = 'rgb(31 72 125 / 0.28)';
-    ctx.beginPath();
-    for (let i = 0; i < dots.length; i += 2) {
-      const x = dots[i];
-      const y = dots[i + 1];
-      if (x < CROP.x - 4 || x > CROP.x + CROP.w + 4 || y < CROP.y - 4 || y > CROP.y + CROP.h + 4) continue;
-      ctx.moveTo(x + r * 1.15, y);
-      ctx.arc(x, y, r * 1.15, 0, Math.PI * 2);
-    }
-    ctx.fill();
-  };
-  const ro = new ResizeObserver(draw);
-  ro.observe(canvas);
-  return () => ro.disconnect();
-}
-
-// ── About Us ─────────────────────────────────────────────────────────────────
-// Layout follows the About Us frame in Figma: region map with stats, a large
-// card per country (city photo + glass details panel), horizontal journey cards.
 export function renderAbout(params) {
   const sections = [
     ['who-we-are', 'Who we are'],
@@ -261,13 +223,8 @@ export function renderAbout(params) {
           <a class="btn btn-navy" href="#our-brands" data-anchor>Explore our brands ${arrow('orange')}</a>
         </div>
         <div class="relative">
-          <div class="region-map" role="img" aria-label="Map of BMK Group regions: ${regions.join(', ')}">
-            <canvas data-region-canvas></canvas>
-            ${regionPins()
-              .map((p) => `<span class="region-flag ${p.x > 70 ? 'is-left' : ''}" style="left:${p.x}%;top:${p.y}%"><span class="region-flag-pole"></span><span class="region-flag-label">${esc(p.r)}</span></span>`)
-              .join('')}
-          </div>
-          <dl class="relative z-10 mx-auto -mt-[clamp(16px,3vw,48px)] grid max-w-[560px] grid-cols-2 gap-2 rounded-3xl bg-mist p-2">
+          ${globeMarkup()}
+          <dl class="relative z-10 mx-auto -mt-6 grid max-w-[560px] grid-cols-2 gap-2 rounded-3xl bg-mist p-2">
             ${[
               [entities.length, 'Group companies'],
               [countries.length, 'Countries'],
@@ -353,7 +310,7 @@ export function renderAbout(params) {
 
     ${enquiryBlock('Work with BMK', 'Distribution, dealership, retail supply or something else.')}`,
     wire(root) {
-      const off = [wireSections(root), wireRail(root), drawRegionMap(root.querySelector('[data-region-canvas]'))];
+      const off = [wireSections(root), wireRail(root), initGlobe(root)];
       const target = params.get('section') || params.get('company');
       if (target) requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView({ block: 'start' }));
       return () => off.forEach((f) => f?.());
