@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- BMK mark, abstracted: three diamonds, navy left halves, light right halves -->
+  <style>
+    .n { fill: #1f487d; }
+    .l { fill: #a9bdd8; }
+    @media (prefers-color-scheme: dark) {
+      .n { fill: #628abf; }
+      .l { fill: #e6edf6; }
+    }
+  </style>
+  <path class="n" d="M23.95 17.80L9.75 32.00L23.95 46.20ZM40.05 1.70L25.85 15.90L40.05 30.10ZM40.05 33.90L25.85 48.10L40.05 62.30Z"/>
+  <path class="l" d="M23.95 17.80L38.15 32.00L23.95 46.20ZM40.05 1.70L54.25 15.90L40.05 30.10ZM40.05 33.90L54.25 48.10L40.05 62.30Z"/>
+</svg>
