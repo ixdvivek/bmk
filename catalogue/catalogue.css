@@ -390,10 +390,21 @@ body.nav-hidden #nav {
 }
 
 /* ── About: dotted globe (globe.js) ─────────────────────────────────────── */
+/* No frame: left, right and bottom edges fade into the white page. On phones
+   the globe runs edge to edge (out of the shell gutter) with the same fades. */
 .globe {
-  @apply relative aspect-[5/4] w-full touch-pan-y overflow-hidden select-none;
-  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  @apply relative aspect-[5/4] w-full touch-none overflow-hidden select-none max-lg:-mx-[clamp(20px,7.5vw,120px)] max-lg:w-[calc(100%+2*clamp(20px,7.5vw,120px))];
+  --fade-x: linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  --fade-y: linear-gradient(to bottom, #000 74%, transparent 100%);
+  -webkit-mask-image: var(--fade-x), var(--fade-y);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--fade-x), var(--fade-y);
+  mask-composite: intersect;
+}
+@media (max-width: 1023px) {
+  .globe {
+    --fade-x: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  }
 }
 .globe-canvas {
   @apply absolute inset-0 size-full;
@@ -437,7 +448,7 @@ body.nav-hidden #nav {
   transform: translate(var(--tx), 0);
 }
 .globe-hint {
-  @apply pointer-events-none absolute top-3 right-3 rounded-full bg-mist px-3 py-1 text-[11px] tracking-[0.06em] text-muted uppercase transition-opacity duration-500;
+  @apply pointer-events-none absolute top-3 right-[16%] rounded-full max-lg:right-[12%] bg-mist px-3 py-1 text-[11px] tracking-[0.06em] text-muted uppercase transition-opacity duration-500;
 }
 .globe.is-touched .globe-hint {
   opacity: 0;
