@@ -1,7 +1,7 @@
 // Legal pages (Terms, Privacy, Cookies) and the 404 page.
 // No approved legal text yet: the sections below are a layout skeleton with the
 // headings these policies usually carry. Every body is marked as placeholder.
-import { esc, href, arrow, crumbs } from './ui.js';
+import { HOME, esc, href, arrow, crumbs } from './ui.js';
 
 const LEGAL = {
   terms: {
@@ -32,7 +32,7 @@ export function renderLegal(id) {
     html: `
     <section class="bg-mist pt-[clamp(128px,11vw,176px)] pb-[clamp(48px,5vw,80px)]">
       <div class="shell">
-        ${crumbs([['Home', '../'], [doc.title]])}
+        ${crumbs([['Home', HOME], [doc.title]])}
         <h1 class="t-display mt-6 max-w-4xl">${esc(doc.title)}</h1>
         <p class="t-body mt-3 max-w-2xl text-ink/80">${esc(doc.sub)}</p>
         <p class="mt-6 text-sm text-muted">Last updated: <span class="legal-tbc">date to be confirmed</span></p>
@@ -91,7 +91,7 @@ export function renderNotFound() {
       <div class="nf-grid" aria-hidden="true"><div class="nf-track" data-nf-track></div></div>
       <div class="nf-actions">
         <a class="btn nf-btn" href="${href('/products')}">Browse all products ${arrow('orange')}</a>
-        <a class="btn nf-btn" href="../">Back to home ${arrow('orange')}</a>
+        <a class="btn nf-btn" href="${HOME}">Back to home ${arrow('orange')}</a>
         <a class="btn nf-btn" href="${href('/contact')}">Contact us ${arrow('orange')}</a>
       </div>
     </section>`,

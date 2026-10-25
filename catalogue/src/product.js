@@ -11,7 +11,7 @@ function specGroups(p) {
   if (extra.length) out.push({ group: out.length ? 'Other' : 'Specifications', rows: extra.map((k) => ({ key: k, label: k, value: p.specs[k] })) });
   return out;
 }
-import { esc, href, arrow, icon, crumbs, productCard, brandMark, stage, brandVars } from './ui.js';
+import { HOME, esc, href, arrow, icon, crumbs, productCard, brandMark, stage, brandVars } from './ui.js';
 import { mediaOf, swatch } from './media.js';
 import { openEnquiry } from './chrome.js';
 
@@ -48,7 +48,7 @@ export function renderProduct(slug) {
 
   const html = `
   <section class="pt-[clamp(120px,10vw,152px)]">
-    <div class="shell">${crumbs([['Home', '../'], ['Brands & Products', href('/products')], [g.name, href(`/category/${g.id}`)], [c.name, href(`/category/${c.id}`)], [p.name]])}</div>
+    <div class="shell">${crumbs([['Home', HOME], ['Brands & Products', href('/products')], [g.name, href(`/category/${g.id}`)], [c.name, href(`/category/${c.id}`)], [p.name]])}</div>
     <div class="shell mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)] lg:gap-16">
       <div>
         <button type="button" class="block w-full cursor-zoom-in" data-lightbox aria-label="Open full-screen gallery"><div data-main>${view(0, { cls: '!rounded-3xl', eager: true })}</div></button>

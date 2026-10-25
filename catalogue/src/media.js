@@ -1,7 +1,7 @@
 // Photography and brand styling for the catalogue. Kept apart from the shared
 // catalogue data (wireframe/src/data.js) so the wireframe stays image-free.
 // Anything missing here falls back to the studio stage with a category glyph.
-const M = '../assets/catalogue/';
+const M = `${import.meta.env.BASE_URL}assets/catalogue/`;
 
 /** Brand accent drives the brand page (tabs, card stages, hover CTA) and the
  *  "More from {brand}" strip. On hover a product card's CTA fills with `color`.

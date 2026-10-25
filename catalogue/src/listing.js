@@ -1,6 +1,6 @@
 // Listing: category, group, all products, search results, and the brand page.
 import { products, brands, groups, categories, categoriesIn, byId, groupOf, searchProducts, searchBrands, searchCategories } from '../../wireframe/src/data.js';
-import { esc, href, arrow, icon, crumbs, productCard, brandMark, brandVars, brandLink } from './ui.js';
+import { HOME, go, esc, href, arrow, icon, crumbs, productCard, brandMark, brandVars, brandLink } from './ui.js';
 import { brandStyle, categoryHero } from './media.js';
 
 const PAGE = 9;
@@ -129,7 +129,7 @@ export function renderListing(ctx, params) {
     title: { all: 'All products', group: ctx.group?.name, category: ctx.cat?.name, brand: ctx.brand?.name, search: `Search: ${ctx.q}` }[ctx.kind],
     html,
     wire(root) {
-      root.querySelectorAll('[data-sort]').forEach((s) => s.addEventListener('change', () => (location.hash = url({ sort: s.value === 'latest' ? '' : s.value, page: '' }))));
+      root.querySelectorAll('[data-sort]').forEach((s) => s.addEventListener('change', () => (go(url({ sort: s.value === 'latest' ? '' : s.value, page: '' })))));
       const sheet = root.querySelector('#sheet');
       const setSheet = (o) => {
         sheetOpen = o;
@@ -143,7 +143,7 @@ export function renderListing(ctx, params) {
       root.querySelector('[data-inline-search]')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const q = e.target.q.value.trim();
-        if (q) location.hash = href('/search', { q });
+        if (q) go(href('/search', { q }));
       });
       return off;
     },
@@ -185,7 +185,7 @@ export const pillbar = (label, items, vars = '') => `
 
 // ── Heroes ───────────────────────────────────────────────────────────────────
 function pageHero(ctx, base) {
-  const home = ['Home', '../'];
+  const home = ['Home', HOME];
   const prods = ['Brands & Products', href('/products')];
   let trail;
   let eyebrow;
@@ -266,7 +266,7 @@ function brandHero(ctx, base, selC, url) {
   <section class="photo-hero pt-[clamp(128px,11vw,176px)] ${base.length ? 'pb-[146px]' : 'pb-[clamp(56px,5vw,80px)]'}" style="--hero-overlay:linear-gradient(90deg,rgb(0 0 0/.55) 0%,rgb(0 0 0/.15) 55%,rgb(0 0 0/0) 100%)">
     ${img ? `<img class="photo-hero-img object-[70%_top]" src="${img}" alt="" fetchpriority="high" />` : ''}
     <div class="shell">
-      ${crumbs([['Home', '../'], ['Brands & Products', href('/products')], [b.name]], true)}
+      ${crumbs([['Home', HOME], ['Brands & Products', href('/products')], [b.name]], true)}
       <div class="mt-10 flex max-w-xl flex-col items-start gap-6">
         <div class="rounded-xl bg-white px-4 py-4">${brandMark(b, { cls: 'h-[42px]' })}</div>
         <h1 class="t-display">${esc(b.name)}</h1>

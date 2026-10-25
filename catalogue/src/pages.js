@@ -4,7 +4,7 @@ import { inHouseBrands, partnerBrands } from '../../wireframe/src/data.js';
 import { countryVisual } from '../../src/data/locations.js';
 import { milestoneVisual } from '../../src/data/milestones.js';
 import mapData from '../../src/data/map-dots.json';
-import { A, esc, href, arrow, icon, crumbs, brandMark } from './ui.js';
+import { A, BASE, HOME, esc, href, arrow, icon, crumbs, brandMark } from './ui.js';
 import { pillbar } from './listing.js';
 
 // Line icons that take the text colour
@@ -17,7 +17,7 @@ const ico = {
 // City icons, photos and pins (shared with the homepage presence map)
 const visual = (c) => {
   const v = countryVisual[c.id] || {};
-  return { ...v, icon: v.icon && `../${v.icon}`, photo: v.photo && `../${v.photo}` };
+  return { ...v, icon: v.icon && `${BASE}${v.icon}`, photo: v.photo && `${BASE}${v.photo}` };
 };
 const tbc = (label = 'To be confirmed') => `<span class="text-muted/70 italic">${label}</span>`;
 
@@ -245,7 +245,7 @@ export function renderAbout(params) {
     <section class="photo-hero pt-[clamp(128px,11vw,176px)] pb-[146px]" style="--hero-overlay:linear-gradient(90deg,rgb(0 0 0/.75) 0%,rgb(0 0 0/.35) 60%,rgb(0 0 0/.2) 100%)">
       <img class="photo-hero-img object-[66%_50%]" src="${A}images/about.webp" alt="" fetchpriority="high" />
       <div class="shell">
-        ${crumbs([['Home', '../'], ['About Us']], true)}
+        ${crumbs([['Home', HOME], ['About Us']], true)}
         <h1 class="t-display mt-6 max-w-3xl">About BMK Group</h1>
         <p class="t-body mt-3 max-w-2xl text-mist">Who we are, what we stand for, where we operate and how we got here.</p>
       </div>
@@ -376,7 +376,7 @@ export function renderFaq() {
     title: 'FAQ',
     html: `
     ${pageHero(
-      [['Home', '../'], ['FAQ']],
+      [['Home', HOME], ['FAQ']],
       'Frequently asked questions',
       'Answers to common questions about BMK Group, our brands and partnering with us.',
       'faq-hero',
@@ -497,7 +497,7 @@ export function renderContact(params) {
   return {
     title: 'Contact Us',
     html: `
-    ${pageHero([['Home', '../'], ['Contact Us']], 'Get in touch', 'Reach the right BMK Group company, or send us a message.', 'contact-hero')}
+    ${pageHero([['Home', HOME], ['Contact Us']], 'Get in touch', 'Reach the right BMK Group company, or send us a message.', 'contact-hero')}
     <section class="shell section-y !pt-12">
       <div class="grid items-start gap-10 lg:grid-cols-[688fr_608fr] lg:gap-16">
         <div>
