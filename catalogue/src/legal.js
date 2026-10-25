@@ -33,8 +33,7 @@ export function renderLegal(id) {
     <section class="bg-mist pt-[clamp(128px,11vw,176px)] pb-[clamp(48px,5vw,80px)]">
       <div class="shell">
         ${crumbs([['Home', '../'], [doc.title]])}
-        <span class="chip mt-6 border-line bg-white text-ink">Legal</span>
-        <h1 class="t-display mt-4 max-w-4xl">${esc(doc.title)}</h1>
+        <h1 class="t-display mt-6 max-w-4xl">${esc(doc.title)}</h1>
         <p class="t-body mt-3 max-w-2xl text-ink/80">${esc(doc.sub)}</p>
         <p class="mt-6 text-sm text-muted">Last updated: <span class="legal-tbc">date to be confirmed</span></p>
       </div>
