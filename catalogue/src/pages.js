@@ -436,15 +436,20 @@ export function renderFaq() {
           if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
           e.preventDefault();
           a.getAnimations().forEach((x) => x.cancel());
-          const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+          // Height and the bottom padding animate together (border-box), so the
+          // answer reaches exactly 0 and closing has no final jump.
+          const ease = 'cubic-bezier(0.33, 1, 0.68, 1)';
+          const pb = getComputedStyle(a).paddingBottom;
           if (!d.open) {
             d.open = true;
-            a.animate({ height: ['0px', `${a.scrollHeight}px`], opacity: [0, 1] }, { duration: 380, easing: ease });
+            const h = a.offsetHeight;
+            a.animate({ height: ['0px', `${h}px`], paddingBottom: ['0px', pb], opacity: [0, 1] }, { duration: 420, easing: ease });
           } else {
             d.classList.add('is-closing');
-            a.animate({ height: [`${a.offsetHeight}px`, '0px'], opacity: [1, 0] }, { duration: 260, easing: ease }).onfinish = () => {
+            a.animate({ height: [`${a.offsetHeight}px`, '0px'], paddingBottom: [pb, '0px'], opacity: [1, 0] }, { duration: 340, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fill: 'forwards' }).onfinish = (ev) => {
               d.open = false;
               d.classList.remove('is-closing');
+              ev.target.cancel();
             };
           }
         });

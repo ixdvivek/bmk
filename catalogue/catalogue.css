@@ -322,27 +322,13 @@ body.nav-hidden #nav {
 
 /* ── Motion ───────────────────────────────────────────────────────────────
    Quick, subtle: page fade, section reveals, panels and the enquiry popup. */
-#view {
-  transition: opacity 0.16s var(--ease-soft);
-}
-#view.is-leaving {
-  opacity: 0;
-}
-#view:not(.is-leaving) {
-  animation: page-in 0.32s var(--ease-soft) both;
-}
-@keyframes page-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-}
+/* Page fade runs in JS (main.js). Section reveal: */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(56px);
   transition:
-    opacity 0.8s var(--ease-soft),
-    transform 0.9s var(--ease-soft);
+    opacity 1s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal.is-in {
   opacity: 1;
@@ -375,20 +361,9 @@ body.nav-hidden #nav {
 }
 .modal-backdrop {
   animation: fade-in 0.25s var(--ease-soft) both;
-  transition: opacity 0.18s;
 }
 .modal-card {
   animation: modal-in 0.4s var(--ease-out-expo) both;
-  transition:
-    opacity 0.18s,
-    transform 0.18s;
-}
-.is-closing .modal-backdrop {
-  opacity: 0;
-}
-.is-closing .modal-card {
-  opacity: 0;
-  transform: translateY(10px) scale(0.98);
 }
 /* FAQ answers ease open and closed (heights animated in JS) */
 .faq-a {
@@ -401,7 +376,6 @@ body.nav-hidden #nav {
 
 @media (prefers-reduced-motion: reduce) {
   .rise,
-  #view,
   #mega,
   #search-panel,
   #drawer,
