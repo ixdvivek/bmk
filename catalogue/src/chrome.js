@@ -48,7 +48,7 @@ export function renderChrome() {
           .join('')}</ul>
         <p class="mt-6 mb-4 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
         <ul class="grid grid-cols-3 gap-2">${partnerBrands
-          .map((b) => `<li><a href="${href(`/brand/${b.id}`)}" class="mega-brand" title="${esc(b.name)}">${brandMark(b, { cls: 'h-4 !text-[13px]' })}</a></li>`)
+          .map((b) => `<li><a href="${href(`/brand/${b.id}`)}" class="mega-brand" title="${esc(b.name)}">${brandMark(b, { cls: 'h-8 !text-[13px]' })}</a></li>`)
           .join('')}</ul>
       </div>
     </div>

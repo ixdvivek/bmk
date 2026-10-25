@@ -63,8 +63,9 @@ export function stage(p, { label = '', ratio = '4 / 3', dark = false, cls = '', 
 }
 
 /** Brand mark: the client's logo where we have it, otherwise a clean wordmark. */
-// Logos we have so far; the rest show a wordmark until BMK sends them.
-const logos = { seeken: 'brands/seeken.svg', 'team-appliances': 'brands/team.svg', nikon: 'brands/nikon.svg', canon: 'brands/canon.svg', sony: 'brands/sony.svg' };
+// Brand logos in their original colours (Figma: UI Design › brands section).
+const logos = Object.fromEntries(['seeken', 'nikon', 'canon', 'fujifilm', 'sony', 'samsung', 'lg', 'sandisk', 'prestige', 'sujata', 'voltas', 'symphony', 'sharp'].map((id) => [id, `brands/${id}.svg`]));
+logos['team-appliances'] = 'brands/team.svg';
 export function brandMark(b, { light = false, cls = 'h-7' } = {}) {
   if (logos[b.id]) return `<img src="${A}${logos[b.id]}" alt="${esc(b.name)}" class="${cls} w-auto max-w-[150px] object-contain ${light ? 'brightness-0 invert' : ''}" />`;
   return `<span class="${cls} inline-flex items-center text-[22px] leading-none font-bold tracking-[-0.03em] ${light ? 'text-white' : 'text-ink'}">${esc(b.name)}</span>`;
