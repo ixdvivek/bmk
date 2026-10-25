@@ -710,7 +710,7 @@ input[type='search']::-webkit-search-cancel-button {
   @apply lg:right-14 lg:left-auto;
 }
 .co-panel {
-  @apply relative mt-6 h-fit self-center rounded-2xl bg-white/80 p-6 text-ink shadow-[0_30px_60px_-30px_rgb(0_0_0/0.45)] backdrop-blur-xl sm:p-8 lg:col-start-2 lg:mt-0;
+  @apply relative mt-6 h-fit self-end rounded-2xl bg-white/80 p-6 text-ink shadow-[0_30px_60px_-30px_rgb(0_0_0/0.45)] backdrop-blur-xl sm:p-8 lg:col-start-2 lg:mt-0;
 }
 .co-card.is-flip .co-panel {
   @apply lg:col-start-1 lg:row-start-1;
