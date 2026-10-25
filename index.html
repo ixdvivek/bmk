@@ -231,13 +231,13 @@
       </section>
 
       <!-- ── Brands ──────────────────────────────────────────────────── -->
-      <section id="brands" class="section-y bg-navy text-white" aria-labelledby="brands-title">
+      <section id="brands" class="brands-section section-y text-white" aria-labelledby="brands-title">
         <div class="shell flex flex-col gap-10">
           <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div class="flex max-w-[640px] flex-col gap-6">
               <div class="flex flex-col gap-3">
-                <h2 id="brands-title" class="t-display" data-split>Our Brands</h2>
-                <p class="t-body" data-reveal="up">BMK’s own brands, SEEKEN and TEAM Appliances, and the global names we distribute.</p>
+                <h2 id="brands-title" class="t-display" data-split>Associated Brands</h2>
+                <p class="t-body" data-reveal="up">The global names we distribute.</p>
               </div>
               <div class="flex flex-wrap gap-2" role="group" aria-label="Filter brands" data-brand-filters data-reveal="up"></div>
             </div>
@@ -258,6 +258,15 @@
               data-lenis-prevent-wheel
             ></ul>
             <p class="hidden py-24 text-center text-white/60" data-brand-empty>No brands in this category yet — check back soon.</p>
+          </div>
+
+          <!-- BMK's own brands (Figma "Homepage v2": below the partner carousel) -->
+          <div class="mt-[clamp(24px,3vw,40px)] flex flex-col gap-10">
+            <div class="flex max-w-[640px] flex-col gap-3">
+              <h2 id="own-brands-title" class="t-display" data-split>Our Brands</h2>
+              <p class="t-body" data-reveal="up">BMK’s own brands, SEEKEN and TEAM Appliances.</p>
+            </div>
+            <ul class="grid gap-4 md:grid-cols-2 lg:gap-10" aria-labelledby="own-brands-title" data-own-brands></ul>
           </div>
         </div>
       </section>

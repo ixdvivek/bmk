@@ -161,14 +161,16 @@ export function initMap({ reduced }) {
   };
 
   // ── Desktop popover placement ───────────────────────────────────────
-  // xl+: the card is positioned beside the selected pin (right side when it
-  // fits, otherwise left), vertically centred on the pin and kept inside the
-  // section. Below xl the card stays in the normal flow under the map.
+  // xl+: the card opens right next to the selected pin: to its right when it
+  // fits in the viewport, otherwise to its left, vertically centred on the pin.
+  // It is then nudged so no part of it falls outside the visible viewport
+  // (below the fixed navbar and above the bottom edge). Below xl the card stays
+  // in the normal flow under the map.
   const section = root.closest('section');
-  const heading = section.querySelector('#presence-title')?.parentElement;
   const desktop = matchMedia('(min-width: 1280px)');
-  const GAP = 40; // clears neighbouring pins (Petaling Jaya ↔ Singapore are ~20px apart)
-  const EDGE = 24;
+  const GAP = 28; // clear of the pin's ring
+  const EDGE = 24; // breathing room from the viewport edges
+  const nav = document.querySelector('header .nav-bar, header nav, header');
 
   const place = () => {
     if (current < 0) return;
@@ -178,57 +180,34 @@ export function initMap({ reduced }) {
     }
     const s = section.getBoundingClientRect();
     const p = pins[current].getBoundingClientRect();
-    const px = p.left + p.width / 2 - s.left;
-    const py = p.top + p.height / 2 - s.top;
+    const px = p.left + p.width / 2; // viewport coords
+    const py = p.top + p.height / 2;
     const w = card.offsetWidth;
     const h = card.offsetHeight;
-    const clampY = (y) => gsap.utils.clamp(EDGE, s.height - h - EDGE, y);
+    const vw = document.documentElement.clientWidth;
+    const vh = window.innerHeight;
+    const navBottom = Math.max(0, nav ? nav.getBoundingClientRect().bottom : 0);
 
-    // Things the card must not cover: the other pins and the heading block.
-    const pad = 16;
-    const others = pins
-      .filter((_, k) => k !== current)
-      .map((b) => b.getBoundingClientRect())
-      .map((r) => ({ l: r.left - s.left - pad, t: r.top - s.top - pad, r: r.right - s.left + pad, b: r.bottom - s.top + pad }));
-    const hr = heading?.getBoundingClientRect();
-    if (hr) others.push({ l: hr.left - s.left, t: hr.top - s.top, r: hr.right - s.left, b: hr.bottom - s.top });
-    const hits = (x, y) => others.some((o) => x < o.r && x + w > o.l && y < o.b && y + h > o.t);
+    // Horizontal: right of the pin if it fits, else left, else clamp.
+    let side = 'right';
+    let x = px + GAP;
+    if (x + w > vw - EDGE) {
+      side = 'left';
+      x = px - GAP - w;
+    }
+    x = gsap.utils.clamp(EDGE, vw - w - EDGE, x);
 
-    // Candidates in order of preference: right of the pin, then left; card
-    // centred on the pin, then hanging below it, then sitting above it.
-    const xs = [px + GAP, px - GAP - w].filter((x) => x >= EDGE && x + w <= s.width - EDGE);
-    const ys = [py - h / 2, py - 48, py - h + 48].map(clampY);
-    let x = xs[0] ?? px + GAP;
-    let y = ys[0];
-    let found = false;
-    search: for (const cx of xs) {
-      for (const cy of ys) {
-        if (!hits(cx, cy)) {
-          x = cx;
-          y = cy;
-          found = true;
-          break search;
-        }
-      }
-    }
-    // Pins are close together (Africa to Southeast Asia): if no spot beside the
-    // pin is free, park the card in a clear corner of the section instead.
-    if (!found) {
-      const self = { l: px - pad - 16, t: py - pad - 16, r: px + pad + 16, b: py + pad + 16 };
-      others.push(self);
-      const corners = [
-        [EDGE, EDGE],
-        [s.width - w - EDGE, EDGE],
-        [s.width - w - EDGE, s.height - h - EDGE],
-      ];
-      const free = corners.find(([cx, cy]) => !hits(cx, cy));
-      if (free) [x, y] = free;
-    }
-    const originX = x > px ? '0%' : '100%';
-    card.style.left = `${Math.round(x)}px`;
-    card.style.top = `${Math.round(y)}px`;
+    // Vertical: centred on the pin, kept inside the visible viewport and the section.
+    const top = Math.max(EDGE, navBottom + 12, s.top + EDGE);
+    const bottom = Math.min(vh - EDGE, s.bottom - EDGE);
+    let y = py - h / 2;
+    y = bottom - top >= h ? gsap.utils.clamp(top, bottom - h, y) : top;
+
+    card.style.left = `${Math.round(x - s.left)}px`;
+    card.style.top = `${Math.round(y - s.top)}px`;
+    card.dataset.side = side;
     // Grow out of the pin's side of the card
-    card.style.transformOrigin = `${originX} ${gsap.utils.clamp(0, 100, ((py - y) / h) * 100)}%`;
+    card.style.transformOrigin = `${side === 'right' ? '0%' : '100%'} ${gsap.utils.clamp(0, 100, ((py - y) / h) * 100)}%`;
   };
   new ResizeObserver(place).observe(section);
   desktop.addEventListener('change', place);
@@ -292,6 +271,7 @@ export function initMap({ reduced }) {
         .timeline()
         .to(view, { reveal: 1, duration: 2.2, ease: 'power2.inOut', onUpdate: requestDraw })
         .to(pins, { scale: 1, autoAlpha: 1, duration: 0.8, ease: 'back.out(3)', stagger: 0.12 }, 1.1)
+        .add(place, 1.2)
         .to(card, { y: 0, autoAlpha: 1, duration: 1.1 }, 1.3);
     },
   });
