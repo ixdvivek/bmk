@@ -316,7 +316,7 @@ export function renderAbout(params) {
         </div>
         <div class="mt-12 grid gap-4 lg:grid-cols-2">${inHouseBrands.map(brandTile).join('')}</div>
         <p class="mt-16 mb-5 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
-        <ul class="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">${partnerBrands.map((b) => `<li><a class="partner-tile" href="${href(`/brand/${b.id}`)}" title="${esc(b.name)}">${brandMark(b, { cls: 'h-6 !text-[17px]' })}</a></li>`).join('')}</ul>
+        <ul class="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">${partnerBrands.map((b) => `<li><a class="partner-tile" href="${href(`/brand/${b.id}`)}" title="${esc(b.name)}">${brandMark(b, { cls: 'h-11 !text-[17px]' })}</a></li>`).join('')}</ul>
       </div>
     </section>
 

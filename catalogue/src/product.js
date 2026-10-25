@@ -61,7 +61,7 @@ export function renderProduct(slug) {
 
       <div class="flex flex-col gap-7">
         <div class="flex flex-wrap items-center gap-3">
-          <a href="${href(`/brand/${b.id}`)}" class="rounded-lg border border-line px-3 py-2 transition-colors hover:border-ink" aria-label="${esc(b.name)}">${brandMark(b, { cls: 'h-5' })}</a>
+          <a href="${href(`/brand/${b.id}`)}" class="rounded-lg border border-line px-3 py-2 transition-colors hover:border-ink" aria-label="${esc(b.name)}">${brandMark(b, { cls: 'h-7' })}</a>
           <a href="${href(`/category/${c.id}`)}" class="chip border-line text-ink transition-colors hover:border-ink">${esc(c.name)}</a>
         </div>
         <div>
