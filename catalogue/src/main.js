@@ -4,18 +4,22 @@ import { renderAbout, renderFaq, renderContact } from './pages.js';
 import { renderLegal, renderNotFound } from './legal.js';
 import { context, renderListing, resetListing } from './listing.js';
 import { renderProduct } from './product.js';
+import { BASE, href, go } from './ui.js';
+import { resetFooterTagline } from './chrome.js';
 
 const view = document.getElementById('view');
 let lastPath = null;
 let cleanup = null;
 
+/** "/bmk/brand/nikon/" → "/brand/nikon" (the site root is BASE). */
+const currentPath = () => `/${location.pathname.slice(BASE.length).replace(/^\/+|\/+$/g, '').replace(/(^|\/)index\.html$/, '')}`;
+
 function route() {
-  const raw = location.hash.slice(1) || '/products';
-  const [path, qs = ''] = raw.split('?');
-  const params = new URLSearchParams(qs);
+  const path = currentPath();
+  const params = new URLSearchParams(location.search);
   const parts = path.split('/').filter(Boolean);
   let page = null;
-  if (parts[0] === 'products' || !parts.length) page = renderListing(context('all', null, params), params);
+  if (parts[0] === 'products') page = renderListing(context('all', null, params), params);
   else if (parts[0] === 'search') page = renderListing(context('search', null, params), params);
   else if (parts[0] === 'category' || parts[0] === 'brand') {
     const ctx = context(parts[0], parts[1], params);
@@ -60,7 +64,7 @@ const EASE_OUT = 'cubic-bezier(0.25, 0.1, 0.25, 1)';
 const EASE_IN = 'cubic-bezier(0.55, 0, 0.75, 0.4)';
 const fadeTargets = () => [view, document.getElementById('site-footer')];
 async function render() {
-  const path = (location.hash.slice(1) || '/products').split('?')[0];
+  const path = currentPath();
   const same = path === lastPath;
   const mine = ++token;
   const animate = lastPath !== null && !same && !reduced();
@@ -98,15 +102,31 @@ function swap() {
   document.title = `${page.title} — BMK Group`;
   scrollTo({ top: same ? y : 0, behavior: 'instant' });
   lastPath = path;
-  if (!same) wireReveals();
+  if (!same) (wireReveals(), resetFooterTagline());
 }
 
-// In-page anchors must not trigger the router
+/** Links to other pages of this app navigate client-side (instant, with the
+ *  fade); the homepage, the wireframes and other sites load normally. */
+const APP = /^(products|search|category|brand|product|about|faq|contact|terms|privacy|cookies)(\/|$)/;
+const isAppLink = (a) => {
+  if (a.target || a.hasAttribute('download') || a.origin !== location.origin) return false;
+  if (!a.pathname.startsWith(BASE)) return false;
+  return APP.test(a.pathname.slice(BASE.length));
+};
+
 document.addEventListener('click', (e) => {
+  // In-page anchors must not trigger the router
   const a = e.target.closest('a[data-anchor]');
   if (a) {
     e.preventDefault();
     document.getElementById(a.getAttribute('href').slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  const link = e.target.closest('a[href]');
+  if (link && !e.defaultPrevented && e.button === 0 && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) && isAppLink(link)) {
+    e.preventDefault();
+    if (link.pathname + link.search !== location.pathname + location.search) go(link.href);
+    else if (link.hash) document.querySelector(link.hash)?.scrollIntoView({ behavior: 'smooth' });
     return;
   }
   const enq = e.target.closest('[data-enquire]');
@@ -116,6 +136,14 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Old links (/catalogue/#/about?x=1) move to their new address (/about/?x=1)
+const legacy = location.hash.startsWith('#/') ? location.hash.slice(1) : null;
+if (legacy || /^\/catalogue$/.test(currentPath())) {
+  const [p, qs = ''] = (legacy || '/products').split('?');
+  history.replaceState(null, '', href(p) + (qs ? `?${qs}` : ''));
+}
+
 renderChrome();
-addEventListener('hashchange', render);
+addEventListener('popstate', render);
+addEventListener('routechange', render);
 render();

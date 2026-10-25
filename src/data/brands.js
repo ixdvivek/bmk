@@ -32,7 +32,7 @@ const card = (b) => ({
   description: b.intro,
   inHouse: !!b.inHouse,
   sites: b.sites || [],
-  href: '#', // homepage stays standalone for now (no links into the catalogue)
+  href: `brand/${b.id}/`,
 });
 
 /** Partner brands: the "Associated Brands" carousel. */

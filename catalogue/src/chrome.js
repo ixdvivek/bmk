@@ -1,14 +1,13 @@
 // Navbar (homepage pill), mega menu, search overlay, mobile menu, footer, enquiry popup.
 import { groups, categoriesIn, brands, inHouseBrands, partnerBrands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../wireframe/src/data.js';
 import { contact } from '../../wireframe/src/content.js';
-import { A, esc, href, arrow, icon, brandMark, brandLink, stage } from './ui.js';
+import { A, HOME, go, esc, href, arrow, icon, brandMark, brandLink, stage } from './ui.js';
 import { mediaOf } from './media.js';
 
 const thumb = (p) => mediaOf(p).card || '';
 
 const countIn = (id) => products.filter((p) => p.category === id).length;
 const countBrand = (id) => products.filter((p) => p.brand === id).length;
-const HOME = '../';
 
 export function renderChrome() {
   document.getElementById('site-header').innerHTML = `
@@ -210,14 +209,14 @@ function wire() {
   input.addEventListener('input', () => (suggest.innerHTML = suggestions(input.value)));
   document.getElementById('search-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    if (input.value.trim()) location.hash = href('/search', { q: input.value.trim() });
+    if (input.value.trim()) go(href('/search', { q: input.value.trim() }));
   });
   menuBtn.addEventListener('click', () => setDrawer(true));
   drawer.querySelectorAll('[data-drawer-close]').forEach((b) => b.addEventListener('click', () => setDrawer(false)));
   drawer.querySelector('[data-drawer-search]').addEventListener('submit', (e) => {
     e.preventDefault();
     const q = e.target.q.value.trim();
-    if (q) location.hash = href('/search', { q });
+    if (q) go(href('/search', { q }));
   });
 
   document.addEventListener('keydown', (e) => e.key === 'Escape' && closeAll());
@@ -240,6 +239,29 @@ function wire() {
     },
     { passive: true },
   );
+}
+
+/** Footer tagline: characters rise in sequence inside word masks (same motion
+ *  as the homepage, which uses GSAP SplitText; here it is plain CSS). */
+function splitChars(text) {
+  let i = 0;
+  return text
+    .split(' ')
+    .map((w) => `<span class="tw" aria-hidden="true">${[...w].map((c) => `<span class="tc" style="--i:${i++}">${esc(c)}</span>`).join('')}</span>`)
+    .join(' ');
+}
+let taglineIO = null;
+export function wireFooterTagline() {
+  const el = document.querySelector('[data-tagline]');
+  if (!el) return;
+  taglineIO?.disconnect();
+  taglineIO = new IntersectionObserver(([e]) => e.isIntersecting && (el.classList.add('is-in'), taglineIO.disconnect()), { rootMargin: '0px 0px -8% 0px' });
+  taglineIO.observe(el);
+}
+/** Replay on every page change (called while the page is faded out). */
+export function resetFooterTagline() {
+  document.querySelector('[data-tagline]')?.classList.remove('is-in');
+  wireFooterTagline();
 }
 
 function footer() {
@@ -266,7 +288,7 @@ function footer() {
         <ul class="flex gap-6 pl-8">${['facebook', 'instagram', 'linkedin', 'x'].map((s) => `<li><a href="#" class="social" aria-label="${s}"><img src="${A}icons/${s}.svg" alt="" width="20" height="20" /></a></li>`).join('')}</ul>
       </div>
     </div>
-    <div class="bg-gradient-to-b from-black to-navy to-90% py-12"><p class="px-2 text-center text-[clamp(2.5rem,6vw,6rem)] leading-[1.25] font-bold tracking-[-1px] lg:whitespace-nowrap">Built on trust. Driven by innovation.</p></div>
+    <div class="bg-gradient-to-b from-black to-navy to-90% py-12"><p class="footer-tagline px-2 text-center text-[clamp(2.5rem,6vw,6rem)] leading-[1.25] font-bold tracking-[-1px] lg:whitespace-nowrap" aria-label="Built on trust. Driven by innovation." data-tagline>${splitChars('Built on trust. Driven by innovation.')}</p></div>
     <div class="bg-navy"><div class="shell flex flex-col gap-4 py-10 text-[13px] leading-5 text-white/40 md:h-32 md:flex-row md:items-center md:justify-between md:py-0">
       <p>© BMK Group. All Rights Reserved. Website made by <a href="https://phitany.com/" target="_blank" rel="noopener" class="underline decoration-white/30 underline-offset-4 hover:text-white">Phitany</a></p>
       <ul class="flex flex-wrap gap-5">${[['/privacy', 'Privacy Policy'], ['/cookies', 'Cookie Policy'], ['/terms', 'Terms &amp; Conditions']].map(([p, n]) => `<li><a class="hover:text-white" href="${href(p)}">${n}</a></li>`).join('')}</ul>

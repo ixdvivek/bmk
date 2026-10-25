@@ -1,12 +1,16 @@
 import { brandOf, categoryOf, highlightsFor } from '../../wireframe/src/data.js';
 import { mediaOf, brandColor } from './media.js';
 
-/** Public assets live at the site root; this page is served from /catalogue/. */
-export const A = '../assets/';
+/** Site root ("/" in dev, "/bmk/" on GitHub Pages). Every page lives under it:
+ *  /about/, /products/, /brand/nikon/ … and the homepage at the root itself. */
+export const BASE = import.meta.env.BASE_URL;
+export const HOME = BASE;
+export const A = `${BASE}assets/`;
 
 export const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
+/** Page URL: href('/brand/nikon', { sort: 'az' }) → "/bmk/brand/nikon/?sort=az" */
 export function href(path, params = {}) {
   const q = new URLSearchParams();
   for (const [k, v] of Object.entries(params)) {
@@ -14,7 +18,14 @@ export function href(path, params = {}) {
     q.set(k, Array.isArray(v) ? v.join(',') : v);
   }
   const qs = q.toString();
-  return `#${path}${qs ? `?${qs}` : ''}`;
+  const p = path.replace(/^\/+|\/+$/g, '');
+  return `${BASE}${p ? `${p}/` : ''}${qs ? `?${qs}` : ''}`;
+}
+
+/** Client-side navigation (History API); main.js renders on 'routechange'. */
+export function go(url, { replace = false } = {}) {
+  history[replace ? 'replaceState' : 'pushState'](null, '', url);
+  dispatchEvent(new Event('routechange'));
 }
 
 /** Link attributes for a brand: partner brands open their catalogue page; BMK's
