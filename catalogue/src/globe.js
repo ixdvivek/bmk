@@ -14,6 +14,7 @@ import { A, esc } from './ui.js';
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
 const RAD = Math.PI / 180;
+const DOT = '#628abf'; // lighter brand blue
 const LIFT = 26; // degrees above the globe centre where the active location rests
 const PHI_MIN = -50;
 const PHI_MAX = 55;
@@ -114,10 +115,10 @@ export function initGlobe(root) {
     }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = DOT;
     buckets.forEach((b, i) => {
       if (!b.length) return;
-      ctx.globalAlpha = 0.08 + (0.74 * (i + 1)) / BUCKETS;
+      ctx.globalAlpha = 0.14 + (0.86 * (i + 1)) / BUCKETS;
       ctx.beginPath();
       for (let k = 0; k < b.length; k += 3) {
         ctx.moveTo(b[k] + b[k + 2], b[k + 1]);
@@ -164,13 +165,16 @@ export function initGlobe(root) {
   const startTour = (i = nearest()) => !reduced && goTo(i);
   const pauseTour = () => (tween?.kill(), idle?.kill());
 
-  // ── Drag (mouse: spin + tilt; touch: spin only so the page still scrolls) ──
+  // ── Drag: spin (x) and tilt (y), mouse and touch. On touch the globe takes the
+  //    gesture (touch-action: none), so the page scrolls from the text around it.
   const proxy = document.createElement('div');
   let lx = 0;
   let ly = 0;
+  // Degrees per pixel; touch screens get a lighter feel (smaller globe, short swipes)
+  const gain = () => (180 / Math.PI / R) * (coarse ? 1.7 : 1);
   const onMove = function () {
-    view.lam -= ((this.x - lx) / R) * (180 / Math.PI);
-    if (!coarse) view.phi = gsap.utils.clamp(PHI_MIN, PHI_MAX, view.phi + ((this.y - ly) / R) * (180 / Math.PI));
+    view.lam -= (this.x - lx) * gain();
+    view.phi = gsap.utils.clamp(PHI_MIN, PHI_MAX, view.phi + (this.y - ly) * gain());
     lx = this.x;
     ly = this.y;
     draw();
@@ -184,9 +188,9 @@ export function initGlobe(root) {
   };
   const [drag] = Draggable.create(proxy, {
     trigger: el,
-    type: coarse ? 'x' : 'x,y',
+    type: 'x,y',
     inertia: !reduced,
-    allowNativeTouchScrolling: true,
+    allowNativeTouchScrolling: false,
     cursor: 'grab',
     activeCursor: 'grabbing',
     onPress() {
