@@ -1,6 +1,6 @@
 // Listing: category, group, all products, search results, and the brand page.
 import { products, brands, groups, categories, categoriesIn, byId, groupOf, searchProducts, searchBrands, searchCategories } from '../../wireframe/src/data.js';
-import { esc, href, arrow, icon, crumbs, productCard, brandMark, brandVars } from './ui.js';
+import { esc, href, arrow, icon, crumbs, productCard, brandMark, brandVars, brandLink } from './ui.js';
 import { brandStyle, categoryHero } from './media.js';
 
 const PAGE = 9;
@@ -13,7 +13,8 @@ export function context(kind, id, params) {
   if (kind === 'search') return { kind, path: '/search', q: params.get('q') || '' };
   if (kind === 'brand') {
     const brand = byId(brands, id);
-    return brand && { kind, path: `/brand/${id}`, brand };
+    // BMK's own brands have no brand page (website links only)
+    return brand && !brand.inHouse && { kind, path: `/brand/${id}`, brand };
   }
   const group = byId(groups, id);
   if (group) return { kind: 'group', path: `/category/${id}`, group };
@@ -206,7 +207,7 @@ function pageHero(ctx, base) {
     const cs = searchCategories(ctx.q);
     extra = `<form data-inline-search role="search" class="mt-8 flex max-w-2xl items-center gap-3 rounded-full border border-ink/15 bg-white py-1.5 pr-1.5 pl-5 focus-within:border-navy">
         ${icon.search}<input name="q" type="search" value="${esc(ctx.q)}" class="min-w-0 flex-1 bg-transparent outline-none" aria-label="Search products" /><button class="btn btn-dark !py-3">Search</button></form>
-      ${bs.length || cs.length ? `<div class="mt-5 flex flex-wrap items-center gap-2 text-sm"><span class="text-muted">Also matching</span>${bs.map((b) => `<a class="pill" href="${href(`/brand/${b.id}`)}">Brand · ${esc(b.name)}</a>`).join('')}${cs.map((c) => `<a class="pill" href="${href(`/category/${c.id}`)}">Category · ${esc(c.name)}</a>`).join('')}</div>` : ''}`;
+      ${bs.length || cs.length ? `<div class="mt-5 flex flex-wrap items-center gap-2 text-sm"><span class="text-muted">Also matching</span>${bs.map((b) => `<a class="pill" ${brandLink(b)}>Brand · ${esc(b.name)}</a>`).join('')}${cs.map((c) => `<a class="pill" href="${href(`/category/${c.id}`)}">Category · ${esc(c.name)}</a>`).join('')}</div>` : ''}`;
   } else {
     const g = ctx.group;
     trail = ctx.kind === 'group' ? [home, prods, [g.name]] : [home, prods, [g.name, href(`/category/${g.id}`)], [ctx.cat.name]];

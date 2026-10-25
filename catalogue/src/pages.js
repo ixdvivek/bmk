@@ -1,11 +1,11 @@
 // About Us, FAQ and Contact Us — homepage styles, wireframe structure and copy.
 import { intro, mission, vision, values, contact, countries, entities, entitiesIn, regions, milestones, enquiryTypes, faqTopics, faqs } from '../../wireframe/src/content.js';
-import { inHouseBrands, partnerBrands, products } from '../../wireframe/src/data.js';
+import { inHouseBrands, partnerBrands } from '../../wireframe/src/data.js';
 import { countryVisual } from '../../src/data/locations.js';
 import { milestoneVisual } from '../../src/data/milestones.js';
 import mapData from '../../src/data/map-dots.json';
 import { A, esc, href, arrow, icon, crumbs, brandMark } from './ui.js';
-import { pillbar, wirePillbar } from './listing.js';
+import { pillbar } from './listing.js';
 
 // Line icons that take the text colour
 const ico = {
@@ -223,7 +223,6 @@ export function renderAbout(params) {
   };
 
   const brandTile = (b) => {
-    const n = products.filter((p) => p.brand === b.id).length;
     // Same card as the homepage "Our Brands" (white, grey outline)
     return `<article class="ih-card">
       <div class="flex items-center justify-between gap-6">
@@ -234,8 +233,7 @@ export function renderAbout(params) {
         <h3 class="text-[32px] leading-8 font-semibold">${esc(b.name)}</h3>
         <p class="t-body text-black/50">${esc(b.intro)}</p>
         <div class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-3">
-          <a class="brand-cta" href="${href(`/brand/${b.id}`)}">${n ? `View ${n} products` : 'View brand'} <img src="${A}icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" /></a>
-          ${b.sites.map(([d]) => `<a class="text-sm text-black/70 underline decoration-black/20 underline-offset-4 transition-colors hover:text-ink hover:decoration-accent" href="https://${d}" target="_blank" rel="noopener">${esc(d)} ↗</a>`).join('')}
+          ${b.sites.map(([d]) => `<a class="brand-cta" href="https://${d}" target="_blank" rel="noopener">Visit ${esc(d)} <img src="${A}icons/arrow-orange.svg" alt="" class="btn-icon -rotate-45" width="16" height="16" /></a>`).join('')}
         </div>
       </div>
     </article>`;
@@ -252,7 +250,7 @@ export function renderAbout(params) {
         <p class="t-body mt-3 max-w-2xl text-mist">Who we are, what we stand for, where we operate and how we got here.</p>
       </div>
     </section>
-    ${pillbar('On this page', sections.map(([id, l], i) => `<li><a class="pill-dark ${i ? '' : 'is-on'}" href="#${id}" data-anchor>${l}</a></li>`).join(''))}
+    ${pillbar('On this page', sections.map(([id, l], i) => `<li><a class="pill-dark ${i ? '' : 'is-on'}" href="#${id}" data-anchor>${l}</a></li>`).join('')).replace('class="pillbar ', 'class="pillbar is-static ')}
 
     <section id="who-we-are" class="section-y scroll-mt-24 bg-white" data-section>
       <div class="shell grid items-center gap-12 lg:grid-cols-[440px_1fr] lg:gap-[120px]">
@@ -355,7 +353,7 @@ export function renderAbout(params) {
 
     ${enquiryBlock('Work with BMK', 'Distribution, dealership, retail supply or something else.')}`,
     wire(root) {
-      const off = [wirePillbar(root), wireSections(root), wireRail(root), drawRegionMap(root.querySelector('[data-region-canvas]'))];
+      const off = [wireSections(root), wireRail(root), drawRegionMap(root.querySelector('[data-region-canvas]'))];
       const target = params.get('section') || params.get('company');
       if (target) requestAnimationFrame(() => document.getElementById(target)?.scrollIntoView({ block: 'start' }));
       return () => off.forEach((f) => f?.());
@@ -431,6 +429,26 @@ export function renderFaq() {
         root.querySelector('[data-faq-empty]').classList.toggle('hidden', shown > 0);
       };
       input.addEventListener('input', apply);
+      // Accordion: animate the answer's height open and closed
+      root.querySelectorAll('[data-faq]').forEach((d) => {
+        const a = d.querySelector('.faq-a');
+        d.querySelector('summary').addEventListener('click', (e) => {
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          e.preventDefault();
+          a.getAnimations().forEach((x) => x.cancel());
+          const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+          if (!d.open) {
+            d.open = true;
+            a.animate({ height: ['0px', `${a.scrollHeight}px`], opacity: [0, 1] }, { duration: 380, easing: ease });
+          } else {
+            d.classList.add('is-closing');
+            a.animate({ height: [`${a.offsetHeight}px`, '0px'], opacity: [1, 0] }, { duration: 260, easing: ease }).onfinish = () => {
+              d.open = false;
+              d.classList.remove('is-closing');
+            };
+          }
+        });
+      });
       root.querySelectorAll('[data-faq-topic]').forEach((b) =>
         b.addEventListener('click', () => {
           topic = b.dataset.faqTopic;

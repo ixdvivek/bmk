@@ -17,6 +17,11 @@ export function href(path, params = {}) {
   return `#${path}${qs ? `?${qs}` : ''}`;
 }
 
+/** Link attributes for a brand: partner brands open their catalogue page; BMK's
+ *  own brands (SEEKEN, TEAM) have no brand page and open their website instead. */
+export const brandLink = (b) =>
+  b.inHouse ? `href="https://${b.sites[0][0]}" target="_blank" rel="noopener"` : `href="${href(`/brand/${b.id}`)}"`;
+
 export const arrow = (tone = 'orange', cls = 'btn-icon') => `<img src="${A}icons/arrow-${tone}.svg" alt="" class="${cls}" width="16" height="16" />`;
 /** Arrow drawn as a mask so CSS can recolour it (brand-colour hovers). */
 export const arrowMask = (cls = 'btn-icon') => `<span class="arrow-mask ${cls}" aria-hidden="true"></span>`;
