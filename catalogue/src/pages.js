@@ -192,7 +192,7 @@ export function renderAbout(params) {
     const flip = i % 2 === 1;
     return `
     <article id="${c.id}" class="co-card ${flip ? 'is-flip' : ''} scroll-mt-40" ${v.photo ? '' : 'data-no-photo'}>
-      ${v.photo ? `<img class="co-photo" src="${v.photo}" alt="" loading="lazy" />` : `<img class="co-mark" src="${A}patterns/history-mark-2.svg" alt="" />`}
+      ${v.photo ? `<img class="co-photo" src="${v.photo}" alt="" loading="lazy" style="object-position:${v.pos || 'center'}" />` : `<img class="co-mark" src="${A}patterns/history-mark-2.svg" alt="" />`}
       <span class="co-badge"><img src="${v.icon}" alt="" width="40" height="40" /></span>
       <p class="co-city">${esc(c.city.split(',')[0])}</p>
       <div class="co-panel">
