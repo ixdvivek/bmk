@@ -158,6 +158,15 @@ let closeAll = () => {};
 let closeEnquiry = () => {};
 export const closePanels = () => (closeAll(), closeEnquiry());
 
+/** Show a panel (entry animation in CSS) or fade it out, then hide it. */
+function show(el, on) {
+  el.getAnimations().forEach((x) => x.cancel());
+  if (on) return el.classList.remove('hidden');
+  if (el.classList.contains('hidden')) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return el.classList.add('hidden');
+  el.animate({ opacity: [1, 0], transform: ['none', 'translateY(-8px)'] }, { duration: 180, easing: 'cubic-bezier(0.4, 0, 1, 1)' }).onfinish = () => el.classList.add('hidden');
+}
+
 function wire() {
   const megaBtn = document.getElementById('mega-toggle');
   const mega = document.getElementById('mega');
@@ -169,12 +178,12 @@ function wire() {
   const menuBtn = document.getElementById('menu-toggle');
 
   const setMega = (o) => {
-    mega.classList.toggle('hidden', !o);
+    show(mega, o);
     megaBtn.setAttribute('aria-expanded', String(o));
     if (o) setSearch(false);
   };
   const setSearch = (o) => {
-    panel.classList.toggle('hidden', !o);
+    show(panel, o);
     sBtn.setAttribute('aria-expanded', String(o));
     if (o) {
       setMega(false);
@@ -297,8 +306,13 @@ export function openEnquiry({ product = null, type = '' } = {}) {
     document.body.classList.remove('no-scroll');
     const dlg = host.firstElementChild;
     if (!dlg || matchMedia('(prefers-reduced-motion: reduce)').matches) return void (host.innerHTML = '');
-    dlg.classList.add('is-closing');
-    setTimeout(() => dlg.isConnected && dlg.remove(), 180);
+    // Fade out with the Web Animations API (a CSS class can't override the entry animation)
+    dlg.style.pointerEvents = 'none';
+    const o = { duration: 220, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' };
+    dlg.querySelector('.modal-backdrop').getAnimations().forEach((x) => x.cancel());
+    dlg.querySelector('.modal-card').getAnimations().forEach((x) => x.cancel());
+    dlg.querySelector('.modal-backdrop').animate({ opacity: [1, 0] }, o);
+    dlg.querySelector('.modal-card').animate({ opacity: [1, 0], transform: ['none', 'translateY(12px) scale(0.98)'] }, o).onfinish = () => dlg.isConnected && dlg.remove();
   };
   const onKey = (e) => e.key === 'Escape' && close();
   addEventListener('keydown', onKey);

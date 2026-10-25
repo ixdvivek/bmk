@@ -30,7 +30,7 @@ function route() {
 }
 
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-const FADE = 160; // ms: quick and subtle
+const FADE = 200; // ms out; the fade-in is a touch longer and eases out
 let token = 0;
 
 /** Sections fade up as they scroll into view (not the hero). A scroll check
@@ -39,7 +39,7 @@ let token = 0;
 let pending = [];
 const checkReveals = () => {
   if (!pending.length) return;
-  const edge = innerHeight * 0.92;
+  const edge = innerHeight * 0.86;
   pending = pending.filter((s) => (s.getBoundingClientRect().top < edge ? (s.classList.add('is-in'), false) : true));
 };
 let ticking = false;
@@ -53,18 +53,34 @@ function wireReveals() {
   pending.forEach((s) => s.classList.add('reveal'));
 }
 
-/** Route change: fade the page out, swap, fade in. Same-page updates (filters, sort) swap in place. */
+/** Route change: page content and footer fade out, swap while hidden (scroll
+ *  reset included, so no jump is ever visible), then fade back in. The navbar
+ *  stays put. Same-page updates (filters, sort) swap in place. */
+const EASE_OUT = 'cubic-bezier(0.25, 0.1, 0.25, 1)';
+const EASE_IN = 'cubic-bezier(0.55, 0, 0.75, 0.4)';
+const fadeTargets = () => [view, document.getElementById('site-footer')];
 async function render() {
   const path = (location.hash.slice(1) || '/products').split('?')[0];
   const same = path === lastPath;
   const mine = ++token;
-  if (lastPath !== null && !same && !reduced()) {
-    view.classList.add('is-leaving');
-    await new Promise((r) => setTimeout(r, FADE));
+  const animate = lastPath !== null && !same && !reduced();
+  if (animate) {
+    fadeTargets().forEach((el) => el.getAnimations().forEach((x) => x.cancel()));
+    await Promise.all(fadeTargets().map((el) => el.animate({ opacity: [1, 0] }, { duration: FADE, easing: EASE_IN, fill: 'forwards' }).finished.catch(() => {})));
     if (mine !== token) return;
   }
   swap();
-  view.classList.remove('is-leaving');
+  if (animate) {
+    // Hold at 0 until the new page has laid out and painted once, so the
+    // fade-in starts on a ready frame instead of skipping its first part.
+    fadeTargets().forEach((el) => (el.getAnimations().forEach((x) => x.cancel()), (el.style.opacity = '0')));
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    if (mine !== token) return;
+    fadeTargets().forEach((el) => {
+      el.style.opacity = '';
+      el.animate({ opacity: [0, 1] }, { duration: 380, easing: EASE_OUT });
+    });
+  }
 }
 
 function swap() {
@@ -80,7 +96,7 @@ function swap() {
   view.innerHTML = page.html;
   cleanup = page.wire?.(view) || null;
   document.title = `${page.title} — BMK Group`;
-  scrollTo(0, same ? y : 0);
+  scrollTo({ top: same ? y : 0, behavior: 'instant' });
   lastPath = path;
   if (!same) wireReveals();
 }
