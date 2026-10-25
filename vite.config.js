@@ -9,6 +9,11 @@ import { groups, categories, brands, products } from './wireframe/src/data.js';
 // renders all of them, so the build writes its shell to each route folder.
 // GitHub Pages serves the site under /bmk/; dev and preview use the same paths.
 const BASE = process.env.BASE_PATH || '/bmk/';
+// Absolute site URL for the share card (social sites need full URLs).
+// Vercel: its production domain; otherwise GitHub Pages. Override with SITE_URL.
+const SITE_URL =
+  process.env.SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/` : `https://ixdvivek.github.io${BASE}`);
 
 const routes = () => [
   'products',
@@ -40,6 +45,7 @@ function siteRoutes() {
     configResolved(c) {
       outDir = resolve(c.root, c.build.outDir);
     },
+    transformIndexHtml: (html) => html.replaceAll('__SITE_URL__', SITE_URL.replace(/\/?$/, '/')),
     configureServer(server) {
       server.middlewares.use(rewrite(server.config.base));
     },
