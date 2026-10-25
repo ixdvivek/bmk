@@ -4,11 +4,17 @@
 // have them, otherwise a wordmark until BMK supplies them.
 import { brands as all, groups } from '../../wireframe/src/data.js';
 
-const logos = { nikon: 'assets/brands/nikon.svg', canon: 'assets/brands/canon.svg', sony: 'assets/brands/sony.svg' };
+const logos = {
+  seeken: 'assets/brands/seeken.svg',
+  'team-appliances': 'assets/brands/team.svg',
+  nikon: 'assets/brands/nikon.svg',
+  canon: 'assets/brands/canon.svg',
+  sony: 'assets/brands/sony.svg',
+};
 
 export const brandFilters = [{ id: 'all', label: 'All' }, ...groups.map((g) => ({ id: g.id, label: g.name }))];
 
-export const brands = [...all.filter((b) => b.inHouse), ...all.filter((b) => !b.inHouse)].map((b) => ({
+const card = (b) => ({
   id: b.id,
   name: b.name,
   logo: logos[b.id] || null,
@@ -17,4 +23,9 @@ export const brands = [...all.filter((b) => b.inHouse), ...all.filter((b) => !b.
   inHouse: !!b.inHouse,
   sites: b.sites || [],
   href: '#', // homepage stays standalone for now (no links into the catalogue)
-}));
+});
+
+/** Partner brands: the "Associated Brands" carousel. */
+export const brands = all.filter((b) => !b.inHouse).map(card);
+/** BMK's own brands: the two wide cards under the carousel. */
+export const ownBrands = all.filter((b) => b.inHouse).map(card);

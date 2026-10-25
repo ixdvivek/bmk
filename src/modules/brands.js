@@ -1,5 +1,5 @@
 import { gsap, Flip } from './gsap.js';
-import { brands, brandFilters } from '../data/brands.js';
+import { brands, ownBrands, brandFilters } from '../data/brands.js';
 
 /**
  * Our Brands: category chips filter the cards (animated with GSAP Flip),
@@ -13,20 +13,17 @@ export function initBrands({ reduced }) {
   const next = document.querySelector('[data-brands-next]');
   if (!track) return;
 
-  // Render
+  // Render: partner brands in the carousel, with their full description
   track.innerHTML = brands
     .map(
       (b) => `
     <li class="brand-card" data-categories="${b.categories.join(' ')}">
       <div class="brand-inner">
-        <div class="flex w-full items-start justify-between gap-4">
-          ${b.inHouse ? '<span class="brand-tag">BMK brand</span>' : '<span></span>'}
-          ${b.logo ? `<img class="brand-logo" src="${b.logo}" alt="${b.name} logo" width="120" height="44" loading="lazy" />` : `<span class="brand-wordmark" aria-hidden="true">${b.name}</span>`}
-        </div>
+        ${b.logo ? `<img class="brand-logo" src="${b.logo}" alt="${b.name} logo" width="120" height="44" loading="lazy" />` : `<span class="brand-wordmark" aria-hidden="true">${b.name}</span>`}
         <div class="flex w-full flex-col gap-3">
           <h3 class="text-[32px] leading-8 font-semibold">${b.name}</h3>
-          <p class="t-body line-clamp-4 text-black/50">${b.description}</p>
-          <a href="${b.href}" class="brand-cta">${b.name} Products
+          <p class="t-body text-black/50">${b.description}</p>
+          <a href="${b.href}" class="brand-cta mt-3">${b.name} Products
             <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
           </a>
         </div>
@@ -34,6 +31,28 @@ export function initBrands({ reduced }) {
     </li>`,
     )
     .join('');
+
+  // BMK's own brands: wide cards that link out to each brand's website
+  const own = document.querySelector('[data-own-brands]');
+  if (own)
+    own.innerHTML = ownBrands
+      .map(
+        (b) => `
+      <li class="own-brand">
+        <div class="flex items-center justify-between gap-6">
+          <span class="brand-tag">BMK brand</span>
+          <img class="own-brand-logo" src="${b.logo}" alt="${b.name} logo" width="160" height="57" loading="lazy" />
+        </div>
+        <div class="mt-auto flex flex-col items-start gap-3 pt-16">
+          <h3 class="text-[32px] leading-8 font-semibold">${b.name}</h3>
+          <p class="t-body line-clamp-3 text-black/50">${b.description}</p>
+          <a href="https://${b.sites[0][0]}" target="_blank" rel="noopener" class="brand-cta mt-3 w-auto gap-8">Visit ${b.name}
+            <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon -rotate-45" width="16" height="16" />
+          </a>
+        </div>
+      </li>`,
+      )
+      .join('');
 
   filterBar.innerHTML = brandFilters
     .map(

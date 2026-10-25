@@ -145,10 +145,27 @@
   @apply h-11 w-[120px] object-contain object-right;
   transition: transform 0.8s var(--ease-soft);
 }
+.brands-section {
+  background: linear-gradient(150deg, #1f487d 0%, #1f487d 58%, #6a4f6b 82%, #e65e2c 120%);
+}
+.own-brand {
+  @apply flex min-h-[363px] flex-col rounded-xl bg-white p-8 text-black transition-[transform,box-shadow] duration-700;
+}
+.own-brand:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 40px -12px rgb(0 0 0 / 0.35);
+}
+.own-brand .brand-cta {
+  width: auto;
+  gap: 32px;
+}
+.own-brand-logo {
+  @apply h-[57px] w-40 object-contain object-right;
+}
 .brand-card .brand-wordmark {
   @apply flex min-h-11 max-w-[62%] items-center justify-end text-right text-[20px] leading-6 font-bold tracking-[-0.03em] text-black;
 }
-.brand-card .brand-tag {
+.brand-tag {
   @apply rounded-full bg-accent px-3 py-1 text-xs leading-4 font-medium whitespace-nowrap text-white;
 }
 .brand-card:hover .brand-logo {
