@@ -156,6 +156,17 @@ export function renderAbout(params) {
   ];
   const valueIcon = { Integrity: 'verified', 'Customer-Centric': 'milestone-2012', 'Quality-Driven': 'star', 'Innovation-Focused': 'milestone-2022' };
 
+  // Company cards carry no contact details (those live on Contact Us); each
+  // button says which office it reaches.
+  const ctaLabel = {
+    'bmk-gulf': 'Contact Our HQ',
+    'island-valley': 'Contact Retail Office',
+    'bmk-international': 'Contact Our Corporate Office',
+    'bmk-electronics': 'Contact SEA HQ',
+    'seeken-malaysia': 'Contact Regional Office',
+    'seeken-zambia': 'Contact Zambia Office',
+    'ets-hb': 'Contact DRC Distributor',
+  };
   const countryCard = (c, i) => {
     const v = visual(c);
     const list = entitiesIn(c.id);
@@ -174,8 +185,7 @@ export function renderAbout(params) {
               <p class="mt-2 text-[15px] leading-6 text-muted">${esc(e.role)}</p>
               ${e.mandate ? `<p class="mt-2 text-sm"><span class="text-muted">Authorized mandate:</span> ${esc(e.mandate)}</p>` : ''}
               ${e.products ? `<p class="mt-2 text-sm"><span class="text-muted">In store:</span> ${esc(e.products)}</p>` : ''}
-              <div class="mt-4">${contactRows(e)}</div>
-              <a class="btn btn-navy mt-5" href="${href('/contact', { office: e.id })}">${e.retail ? 'Visit the showroom' : 'Contact this office'} ${arrow('orange')}</a>
+              <a class="btn btn-navy mt-5" href="${href('/contact', { office: e.id })}">${ctaLabel[e.id] || (e.retail ? 'Visit the showroom' : 'Contact this office')} ${arrow('orange')}</a>
             </section>`,
           )
           .join('')}
