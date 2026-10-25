@@ -98,12 +98,14 @@
 .pcard:hover .brand-cta .btn-icon {
   transform: translateX(4px);
 }
+/* Brand surfaces: the CTA fills with the brand accent; its label colour (--on,
+   black or white) is set per brand in the admin for the best contrast. */
 .pcard-brand {
-  --cta-bg: var(--color-black);
-  --cta-fg: var(--brand);
+  --cta-bg: var(--brand);
+  --cta-fg: var(--on);
 }
 .pcard-brand:hover .arrow-mask {
-  background: var(--brand);
+  background: var(--on);
 }
 .on-navy .pcard {
   @apply border-transparent;
@@ -233,6 +235,9 @@
   top: 0;
   transition: top 0.6s var(--ease-out-expo);
 }
+.pillbar.is-static {
+  @apply relative; /* About: the in-page pills stay in the hero (no sticky bar under the navbar) */
+}
 .pillbar-inner {
   @apply relative pt-3 pb-16;
 }
@@ -245,6 +250,16 @@
 }
 .pillbar nav {
   @apply pointer-events-auto relative;
+}
+
+/* Product section links (Overview / Specifications / Related): the active one
+   is navy with a white label, and stays white on hover. */
+.sec-link {
+  @apply rounded-full px-4 py-2 text-sm whitespace-nowrap text-muted transition-colors duration-300 hover:text-ink;
+}
+.sec-link.is-on,
+.sec-link.is-on:hover {
+  @apply bg-navy text-white;
 }
 
 /* Pill select */
@@ -299,8 +314,85 @@
 body[data-page='product'] #nav {
   background-color: rgb(255 255 255 / 0.6);
 }
+/* Straight up and back down. The navbar is centred with Tailwind's `translate`
+   property, so only `transform` moves here (no second -50% → no corner drift). */
 body.nav-hidden #nav {
-  transform: translate(-50%, -160%);
+  transform: translateY(-160%);
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────
+   Quick, subtle: page fade, section reveals, panels and the enquiry popup. */
+#view {
+  transition: opacity 0.16s var(--ease-soft);
+}
+#view.is-leaving {
+  opacity: 0;
+}
+#view:not(.is-leaving) {
+  animation: page-in 0.32s var(--ease-soft) both;
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s var(--ease-soft),
+    transform 0.9s var(--ease-soft);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.985);
+  }
+}
+#mega:not(.hidden),
+#search-panel:not(.hidden) {
+  animation: panel-in 0.32s var(--ease-out-expo) both;
+  transform-origin: top center;
+}
+#drawer:not(.hidden) {
+  animation: fade-in 0.25s var(--ease-soft) both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+.modal-backdrop {
+  animation: fade-in 0.25s var(--ease-soft) both;
+  transition: opacity 0.18s;
+}
+.modal-card {
+  animation: modal-in 0.4s var(--ease-out-expo) both;
+  transition:
+    opacity 0.18s,
+    transform 0.18s;
+}
+.is-closing .modal-backdrop {
+  opacity: 0;
+}
+.is-closing .modal-card {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+}
+/* FAQ answers ease open and closed (heights animated in JS) */
+.faq-a {
+  overflow: hidden;
 }
 
 .no-scroll {
@@ -308,8 +400,18 @@ body.nav-hidden #nav {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rise {
-    animation: none;
+  .rise,
+  #view,
+  #mega,
+  #search-panel,
+  #drawer,
+  .modal-backdrop,
+  .modal-card {
+    animation: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
   .pcard:hover .stage-img {
     transform: none;
@@ -416,7 +518,7 @@ body.nav-hidden #nav {
 .faq-icon {
   @apply grid size-8 shrink-0 place-items-center rounded-full border border-ink/15 transition-[transform,background-color,border-color,color] duration-500;
 }
-.faq[open] .faq-icon {
+.faq[open]:not(.is-closing) .faq-icon {
   @apply rotate-45 border-navy bg-navy text-white;
 }
 .faq-a {
@@ -594,14 +696,14 @@ input[type='search']::-webkit-search-cancel-button {
 /* In-house brands and partner logos */
 /* BMK's own brands: same card as the homepage (white, grey outline) */
 .ih-card {
-  @apply flex min-h-[363px] flex-col rounded-xl border border-line bg-white p-8 text-black transition-[transform,box-shadow] duration-700;
+  @apply flex min-h-[363px] min-w-0 flex-col rounded-xl border border-line bg-white p-6 text-black transition-[transform,box-shadow] duration-700 sm:p-8;
 }
 .ih-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 24px 40px -12px rgb(0 0 0 / 0.18);
 }
 .ih-card .brand-cta {
-  @apply w-auto gap-8;
+  @apply w-auto max-w-full gap-4 max-sm:px-5 sm:gap-8;
 }
 .ih-card .brand-cta:hover {
   @apply border-ink text-white;

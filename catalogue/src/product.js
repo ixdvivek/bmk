@@ -98,7 +98,7 @@ export function renderProduct(slug) {
     <div class="shell flex h-16 items-center gap-6">
       <p class="hidden max-w-[30ch] truncate font-semibold md:block">${esc(p.name)}</p>
       <nav class="-mx-1 flex flex-1 gap-1 overflow-x-auto [scrollbar-width:none]" aria-label="Product sections">
-        ${['Overview', 'Specifications', 'More'].map((s) => `<a href="#${s.toLowerCase()}" data-anchor data-sec="${s.toLowerCase()}" class="rounded-full px-4 py-2 text-sm whitespace-nowrap text-muted transition-colors hover:text-ink">${s === 'More' ? 'Related' : s}</a>`).join('')}
+        ${['Overview', 'Specifications', 'More'].map((s) => `<a href="#${s.toLowerCase()}" data-anchor data-sec="${s.toLowerCase()}" class="sec-link">${s === 'More' ? 'Related' : s}</a>`).join('')}
       </nav>
       <button type="button" class="btn btn-navy hidden !py-2.5 sm:inline-flex" data-enquire-product>Enquire ${arrow('orange')}</button>
     </div>
@@ -194,9 +194,7 @@ export function renderProduct(slug) {
       const io = new IntersectionObserver(
         (es) => es.forEach((e) => e.isIntersecting && links.forEach((l) => {
           const on = l.dataset.sec === e.target.id;
-          l.classList.toggle('bg-navy', on);
-          l.classList.toggle('text-white', on);
-          l.classList.toggle('text-muted', !on);
+          l.classList.toggle('is-on', on);
         })),
         { rootMargin: '-45% 0px -50% 0px' },
       );

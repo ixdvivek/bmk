@@ -68,7 +68,7 @@
 
     <main id="main">
       <!-- ── Hero: scroll-scrubbed video ──────────────────────────────── -->
-      <section id="top" class="hero relative h-svh min-h-[640px] overflow-hidden bg-ink text-white" aria-label="Introduction">
+      <section id="top" class="hero relative h-svh min-h-[540px] overflow-hidden max-lg:h-auto max-lg:min-h-svh bg-ink text-white" aria-label="Introduction">
         <video
           class="hero-video absolute inset-0 size-full object-cover"
           data-src="video/hero-1080.mp4"
@@ -87,9 +87,9 @@
           <img src="assets/patterns/hero-mark.svg" alt="" class="absolute inset-y-0 right-[8.58%] left-[10.42%] size-auto h-full" />
         </div>
 
-        <div class="hero-content relative flex h-full flex-col justify-end pb-[clamp(40px,9.6vh,88px)]" style="padding-inline: clamp(20px, 6.25vw, 100px)">
-          <div class="mx-auto flex w-full max-w-[1400px] flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <div class="flex max-w-[760px] flex-col items-start gap-6">
+        <div class="hero-content relative flex h-full flex-col justify-end pb-[clamp(32px,9.6vh,88px)] max-lg:min-h-svh max-lg:pt-28" style="padding-inline: clamp(20px, 6.25vw, 100px)">
+          <div class="mx-auto flex w-full max-w-[1400px] flex-col gap-6 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
+            <div class="flex max-w-[760px] flex-col items-start gap-5 sm:gap-6">
               <p class="hero-badge inline-flex items-center gap-2 rounded-[20px] px-3 py-1 text-xs leading-5 tracking-[1px] uppercase backdrop-blur-[16px]">
                 <img src="assets/icons/badge-globe.svg" alt="" width="16" height="16" class="size-4" />
                 Global technology distribution
@@ -100,7 +100,7 @@
                 forward-looking approach to product development.
               </p>
               <!-- z-20: buttons sit above the rising white fade (hero.js) -->
-              <div class="hero-ctas relative z-20 flex flex-wrap gap-5">
+              <div class="hero-ctas relative z-20 flex flex-wrap gap-3 sm:gap-5">
                 <a href="#brands" class="btn btn-dark">
                   Explore Our Products <img src="assets/icons/arrow-orange.svg" alt="" class="btn-icon" width="16" height="16" />
                 </a>
@@ -176,7 +176,7 @@
       </section>
 
       <!-- ── Group presence: interactive dot map ─────────────────────── -->
-      <section id="presence" class="relative overflow-hidden bg-fog pt-[clamp(72px,7.5vw,120px)] pb-[clamp(72px,10.75vw,172px)]" aria-labelledby="presence-title">
+      <section id="presence" class="relative overflow-hidden bg-fog pt-[clamp(72px,7.5vw,120px)] pb-[clamp(72px,10.75vw,172px)] xl:pt-[clamp(40px,min(7.5vw,7vh),120px)] xl:pb-[clamp(48px,min(10.75vw,9vh),172px)]" aria-labelledby="presence-title">
         <!-- Heading block: in flow on small screens; overlaps the map bottom-left on xl (Figma Frame 39) -->
         <div class="shell relative z-10 xl:absolute xl:bottom-[clamp(72px,7.5vw,120px)] xl:left-0 xl:w-auto xl:max-w-none">
           <div class="max-w-[360px]">
@@ -188,7 +188,8 @@
           </div>
         </div>
 
-        <div class="map relative mx-auto mt-10 w-[calc(100%-24px)] xl:mt-0 xl:w-3/4" data-map>
+        <!-- xl: capped by height too, so the whole map fits one fold on short screens -->
+        <div class="map relative mx-auto mt-10 w-[calc(100%-24px)] xl:mt-0 xl:w-3/4 xl:max-w-[calc((100svh-120px)*1200/620)]" data-map>
           <div class="relative aspect-[1200/620]">
             <canvas class="map-canvas absolute inset-0 size-full" aria-hidden="true"></canvas>
             <div class="map-pins absolute inset-0 z-20" role="group" aria-label="Group entities">
@@ -288,8 +289,8 @@
           </div>
         </div>
 
-        <div class="history-pin section-y relative flex flex-col justify-center lg:min-h-svh">
-          <div class="shell flex flex-col gap-10">
+        <div class="history-pin section-y relative flex flex-col justify-center lg:min-h-svh lg:!py-[clamp(32px,min(7.5vw,8vh),120px)]">
+          <div class="shell flex flex-col gap-10 lg:gap-[clamp(20px,4.5vh,40px)]">
             <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
               <div class="flex max-w-[520px] flex-col items-start gap-6">
                 <span class="chip border-line text-ink" data-reveal="up">Our Journey</span>

@@ -3,11 +3,17 @@
 // Anything missing here falls back to the studio stage with a category glyph.
 const M = '../assets/catalogue/';
 
-/** Brand colour drives the brand page (tabs, card stages, hover CTA) and the
- *  "More from {brand}" strip. `on` is the text colour that sits on it. */
+/** Brand accent drives the brand page (tabs, card stages, hover CTA) and the
+ *  "More from {brand}" strip. On hover a product card's CTA fills with `color`.
+ *  `on` is the label colour on top of it: black or white, picked per brand in
+ *  the admin (dev handoff: "Brand accent colour" + "Label on accent" fields)
+ *  for the best contrast — e.g. black on Nikon yellow, white on Samsung blue. */
 export const brandStyle = {
   nikon: { color: '#ffec33', on: '#121212', hero: `${M}heroes/brand-nikon.webp` },
   fujifilm: { color: '#e60012', on: '#ffffff' },
+  samsung: { color: '#1428a0', on: '#ffffff' },
+  lg: { color: '#a50034', on: '#ffffff' },
+  sujata: { color: '#6d6e71', on: '#ffffff' },
 };
 export const brandColor = (id) => brandStyle[id] || { color: '#1f487d', on: '#ffffff' };
 

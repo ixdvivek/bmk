@@ -1,7 +1,7 @@
 // Navbar (homepage pill), mega menu, search overlay, mobile menu, footer, enquiry popup.
 import { groups, categoriesIn, brands, inHouseBrands, partnerBrands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../wireframe/src/data.js';
 import { contact } from '../../wireframe/src/content.js';
-import { A, esc, href, arrow, icon, brandMark, stage } from './ui.js';
+import { A, esc, href, arrow, icon, brandMark, brandLink, stage } from './ui.js';
 import { mediaOf } from './media.js';
 
 const thumb = (p) => mediaOf(p).card || '';
@@ -42,8 +42,8 @@ export function renderChrome() {
         <p class="mb-4 text-xs tracking-[0.14em] text-muted uppercase">Our brands</p>
         <ul class="grid gap-2">${inHouseBrands
           .map(
-            (b) => `<li><a href="${href(`/brand/${b.id}`)}" class="group flex items-center justify-between rounded-xl border border-line px-4 py-3 transition-colors hover:border-ink">
-              ${brandMark(b, { cls: 'h-6' })}<span class="flex items-center gap-2 text-xs text-muted">In-house ${arrow('orange')}</span></a></li>`,
+            (b) => `<li><a ${brandLink(b)} class="group flex items-center justify-between rounded-xl border border-line px-4 py-3 transition-colors hover:border-ink">
+              ${brandMark(b, { cls: 'h-6' })}<span class="flex items-center gap-2 text-xs text-muted">${esc(b.sites[0][0])} ${arrow('orange', 'btn-icon -rotate-45')}</span></a></li>`,
           )
           .join('')}</ul>
         <p class="mt-6 mb-4 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
@@ -85,9 +85,9 @@ export function renderChrome() {
               )
               .join('')}
             <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Our brands</p>
-            <div class="flex flex-wrap gap-2">${inHouseBrands.map((b) => `<a class="pill" href="${href(`/brand/${b.id}`)}">${esc(b.name)}</a>`).join('')}</div>
+            <div class="flex flex-wrap gap-2">${inHouseBrands.map((b) => `<a class="pill" ${brandLink(b)}>${esc(b.name)}</a>`).join('')}</div>
             <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
-            <div class="flex flex-wrap gap-2">${partnerBrands.map((b) => `<a class="pill" href="${href(`/brand/${b.id}`)}">${esc(b.name)}</a>`).join('')}</div>
+            <div class="flex flex-wrap gap-2">${partnerBrands.map((b) => `<a class="pill" ${brandLink(b)}>${esc(b.name)}</a>`).join('')}</div>
             <a href="${href('/products')}" class="btn btn-navy mt-5">View all products ${arrow('orange')}</a>
           </div>
         </details>
@@ -148,7 +148,7 @@ function suggestions(q) {
       ${ps.length ? `<a href="${href('/search', { q })}" class="group mt-4 inline-flex items-center gap-2 text-sm font-semibold">See all ${ps.length} result${ps.length === 1 ? '' : 's'} for “${esc(q)}” ${arrow('orange')}</a>` : ''}
     </div>
     <div class="grid content-start gap-6">
-      ${bs.length ? `<div><p class="mb-3 text-xs tracking-[0.14em] text-muted uppercase">Brands</p><div class="flex flex-wrap gap-2">${bs.map((b) => `<a class="pill" href="${href(`/brand/${b.id}`)}">${esc(b.name)}</a>`).join('')}</div></div>` : ''}
+      ${bs.length ? `<div><p class="mb-3 text-xs tracking-[0.14em] text-muted uppercase">Brands</p><div class="flex flex-wrap gap-2">${bs.map((b) => `<a class="pill" ${brandLink(b)}>${esc(b.name)}</a>`).join('')}</div></div>` : ''}
       ${cs.length ? `<div><p class="mb-3 text-xs tracking-[0.14em] text-muted uppercase">Categories</p><div class="flex flex-wrap gap-2">${cs.map((c) => `<a class="pill" href="${href(`/category/${c.id}`)}">${esc(c.name)}</a>`).join('')}</div></div>` : ''}
     </div>
   </div>`;
@@ -271,8 +271,8 @@ export function openEnquiry({ product = null, type = '' } = {}) {
   const host = document.getElementById('overlays');
   host.innerHTML = `
   <div class="fixed inset-0 z-[80] grid place-items-end sm:place-items-center" role="dialog" aria-modal="true" aria-labelledby="enq-title">
-    <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" data-close></div>
-    <div class="relative max-h-[94svh] w-full overflow-y-auto rounded-t-3xl bg-white p-6 sm:max-w-xl sm:rounded-3xl sm:p-8">
+    <div class="modal-backdrop absolute inset-0 bg-ink/50 backdrop-blur-sm" data-close></div>
+    <div class="modal-card relative max-h-[94svh] w-full overflow-y-auto rounded-t-3xl bg-white p-6 sm:max-w-xl sm:rounded-3xl sm:p-8">
       <div class="mb-6 flex items-start justify-between gap-4">
         <div><span class="chip border-line text-ink">Business enquiry</span><h2 id="enq-title" class="mt-4 text-[28px] leading-tight tracking-[-0.04em]">${product ? 'Enquire about this product' : 'Let’s do business together'}</h2></div>
         <button type="button" data-close class="icon-btn shrink-0 bg-ink/5" aria-label="Close">${icon.close}</button>
@@ -293,9 +293,12 @@ export function openEnquiry({ product = null, type = '' } = {}) {
   </div>`;
   document.body.classList.add('no-scroll');
   const close = () => {
-    host.innerHTML = '';
-    document.body.classList.remove('no-scroll');
     removeEventListener('keydown', onKey);
+    document.body.classList.remove('no-scroll');
+    const dlg = host.firstElementChild;
+    if (!dlg || matchMedia('(prefers-reduced-motion: reduce)').matches) return void (host.innerHTML = '');
+    dlg.classList.add('is-closing');
+    setTimeout(() => dlg.isConnected && dlg.remove(), 180);
   };
   const onKey = (e) => e.key === 'Escape' && close();
   addEventListener('keydown', onKey);
