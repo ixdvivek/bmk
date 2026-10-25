@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "assets": "node scripts/fetch-figma-assets.mjs",
-    "globe-dots": "node scripts/build-globe-dots.mjs"
+    "globe-dots": "node scripts/build-globe-dots.mjs",
+    "og": "node scripts/og/render.mjs"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
