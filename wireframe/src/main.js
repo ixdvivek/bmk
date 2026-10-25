@@ -50,7 +50,7 @@ function render() {
   const y = scrollY;
   view.innerHTML = page.html;
   cleanup = page.wire?.(view) || null;
-  document.title = `${page.title} · BMK wireframe`;
+  document.title = `${page.title} | BMK wireframe`;
   window.scrollTo(0, samePage ? y : 0);
   lastPath = route.path;
   setActiveNav(route.path);

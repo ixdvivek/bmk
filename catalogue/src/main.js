@@ -99,7 +99,7 @@ function swap() {
   const y = scrollY;
   view.innerHTML = page.html;
   cleanup = page.wire?.(view) || null;
-  document.title = `${page.title} — BMK Group`;
+  document.title = `${page.title} | BMK Group`;
   scrollTo({ top: same ? y : 0, behavior: 'instant' });
   lastPath = path;
   if (!same) (wireReveals(), resetFooterTagline());
