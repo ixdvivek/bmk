@@ -1,6 +1,6 @@
 // Homepage: the Brands & Products dropdown and the enquiry popup, shared with
 // every other page (markup and popup come from catalogue/src/chrome.js).
-import { megaMarkup, openEnquiry } from '../../catalogue/src/chrome.js';
+import { megaMarkup, catalogueMenuMarkup, openEnquiry } from '../../catalogue/src/chrome.js';
 
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -43,6 +43,21 @@ export function initOverlays({ lenis }) {
   addEventListener('keydown', (e) => e.key === 'Escape' && !mega.classList.contains('hidden') && setMega(false));
   // Close when the navbar slides away on scroll
   addEventListener('scroll', () => !mega.classList.contains('hidden') && nav.getBoundingClientRect().bottom < 0 && setMega(false), { passive: true });
+
+  // ── Mobile menu: Brands & Products expands into categories and brands ──
+  const item = document.querySelector('[data-catalogue-menu]');
+  if (item) {
+    item.innerHTML = catalogueMenuMarkup();
+    const top = item.querySelector(':scope > details');
+    top.classList.remove('border-b', 'border-line');
+    const sum = top.querySelector(':scope > summary');
+    sum.classList.remove('!py-4', '!font-semibold');
+    sum.classList.add('!py-2.5', '!font-normal');
+    // Long list: the menu scrolls inside itself
+    const list = item.closest('ul');
+    list.classList.add('max-h-[calc(100svh-120px)]', 'overflow-y-auto', 'overscroll-contain');
+    list.setAttribute('data-lenis-prevent', '');
+  }
 
   // ── Enquiry popup (same as every other page) ──
   const host = document.createElement('div');
