@@ -295,9 +295,6 @@
 }
 
 /* Field */
-.field {
-  @apply w-full rounded-xl border border-line bg-white px-4 py-3 text-[15px] transition-[border-color,box-shadow] outline-none focus:border-navy focus:shadow-[0_0_0_3px_rgb(31_72_125_/_0.15)];
-}
 
 /* Navbar hide on scroll (homepage behaviour) */
 #nav {
@@ -333,37 +330,6 @@ body.nav-hidden #nav {
 .reveal.is-in {
   opacity: 1;
   transform: none;
-}
-@keyframes panel-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.985);
-  }
-}
-#mega:not(.hidden),
-#search-panel:not(.hidden) {
-  animation: panel-in 0.32s var(--ease-out-expo) both;
-  transform-origin: top center;
-}
-#drawer:not(.hidden) {
-  animation: fade-in 0.25s var(--ease-soft) both;
-}
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}
-@keyframes modal-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.98);
-  }
-}
-.modal-backdrop {
-  animation: fade-in 0.25s var(--ease-soft) both;
-}
-.modal-card {
-  animation: modal-in 0.4s var(--ease-out-expo) both;
 }
 /* Footer tagline (homepage motion: chars rise, expo-out, 18ms stagger) */
 .footer-tagline .tw {
@@ -459,9 +425,6 @@ body.nav-hidden #nav {
   overflow: hidden;
 }
 
-.no-scroll {
-  overflow: hidden;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .rise,
@@ -670,9 +633,6 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 /* Mega menu: partner brand tiles */
-.mega-brand {
-  @apply flex h-11 items-center justify-center rounded-lg border border-line px-2 transition-colors hover:border-ink;
-}
 
 /* ── About v2: company cards (Figma "Our companies") ──────────────────────── */
 .co-card {

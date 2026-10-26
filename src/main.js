@@ -8,6 +8,7 @@ import { initMap } from './modules/map.js';
 import { initBrands } from './modules/brands.js';
 import { initTimeline } from './modules/timeline.js';
 import { initSearch } from './modules/search.js';
+import { initOverlays } from './modules/overlays.js';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -16,6 +17,7 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lenis = reduced ? null : initSmoothScroll();
 initNav({ lenis });
 initSearch();
+initOverlays({ lenis });
 initHero({ reduced });
 initMap({ reduced });
 initBrands({ reduced });
