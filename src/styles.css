@@ -2,6 +2,34 @@
 @import '@fontsource-variable/plus-jakarta-sans';
 @source not '../wireframe';
 
+/* Search panel (homepage; same look as the other pages) */
+.search-panel {
+  @apply fixed top-[96px] left-1/2 z-40 w-[min(1040px,calc(100%-32px))] -translate-x-1/2 rounded-2xl bg-white p-6 text-black shadow-[0_40px_80px_-30px_rgba(18,18,18,0.45)] md:top-[120px] md:p-8;
+  animation: search-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.search-panel[hidden] {
+  display: none;
+}
+@keyframes search-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.985);
+  }
+}
+/* One close button is enough: hide the browser's own clear (×) in search panels */
+#search-panel input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  display: none;
+}
+.search-pill {
+  @apply inline-flex items-center rounded-full border border-black/15 bg-white px-4 py-2 text-[13px] leading-[18px] whitespace-nowrap transition-colors duration-300 hover:border-black;
+}
+@media (prefers-reduced-motion: reduce) {
+  .search-panel {
+    animation: none;
+  }
+}
+
 /* Quick cross-fade between pages (homepage ↔ catalogue ↔ 404) where supported */
 @view-transition {
   navigation: auto;

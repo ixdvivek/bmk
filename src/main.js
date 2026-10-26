@@ -7,6 +7,7 @@ import { initReveals } from './modules/reveals.js';
 import { initMap } from './modules/map.js';
 import { initBrands } from './modules/brands.js';
 import { initTimeline } from './modules/timeline.js';
+import { initSearch } from './modules/search.js';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -14,6 +15,7 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ScrollTriggers below them measure the added pin spacing correctly.
 const lenis = reduced ? null : initSmoothScroll();
 initNav({ lenis });
+initSearch();
 initHero({ reduced });
 initMap({ reduced });
 initBrands({ reduced });
