@@ -44,6 +44,23 @@
   @apply flex h-11 items-center justify-center rounded-lg border border-line px-2 transition-colors hover:border-ink;
 }
 
+/* Accordions (mobile menu, filters) and pills, shared */
+.facet summary {
+  @apply flex cursor-pointer list-none items-center justify-between py-4 text-[15px] font-semibold;
+}
+.facet summary::-webkit-details-marker {
+  display: none;
+}
+.facet[open] > summary .facet-chev {
+  transform: rotate(180deg);
+}
+.pill {
+  @apply inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white px-4 py-2 text-[13px] leading-[18px] whitespace-nowrap text-ink transition-colors duration-300 hover:border-ink;
+}
+.pill .n {
+  @apply text-[11px] text-muted;
+}
+
 /* Search panel (homepage; same look as the other pages) */
 .search-panel {
   @apply fixed top-[96px] left-1/2 z-40 w-[min(1040px,calc(100%-32px))] -translate-x-1/2 rounded-2xl bg-white p-6 text-black shadow-[0_40px_80px_-30px_rgba(18,18,18,0.45)] md:top-[120px] md:p-8;

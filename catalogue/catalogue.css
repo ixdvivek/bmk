@@ -124,15 +124,6 @@
 }
 
 /* ── Filters ──────────────────────────────────────────────────────────────── */
-.facet summary {
-  @apply flex cursor-pointer list-none items-center justify-between py-4 text-[15px] font-semibold;
-}
-.facet summary::-webkit-details-marker {
-  display: none;
-}
-.facet[open] > summary .facet-chev {
-  transform: rotate(180deg);
-}
 .check {
   @apply flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 text-sm transition-colors hover:bg-fog;
 }
@@ -150,15 +141,9 @@
 }
 
 /* Category / filter chips on light backgrounds (homepage chip shape) */
-.pill {
-  @apply inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white px-4 py-2 text-[13px] leading-[18px] whitespace-nowrap text-ink transition-colors duration-300 hover:border-ink;
-}
 .pill[aria-current='true'],
 .pill.is-on {
   @apply border-navy bg-navy text-white;
-}
-.pill .n {
-  @apply text-[11px] text-muted;
 }
 .pill.is-on .n,
 .pill[aria-current='true'] .n {

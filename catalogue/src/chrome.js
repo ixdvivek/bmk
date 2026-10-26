@@ -37,6 +37,27 @@ export const megaMarkup = () => `
     </div>
   </div>`;
 
+/** Mobile menu: Brands & Products accordion (groups → categories, brands).
+ *  Shared with the homepage's mobile menu (src/modules/overlays.js). */
+export const catalogueMenuMarkup = ({ open = false } = {}) => `
+        <details class="facet border-b border-line" ${open ? 'open' : ''}>
+          <summary class="!py-4 !text-[22px] !font-semibold">Brands &amp; Products ${icon.chev}</summary>
+          <div class="grid gap-1 pb-5 text-base">
+            ${groups
+              .map(
+                (g) => `<details class="facet"><summary class="!py-2.5 !text-base !font-medium">${esc(g.name)} ${icon.chev}</summary>
+                  <ul class="grid pb-2 pl-3 text-[15px]"><li><a class="block py-1.5 font-medium" href="${href(`/category/${g.id}`)}">All ${esc(g.name)}</a></li>
+                  ${categoriesIn(g.id).map((c) => `<li><a class="flex justify-between py-1.5 ${countIn(c.id) ? '' : 'text-ink/40'}" href="${href(`/category/${c.id}`)}">${esc(c.name)}<span class="text-xs text-muted">${countIn(c.id)}</span></a></li>`).join('')}</ul></details>`,
+              )
+              .join('')}
+            <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Our brands</p>
+            <div class="flex flex-wrap gap-2">${inHouseBrands.map((b) => `<a class="pill" ${brandLink(b)}>${esc(b.name)}</a>`).join('')}</div>
+            <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
+            <div class="flex flex-wrap gap-2">${partnerBrands.map((b) => `<a class="pill" ${brandLink(b)}>${esc(b.name)}</a>`).join('')}</div>
+            <a href="${href('/products')}" class="btn btn-navy mt-5">View all products ${arrow('orange')}</a>
+          </div>
+        </details>`;
+
 export function renderChrome() {
   document.getElementById('site-header').innerHTML = `
   <header id="nav" class="fixed top-4 left-1/2 z-50 w-[min(1040px,calc(100%-32px))] -translate-x-1/2 rounded-lg bg-white/80 py-2 pr-2 pl-4 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.35)] backdrop-blur-[16px] md:top-6">
@@ -77,23 +98,7 @@ export function renderChrome() {
       <nav class="text-[22px] leading-tight tracking-[-0.02em]" aria-label="Mobile">
         <a class="block border-b border-line py-4" href="${HOME}">Home</a>
         <a class="block border-b border-line py-4" href="${href('/about')}">About Us</a>
-        <details class="facet border-b border-line" open>
-          <summary class="!py-4 !text-[22px] !font-semibold">Brands &amp; Products ${icon.chev}</summary>
-          <div class="grid gap-1 pb-5 text-base">
-            ${groups
-              .map(
-                (g) => `<details class="facet"><summary class="!py-2.5 !text-base !font-medium">${esc(g.name)} ${icon.chev}</summary>
-                  <ul class="grid pb-2 pl-3 text-[15px]"><li><a class="block py-1.5 font-medium" href="${href(`/category/${g.id}`)}">All ${esc(g.name)}</a></li>
-                  ${categoriesIn(g.id).map((c) => `<li><a class="flex justify-between py-1.5 ${countIn(c.id) ? '' : 'text-ink/40'}" href="${href(`/category/${c.id}`)}">${esc(c.name)}<span class="text-xs text-muted">${countIn(c.id)}</span></a></li>`).join('')}</ul></details>`,
-              )
-              .join('')}
-            <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Our brands</p>
-            <div class="flex flex-wrap gap-2">${inHouseBrands.map((b) => `<a class="pill" ${brandLink(b)}>${esc(b.name)}</a>`).join('')}</div>
-            <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
-            <div class="flex flex-wrap gap-2">${partnerBrands.map((b) => `<a class="pill" ${brandLink(b)}>${esc(b.name)}</a>`).join('')}</div>
-            <a href="${href('/products')}" class="btn btn-navy mt-5">View all products ${arrow('orange')}</a>
-          </div>
-        </details>
+        ${catalogueMenuMarkup({ open: true })}
         <a class="block border-b border-line py-4" href="${href('/faq')}">FAQ</a>
         <a class="block border-b border-line py-4" href="${href('/contact')}">Contact Us</a>
       </nav>
