@@ -288,7 +288,7 @@ function footer() {
         <ul class="flex gap-6 pl-8">${['facebook', 'instagram', 'linkedin', 'x'].map((s) => `<li><a href="#" class="social" aria-label="${s}"><img src="${A}icons/${s}.svg" alt="" width="20" height="20" /></a></li>`).join('')}</ul>
       </div>
     </div>
-    <div class="bg-gradient-to-b from-black to-navy to-90% py-12"><p class="footer-tagline px-2 text-center text-[clamp(2.5rem,6vw,6rem)] leading-[1.25] font-bold tracking-[-1px] lg:whitespace-nowrap" aria-label="Built on trust. Driven by innovation." data-tagline>${splitChars('Built on trust. Driven by innovation.')}</p></div>
+    <div class="@container overflow-x-clip bg-gradient-to-b from-black to-navy to-90% py-12"><p class="footer-tagline px-2 text-center text-[clamp(2.5rem,5.8cqi,6rem)] leading-[1.25] font-bold tracking-[-1px] lg:whitespace-nowrap" aria-label="Built on trust. Driven by innovation." data-tagline>${splitChars('Built on trust. Driven by innovation.')}</p></div>
     <div class="bg-navy"><div class="shell flex flex-col gap-4 py-10 text-[13px] leading-5 text-white/40 md:h-32 md:flex-row md:items-center md:justify-between md:py-0">
       <p>© BMK Group. All Rights Reserved. Website made by <a href="https://phitany.com/" target="_blank" rel="noopener" class="underline decoration-white/30 underline-offset-4 hover:text-white">Phitany</a></p>
       <ul class="flex flex-wrap gap-5">${[['/privacy', 'Privacy Policy'], ['/cookies', 'Cookie Policy'], ['/terms', 'Terms &amp; Conditions']].map(([p, n]) => `<li><a class="hover:text-white" href="${href(p)}">${n}</a></li>`).join('')}</ul>
