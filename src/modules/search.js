@@ -71,6 +71,7 @@ export function initSearch() {
     if (open === !panel.hidden) return;
     panel.getAnimations().forEach((a) => a.cancel());
     if (open) {
+      document.dispatchEvent(new CustomEvent('bmk:panel', { detail: 'search' }));
       panel.hidden = false;
       suggest.innerHTML = suggestions(input.value);
       requestAnimationFrame(() => input.focus());
@@ -92,5 +93,6 @@ export function initSearch() {
     if (input.value.trim()) location.href = url('search', input.value.trim());
   });
   addEventListener('keydown', (e) => e.key === 'Escape' && !panel.hidden && set(false));
+  document.addEventListener('bmk:panel', (e) => e.detail !== 'search' && set(false));
   document.addEventListener('click', (e) => !panel.hidden && !e.target.closest('#search-panel, #nav') && set(false));
 }

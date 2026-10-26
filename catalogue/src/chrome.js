@@ -9,28 +9,8 @@ const thumb = (p) => mediaOf(p).card || '';
 const countIn = (id) => products.filter((p) => p.category === id).length;
 const countBrand = (id) => products.filter((p) => p.brand === id).length;
 
-export function renderChrome() {
-  document.getElementById('site-header').innerHTML = `
-  <header id="nav" class="fixed top-4 left-1/2 z-50 w-[min(1040px,calc(100%-32px))] -translate-x-1/2 rounded-lg bg-white/80 py-2 pr-2 pl-4 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.35)] backdrop-blur-[16px] md:top-6">
-    <nav class="flex items-center justify-between gap-4" aria-label="Primary">
-      <a href="${HOME}" class="block h-12 w-[92px] shrink-0" aria-label="BMK Group home"><img src="${A}logo/bmk.svg" alt="BMK" width="92" height="48" class="size-full" /></a>
-      <ul class="hidden items-center gap-5 text-sm leading-5 text-black lg:flex">
-        <li><a class="nav-link" href="${HOME}">Home</a></li>
-        <li><a class="nav-link" data-nav="about" href="${href('/about')}">About Us</a></li>
-        <li><button type="button" id="mega-toggle" class="nav-link inline-flex items-center gap-1.5" data-nav="catalogue" aria-expanded="false" aria-controls="mega">Brands &amp; Products ${icon.chev}</button></li>
-        <li><a class="nav-link" data-nav="faq" href="${href('/faq')}">FAQ</a></li>
-        <li><a class="nav-link" data-nav="contact" href="${href('/contact')}">Contact Us</a></li>
-      </ul>
-      <div class="flex items-center gap-2">
-        <button type="button" id="search-toggle" class="icon-btn size-12 hover:bg-ink/5" aria-label="Search products" aria-expanded="false">${icon.search}</button>
-        <button type="button" class="btn btn-dark hidden sm:inline-flex" data-enquire>Enquiry ${arrow('orange')}</button>
-        <button type="button" id="menu-toggle" class="icon-btn size-12 bg-ink/5 lg:hidden" aria-label="Open menu" aria-expanded="false">
-          <span class="relative block h-3 w-5" aria-hidden="true"><span class="absolute top-0 left-0 h-px w-full bg-ink"></span><span class="absolute bottom-0 left-0 h-px w-full bg-ink"></span></span>
-        </button>
-      </div>
-    </nav>
-  </header>
-
+/** Brands & Products dropdown (also used by the homepage, src/modules/overlays.js). */
+export const megaMarkup = () => `
   <div id="mega" class="fixed top-[96px] left-1/2 z-40 hidden w-[min(1200px,calc(100%-32px))] -translate-x-1/2 overflow-hidden rounded-2xl bg-white shadow-[0_40px_80px_-30px_rgba(18,18,18,0.45)] md:top-[104px]" role="region" aria-label="Brands and products">
     <div class="grid grid-cols-12 gap-10 p-10">
       <div class="col-span-8">
@@ -55,7 +35,31 @@ export function renderChrome() {
       <p class="text-sm text-muted">Explore the brands associated with and handled by BMK Group.</p>
       <a href="${href('/products')}" class="btn btn-navy">View all products ${arrow('orange')}</a>
     </div>
-  </div>
+  </div>`;
+
+export function renderChrome() {
+  document.getElementById('site-header').innerHTML = `
+  <header id="nav" class="fixed top-4 left-1/2 z-50 w-[min(1040px,calc(100%-32px))] -translate-x-1/2 rounded-lg bg-white/80 py-2 pr-2 pl-4 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.35)] backdrop-blur-[16px] md:top-6">
+    <nav class="flex items-center justify-between gap-4" aria-label="Primary">
+      <a href="${HOME}" class="block h-12 w-[92px] shrink-0" aria-label="BMK Group home"><img src="${A}logo/bmk.svg" alt="BMK" width="92" height="48" class="size-full" /></a>
+      <ul class="hidden items-center gap-5 text-sm leading-5 text-black lg:flex">
+        <li><a class="nav-link" href="${HOME}">Home</a></li>
+        <li><a class="nav-link" data-nav="about" href="${href('/about')}">About Us</a></li>
+        <li><button type="button" id="mega-toggle" class="nav-link inline-flex items-center gap-1.5" data-nav="catalogue" aria-expanded="false" aria-controls="mega">Brands &amp; Products ${icon.chev}</button></li>
+        <li><a class="nav-link" data-nav="faq" href="${href('/faq')}">FAQ</a></li>
+        <li><a class="nav-link" data-nav="contact" href="${href('/contact')}">Contact Us</a></li>
+      </ul>
+      <div class="flex items-center gap-2">
+        <button type="button" id="search-toggle" class="icon-btn size-12 hover:bg-ink/5" aria-label="Search products" aria-expanded="false">${icon.search}</button>
+        <button type="button" class="btn btn-dark hidden sm:inline-flex" data-enquire>Enquiry ${arrow('orange')}</button>
+        <button type="button" id="menu-toggle" class="icon-btn size-12 bg-ink/5 lg:hidden" aria-label="Open menu" aria-expanded="false">
+          <span class="relative block h-3 w-5" aria-hidden="true"><span class="absolute top-0 left-0 h-px w-full bg-ink"></span><span class="absolute bottom-0 left-0 h-px w-full bg-ink"></span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  ${megaMarkup()}
 
   <div id="search-panel" class="fixed top-[96px] left-1/2 z-40 hidden w-[min(1040px,calc(100%-32px))] -translate-x-1/2 rounded-2xl bg-white p-6 shadow-[0_40px_80px_-30px_rgba(18,18,18,0.45)] md:top-[104px] md:p-8">
     <form id="search-form" role="search" class="flex items-center gap-3 rounded-full border border-ink/15 px-5 py-3 focus-within:border-navy">
@@ -303,7 +307,7 @@ export function openEnquiry({ product = null, type = '' } = {}) {
   host.innerHTML = `
   <div class="fixed inset-0 z-[80] grid place-items-end sm:place-items-center" role="dialog" aria-modal="true" aria-labelledby="enq-title">
     <div class="modal-backdrop absolute inset-0 bg-ink/50 backdrop-blur-sm" data-close></div>
-    <div class="modal-card relative max-h-[94svh] w-full overflow-y-auto rounded-t-3xl bg-white p-6 sm:max-w-xl sm:rounded-3xl sm:p-8">
+    <div data-lenis-prevent class="modal-card relative max-h-[94svh] w-full overflow-y-auto rounded-t-3xl bg-white p-6 sm:max-w-xl sm:rounded-3xl sm:p-8">
       <div class="mb-6 flex items-start justify-between gap-4">
         <div><span class="chip border-line text-ink">Business enquiry</span><h2 id="enq-title" class="mt-4 text-[28px] leading-tight tracking-[-0.04em]">${product ? 'Enquire about this product' : 'Let’s do business together'}</h2></div>
         <button type="button" data-close class="icon-btn shrink-0 bg-ink/5" aria-label="Close">${icon.close}</button>
