@@ -4,7 +4,7 @@ import { renderAbout, renderFaq, renderContact } from './pages.js';
 import { renderLegal, renderNotFound } from './legal.js';
 import { context, renderListing, resetListing } from './listing.js';
 import { renderProduct } from './product.js';
-import { BASE, href, go } from './ui.js';
+import { BASE, href, go, fitSpecRows } from './ui.js';
 import { resetFooterTagline } from './chrome.js';
 
 const view = document.getElementById('view');
@@ -99,6 +99,7 @@ function swap() {
   const y = scrollY;
   view.innerHTML = page.html;
   cleanup = page.wire?.(view) || null;
+  fitSpecRows(view);
   document.title = `${page.title} | BMK Group`;
   scrollTo({ top: same ? y : 0, behavior: 'instant' });
   lastPath = path;
@@ -145,5 +146,9 @@ if (legacy || /^\/catalogue$/.test(currentPath())) {
 
 renderChrome();
 addEventListener('popstate', render);
+// Card spec rows follow their label's line count; re-fit when the layout changes
+let fitting = 0;
+addEventListener('resize', () => (cancelAnimationFrame(fitting), (fitting = requestAnimationFrame(() => fitSpecRows(view)))));
+document.fonts?.ready.then(() => fitSpecRows(view));
 addEventListener('routechange', render);
 render();

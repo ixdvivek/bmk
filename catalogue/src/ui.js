@@ -87,6 +87,18 @@ export function brandMark(b, { light = false, cls = 'h-7' } = {}) {
   return `<span class="${cls} inline-flex items-center text-[22px] leading-none font-bold tracking-[-0.03em] ${light ? 'text-white' : 'text-ink'}">${esc(b.name)}</span>`;
 }
 
+/** Card spec rows: a value may use as many lines as its label wraps to, and is
+ *  truncated (…) after that. A one-line label keeps a one-line value. */
+export function fitSpecRows(root = document) {
+  root.querySelectorAll('[data-spec-row]').forEach((row) => {
+    const dt = row.firstElementChild;
+    const dd = dt.nextElementSibling;
+    const lh = parseFloat(getComputedStyle(dt).lineHeight) || dt.offsetHeight;
+    const lines = Math.max(1, Math.round(dt.offsetHeight / lh));
+    dd.style.webkitLineClamp = dd.style.lineClamp = String(lines);
+  });
+}
+
 /** Product card — identical in every listing. On brand surfaces (`brand: true`)
  *  it uses the brand-colour shot and the brand-colour hover. */
 export function productCard(p, i = 0, { brand = false } = {}) {
@@ -109,7 +121,7 @@ export function productCard(p, i = 0, { brand = false } = {}) {
       </div>
       ${
         hl.length
-          ? `<dl class="grid gap-1.5 text-[13px]">${hl.map((h) => `<div class="flex items-start gap-3"><dt class="w-[42%] shrink-0 text-muted">${esc(h.label)}</dt><dd class="line-clamp-1 font-medium">${esc(h.value)}</dd></div>`).join('')}</dl>`
+          ? `<dl class="grid gap-1.5 text-[13px]">${hl.map((h) => `<div class="flex items-start gap-3" data-spec-row><dt class="w-[42%] shrink-0 text-muted">${esc(h.label)}</dt><dd class="line-clamp-1 min-w-0 font-medium">${esc(h.value)}</dd></div>`).join('')}</dl>`
           : `<p class="line-clamp-2 text-sm text-muted">${esc(p.short)}</p>`
       }
       <span class="brand-cta">View details ${arrowMask()}</span>
