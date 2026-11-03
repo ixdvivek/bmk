@@ -2,16 +2,17 @@
 import { groups, categoriesIn, brands, inHouseBrands, partnerBrands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../wireframe/src/data.js';
 import { contact } from '../../wireframe/src/content.js';
 import { A, HOME, go, esc, href, arrow, icon, brandMark, brandLink, stage } from './ui.js';
-import { mediaOf } from './media.js';
+import { mediaOf, brandColor, brandMenuImage } from './media.js';
 
 const thumb = (p) => mediaOf(p).card || '';
 
 const countIn = (id) => products.filter((p) => p.category === id).length;
-const countBrand = (id) => products.filter((p) => p.brand === id).length;
 
 /** Brands & Products dropdown (also used by the homepage, src/modules/overlays.js). */
 export const megaMarkup = () => `
   <div id="mega" class="fixed top-[96px] left-1/2 z-40 hidden w-[min(1200px,calc(100%-32px))] -translate-x-1/2 overflow-hidden rounded-2xl bg-white shadow-[0_40px_80px_-30px_rgba(18,18,18,0.45)] md:top-[104px]" role="region" aria-label="Brands and products">
+    ${menuSwitch('absolute top-4 right-5 z-10')}
+    <div data-menu-view="categories">
     <div class="grid grid-cols-12 gap-10 p-10">
       <div class="col-span-8">
         <p class="mb-5 text-xs tracking-[0.14em] text-muted uppercase">Product categories</p>
@@ -35,13 +36,96 @@ export const megaMarkup = () => `
       <p class="text-sm text-muted">Explore the brands associated with and handled by BMK Group.</p>
       <a href="${href('/products')}" class="btn btn-navy">View all products ${arrow('orange')}</a>
     </div>
+    </div>
+    <div data-menu-view="brands" hidden>${megaBrands()}</div>
   </div>`;
+
+/** Review-only switch between the two menu designs (shown with ?menu=preview). */
+const menuSwitch = (cls = '') => `
+    <label class="menu-switch ${cls}" data-menu-switch hidden>
+      <span>Brands only</span>
+      <input type="checkbox" role="switch" aria-label="Show brands-only menu" />
+      <span class="menu-switch-track" aria-hidden="true"></span>
+    </label>`;
+
+/** Brands view: partner brands on the left, a 4:3 picture + CTA on the right
+ *  (follows hover/focus), in-house brands as a split bar along the bottom. */
+const megaPicture = (b, i) => {
+  const img = brandMenuImage[b.id];
+  const c = brandColor(b.id);
+  return `<figure class="mb-pane ${i ? '' : 'is-on'}" data-mb-pane="${b.id}" style="--brand:${c.color}">
+    ${img ? `<img src="${img}" alt="" class="absolute inset-0 size-full object-cover" loading="lazy" decoding="async" />` : `<div class="mb-fallback"><span class="rounded-2xl bg-white px-10 py-7 shadow-[0_20px_40px_-28px_rgba(18,18,18,0.5)]">${brandMark(b, { cls: 'h-14 !text-2xl' })}</span></div>`}
+    <figcaption class="mb-cta">
+      <p class="line-clamp-2 text-sm text-muted">${esc(b.intro)}</p>
+      <a href="${href(`/brand/${b.id}`)}" class="btn btn-navy mt-4 self-start" tabindex="-1">Explore ${esc(b.name)} products ${arrow('orange')}</a>
+    </figcaption>
+  </figure>`;
+};
+const megaBrands = () => `
+    <div class="grid grid-cols-[minmax(0,1fr)_auto] gap-10 p-10">
+      <div class="flex min-h-0 flex-col">
+        <p class="mb-3 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
+        <ul class="flex flex-1 flex-col">${partnerBrands
+          .map((b, i) => `<li class="flex flex-1"><a href="${href(`/brand/${b.id}`)}" class="mb-item ${i ? '' : 'is-on'}" data-mb="${b.id}">${esc(b.name)}${arrow('orange', 'mb-arrow')}</a></li>`)
+          .join('')}</ul>
+        <a href="${href('/products')}" class="group mt-4 inline-flex items-center gap-2 self-start text-sm font-semibold">View all products ${arrow('orange')}</a>
+      </div>
+      <div class="mb-stage">${partnerBrands.map(megaPicture).join('')}</div>
+    </div>
+    <div class="grid grid-cols-2 divide-x divide-line border-t border-line bg-mist">${inHouseBrands
+      .map(
+        (b) => `<a ${brandLink(b)} class="group flex items-center justify-between gap-4 px-10 py-5 transition-colors hover:bg-fog" aria-label="${esc(b.name)}, ${esc(b.sites[0][0])} (opens in a new tab)">
+          ${brandMark(b, { cls: 'h-7' })}<span class="flex items-center gap-2 text-sm text-ink">${esc(b.sites[0][0])} ${arrow('orange', 'btn-icon -rotate-45')}</span></a>`,
+      )
+      .join('')}</div>`;
+
+/** Which menu design shows: "categories" (default) or "brands".
+ *  ?menu=preview turns the review switch on (remembered), ?menu=off hides it,
+ *  ?menu=brands / ?menu=categories pick a design. */
+const store = { get: (k) => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} } };
+const q = new URLSearchParams(location.search).get('menu');
+if (q === 'preview') store.set('bmk-menu-preview', '1');
+if (q === 'off') store.set('bmk-menu-preview', null);
+if (q === 'brands' || q === 'categories') store.set('bmk-menu', q);
+export const menuMode = () => (store.get('bmk-menu') === 'brands' ? 'brands' : 'categories');
+function applyMenuMode(root = document) {
+  const m = menuMode();
+  root.querySelectorAll('[data-menu-view]').forEach((el) => (el.hidden = el.dataset.menuView !== m));
+  root.querySelectorAll('[data-menu-switch]').forEach((el) => {
+    el.hidden = store.get('bmk-menu-preview') !== '1';
+    el.querySelector('input').checked = m === 'brands';
+  });
+}
+/** Wire the switch(es) and the brands view's hover preview. Call once per page. */
+export function wireMenus(root = document) {
+  applyMenuMode(root);
+  root.querySelectorAll('[data-menu-switch] input').forEach((inp) =>
+    inp.addEventListener('change', () => (store.set('bmk-menu', inp.checked ? 'brands' : 'categories'), applyMenuMode(root))),
+  );
+  root.querySelectorAll('[data-mb]').forEach((a) => {
+    const pick = () => {
+      const id = a.dataset.mb;
+      const host = a.closest('[data-menu-view]');
+      host.querySelectorAll('[data-mb]').forEach((x) => x.classList.toggle('is-on', x === a));
+      host.querySelectorAll('[data-mb-pane]').forEach((x) => {
+        const on = x.dataset.mbPane === id;
+        x.classList.toggle('is-on', on);
+        x.querySelector('a').tabIndex = on ? 0 : -1;
+      });
+    };
+    a.addEventListener('pointerenter', pick);
+    a.addEventListener('focus', pick);
+  });
+  root.querySelectorAll('[data-mb-pane].is-on a').forEach((x) => (x.tabIndex = 0));
+}
 
 /** Mobile menu: Brands & Products accordion (groups → categories, brands).
  *  Shared with the homepage's mobile menu (src/modules/overlays.js). */
 export const catalogueMenuMarkup = ({ open = false } = {}) => `
         <details class="facet border-b border-line" ${open ? 'open' : ''}>
           <summary class="!py-4 !text-[22px] !font-semibold">Brands &amp; Products ${icon.chev}</summary>
+          ${menuSwitch('mb-2 ml-auto')}
+          <div data-menu-view="categories">
           <div class="grid gap-1 pb-5 text-base">
             ${groups
               .map(
@@ -55,6 +139,14 @@ export const catalogueMenuMarkup = ({ open = false } = {}) => `
             <p class="mt-4 mb-2 text-xs tracking-[0.14em] text-muted uppercase">Partner brands</p>
             <div class="flex flex-wrap gap-2">${partnerBrands.map((b) => `<a class="pill" ${brandLink(b)}>${esc(b.name)}</a>`).join('')}</div>
             <a href="${href('/products')}" class="btn btn-navy mt-5">View all products ${arrow('orange')}</a>
+          </div>
+          </div>
+          <div data-menu-view="brands" hidden>
+            <ul class="grid pb-3 text-base">${partnerBrands.map((b) => `<li><a class="flex items-center justify-between border-b border-line py-3" href="${href(`/brand/${b.id}`)}">${esc(b.name)}${arrow('orange')}</a></li>`).join('')}</ul>
+            <a href="${href('/products')}" class="btn btn-navy mt-2 w-full">View all products ${arrow('orange')}</a>
+            <div class="mt-5 mb-5 grid grid-cols-2 divide-x divide-line overflow-hidden rounded-2xl border border-line bg-mist">${inHouseBrands
+              .map((b) => `<a ${brandLink(b)} class="grid justify-items-start gap-2 p-4" aria-label="${esc(b.name)}, ${esc(b.sites[0][0])} (opens in a new tab)">${brandMark(b, { cls: 'h-5 max-w-full' })}<span class="flex items-center gap-1.5 text-xs text-ink">${esc(b.sites[0][0])} ${arrow('orange', 'size-3.5 -rotate-45')}</span></a>`)
+              .join('')}</div>
           </div>
         </details>`;
 
@@ -108,6 +200,7 @@ export function renderChrome() {
 
   document.getElementById('site-footer').innerHTML = footer();
   wire();
+  wireMenus();
 }
 
 /** Mark the current section in the navbar (bold + underline). */

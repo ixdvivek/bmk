@@ -17,6 +17,13 @@ export const brandStyle = {
 };
 export const brandColor = (id) => brandStyle[id] || { color: '#1f487d', on: '#ffffff' };
 
+/** Mega menu (brands view) picture per partner brand, 4:3. Admin field
+ *  "Menu image". Brands without one get a tinted panel with their logo. */
+export const brandMenuImage = {
+  nikon: `${M}heroes/brand-nikon.webp`,
+  fujifilm: `${M}products/fujifilm-x-t5.webp`,
+};
+
 /** Hero photography per category (falls back to its group, then to no image). */
 export const categoryHero = {
   'mirrorless-dslr-cameras': `${M}heroes/category-mirrorless-cameras.webp`,

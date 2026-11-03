@@ -1,6 +1,6 @@
 // Homepage: the Brands & Products dropdown and the enquiry popup, shared with
 // every other page (markup and popup come from catalogue/src/chrome.js).
-import { megaMarkup, catalogueMenuMarkup, openEnquiry } from '../../catalogue/src/chrome.js';
+import { megaMarkup, catalogueMenuMarkup, openEnquiry, wireMenus } from '../../catalogue/src/chrome.js';
 
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -58,6 +58,7 @@ export function initOverlays({ lenis }) {
     list.classList.add('max-h-[calc(100svh-120px)]', 'overflow-y-auto', 'overscroll-contain');
     list.setAttribute('data-lenis-prevent', '');
   }
+  wireMenus();
 
   // ── Enquiry popup (same as every other page) ──
   const host = document.createElement('div');
