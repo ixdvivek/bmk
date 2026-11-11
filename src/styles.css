@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/plus-jakarta-sans';
-@source not '../wireframe';
 
 /* ── Shared overlays (every page): form field, mega menu, panels, popup ── */
 .field {

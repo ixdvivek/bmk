@@ -2,7 +2,7 @@
 // Companies come from the shared content file; this adds what only the
 // visual design needs: pin positions on the 1200×620 dot map (as % of the
 // frame), city icons and city photos.
-import { countries, entitiesIn } from '../../wireframe/src/content.js';
+import { countries, entitiesIn } from '../../data/company.js';
 
 export const countryVisual = {
   // `photo` is used on About › Our companies. The panel covers one half of the

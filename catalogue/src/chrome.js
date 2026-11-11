@@ -1,6 +1,6 @@
 // Navbar (homepage pill), mega menu, search overlay, mobile menu, footer, enquiry popup.
-import { groups, categoriesIn, brands, inHouseBrands, partnerBrands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../wireframe/src/data.js';
-import { contact } from '../../wireframe/src/content.js';
+import { groups, categoriesIn, brands, inHouseBrands, partnerBrands, products, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../data/catalogue.js';
+import { contact } from '../../data/company.js';
 import { A, HOME, go, esc, href, arrow, icon, brandMark, brandLink, stage } from './ui.js';
 import { mediaOf, brandColor, brandMenuImage } from './media.js';
 

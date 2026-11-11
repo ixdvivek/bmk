@@ -1,4 +1,4 @@
-import { brandOf, categoryOf, highlightsFor } from '../../wireframe/src/data.js';
+import { brandOf, categoryOf, highlightsFor } from '../../data/catalogue.js';
 import { mediaOf, brandColor } from './media.js';
 
 /** Site root ("/" in dev, "/bmk/" on GitHub Pages). Every page lives under it:

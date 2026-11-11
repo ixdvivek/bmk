@@ -1,5 +1,5 @@
 // Timeline visuals: icon and hover photo per milestone, plus the short card
-// line used on the homepage. Full text lives in wireframe/src/content.js.
+// line used on the homepage. Full text lives in data/company.js.
 export const milestoneVisual = {
   2002: { icon: 'milestone-2005', img: 'milestone-2018', short: 'Founded as Island Valley Electronics LLC in Dubai, trading consumer electronics.' },
   2004: { icon: 'milestone-camera', img: 'milestone-2005', short: 'Wholesale and retail expand into digital imaging and cameras.' },

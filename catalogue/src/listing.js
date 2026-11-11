@@ -1,5 +1,5 @@
 // Listing: category, group, all products, search results, and the brand page.
-import { products, brands, groups, categories, categoriesIn, byId, groupOf, searchProducts, searchBrands, searchCategories } from '../../wireframe/src/data.js';
+import { products, brands, groups, categories, categoriesIn, byId, groupOf, searchProducts, searchBrands, searchCategories } from '../../data/catalogue.js';
 import { HOME, go, esc, href, arrow, icon, crumbs, productCard, brandMark, brandVars, brandLink } from './ui.js';
 import { brandStyle, categoryHero } from './media.js';
 
