@@ -12,13 +12,13 @@ function specGroups(p) {
   return out;
 }
 import { HOME, esc, href, arrow, icon, crumbs, productCard, brandMark, stage, brandVars } from './ui.js';
-import { mediaOf, swatch } from './media.js';
+import { mediaOf } from './media.js';
 import { openEnquiry } from './chrome.js';
 
-function valueHtml(v, variant) {
+function valueHtml(v) {
   if (Array.isArray(v)) return `<ul class="grid gap-1.5">${v.map((x) => `<li class="flex gap-2.5"><span class="mt-2 size-1 shrink-0 rounded-full bg-accent" aria-hidden="true"></span>${esc(x)}</li>`).join('')}</ul>`;
   if (v && typeof v === 'object')
-    return `<dl class="grid gap-1.5">${Object.entries(v).map(([k, x]) => `<div class="flex gap-4 ${variant && variant !== k ? 'text-ink/35' : ''}"><dt class="w-14 shrink-0 text-muted">${esc(k)}</dt><dd>${esc(x)}</dd></div>`).join('')}</dl>`;
+    return `<dl class="grid gap-1.5">${Object.entries(v).map(([k, x]) => `<div class="flex gap-4"><dt class="w-14 shrink-0 text-muted">${esc(k)}</dt><dd>${esc(x)}</dd></div>`).join('')}</dl>`;
   return esc(v);
 }
 
@@ -31,20 +31,19 @@ export function renderProduct(slug) {
   const gs = specGroups(p);
   const fields = gs.reduce((n, x) => n + x.rows.length, 0);
   const many = gs.length >= 3;
-  const st = { img: 0, colour: p.colours[0] || '', variant: p.variants?.[0] || '' };
+  const st = { img: 0 };
   const fromBrand = products.filter((x) => x.brand === p.brand && x.slug !== p.slug).slice(0, 4);
   const inCat = products.filter((x) => x.category === p.category && x.slug !== p.slug).slice(0, 4);
   const hl = c.card.filter((k) => p.specs[k] != null);
   const tileVal = (k) => {
     const v = p.specs[k];
-    return v && typeof v === 'object' && !Array.isArray(v) ? v[st.variant] ?? shortValue(v) : shortValue(v);
+    return shortValue(v);
   };
-  const shot = (i) => `${p.images[i]}${st.colour && p.colours.length > 1 ? ` · ${st.colour}` : ''}`;
   const m = mediaOf(p);
   const srcOf = (i) => m.shots?.[p.images[i]] || (i === 0 ? m.card : '');
   // Photo when we have it; otherwise the labelled studio stage
-  const view = (i, o = {}) => stage(p, { label: srcOf(i) ? p.images[i] : shot(i), src: srcOf(i), ...o });
-  const rows = (rs) => rs.map((r) => `<div class="spec-row"><dt class="text-[15px] text-muted">${esc(r.label)}</dt><dd class="text-[15px]" data-spec="${r.key}">${valueHtml(r.value, st.variant)}</dd></div>`).join('');
+  const view = (i, o = {}) => stage(p, { label: p.images[i], src: srcOf(i), ...o });
+  const rows = (rs) => rs.map((r) => `<div class="spec-row"><dt class="text-[15px] text-muted">${esc(r.label)}</dt><dd class="text-[15px]" data-spec="${r.key}">${valueHtml(r.value)}</dd></div>`).join('');
 
   const html = `
   <section class="pt-[clamp(120px,10vw,152px)]">
@@ -70,18 +69,6 @@ export function renderProduct(slug) {
         </div>
         <p class="text-lg leading-relaxed text-ink/80">${esc(p.short)}</p>
         ${
-          p.variants
-            ? `<div><p class="mb-3 text-sm"><span class="text-muted">Size</span> <strong data-variant-label class="ml-1 font-semibold">${esc(st.variant)}</strong></p>
-                <div class="flex flex-wrap gap-2">${p.variants.map((v, i) => `<button type="button" class="pill ${i ? '' : 'is-on'}" data-variant="${esc(v)}">${esc(v)}</button>`).join('')}</div></div>`
-            : ''
-        }
-        ${
-          p.colours.length
-            ? `<div><p class="mb-3 text-sm"><span class="text-muted">Colour</span> <strong data-colour-label class="ml-1 font-semibold">${esc(st.colour)}</strong></p>
-                <div class="flex flex-wrap gap-2">${p.colours.map((col, i) => `<button type="button" class="pill ${i ? '' : 'is-on'}" data-colour="${esc(col)}"><span class="size-3.5 rounded-full border border-ink/15" style="background:hsl(215 ${10 + i * 8}% ${85 - i * 15}%)"></span>${esc(col)}</button>`).join('')}</div></div>`
-            : ''
-        }
-        ${
           hl.length
             ? `<div class="grid gap-2 sm:grid-cols-3">${hl.map((k) => `<div class="tile"><p class="text-xs text-muted">${esc(fieldLabel(c.template, k))}</p><p class="mt-1.5 text-[15px] leading-snug font-semibold" data-tile="${k}">${esc(tileVal(k))}</p></div>`).join('')}</div>`
             : ''
@@ -106,7 +93,7 @@ export function renderProduct(slug) {
 
   <section id="overview" class="shell section-y scroll-mt-24" data-section>
     <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
-      <div><span class="chip border-line text-ink">Overview</span><h2 class="t-display mt-5">About the ${esc(p.model)}</h2></div>
+      <div><h2 class="t-display">About the ${esc(p.model)}</h2></div>
       <div class="t-body grid content-start gap-5 text-[17px] leading-[1.65] text-ink/80">${p.overview.map((t) => `<p>${esc(t)}</p>`).join('')}</div>
     </div>
     ${
@@ -121,7 +108,7 @@ export function renderProduct(slug) {
   <section id="specifications" class="scroll-mt-24 bg-mist section-y" data-section>
     <div class="shell">
       <div class="mb-10 flex flex-wrap items-end justify-between gap-6">
-        <div><span class="chip border-line bg-white text-ink">Specifications</span><h2 class="t-display mt-5">Technical details</h2><p class="t-body mt-2 text-muted">${fields} specifications${many ? ` in ${gs.length} groups` : ''}</p></div>
+        <div><h2 class="t-display">Technical details</h2><p class="t-body mt-2 text-muted">${fields} specifications${many ? ` in ${gs.length} groups` : ''}</p></div>
         ${many ? `<div class="flex gap-2"><button type="button" class="pill" data-expand="1">${icon.plus} Expand all</button><button type="button" class="pill" data-expand="0">Collapse all</button></div>` : ''}
       </div>
       ${
@@ -161,24 +148,6 @@ export function renderProduct(slug) {
       };
       root.querySelectorAll('[data-thumb]').forEach((t) => t.addEventListener('click', () => setImg(+t.dataset.thumb)));
       root.querySelector('[data-lightbox]').addEventListener('click', () => lightbox(p, st, view, setImg));
-      const pick = (attr, key, label) =>
-        root.querySelectorAll(`[${attr}]`).forEach((btn) =>
-          btn.addEventListener('click', () => {
-            st[key] = btn.getAttribute(attr);
-            root.querySelectorAll(`[${attr}]`).forEach((x) => x.classList.toggle('is-on', x === btn));
-            root.querySelector(label).textContent = st[key];
-            if (key === 'colour') setImg(st.img);
-            if (key === 'variant') {
-              root.querySelectorAll('[data-tile]').forEach((el) => (el.textContent = tileVal(el.dataset.tile)));
-              root.querySelectorAll('[data-spec]').forEach((el) => {
-                const v = p.specs[el.dataset.spec];
-                if (v && typeof v === 'object' && !Array.isArray(v)) el.innerHTML = valueHtml(v, st.variant);
-              });
-            }
-          }),
-        );
-      pick('data-colour', 'colour', '[data-colour-label]');
-      pick('data-variant', 'variant', '[data-variant-label]');
       root.querySelectorAll('[data-enquire-product]').forEach((x) => x.addEventListener('click', () => openEnquiry({ product: p })));
       root.querySelectorAll('[data-expand]').forEach((x) => x.addEventListener('click', () => root.querySelectorAll('.spec-group').forEach((d) => (d.open = x.dataset.expand === '1'))));
       if (matchMedia('(max-width: 1023px)').matches && many) root.querySelectorAll('details.spec-group').forEach((d, i) => (d.open = i === 0));

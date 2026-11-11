@@ -113,7 +113,6 @@ export function productCard(p, i = 0, { brand = false } = {}) {
     <div class="flex flex-1 flex-col gap-4 px-4 pt-5 pb-4">
       <div class="flex items-center justify-between gap-2">
         <span class="text-[11px] font-semibold tracking-[0.14em] text-muted uppercase">${esc(b.name)}</span>
-        ${p.colours.length > 1 ? `<span class="flex items-center gap-1" aria-label="${p.colours.length} colours">${p.colours.slice(0, 4).map((_, k) => `<span class="size-2.5 rounded-full border border-ink/15" style="background:hsl(215 ${10 + k * 8}% ${85 - k * 18}%)"></span>`).join('')}${p.colours.length > 4 ? `<span class="text-[11px] text-muted">+${p.colours.length - 4}</span>` : ''}</span>` : ''}
       </div>
       <div>
         <h3 class="text-xl leading-snug font-semibold tracking-[-0.01em]"><a href="${href(`/product/${p.slug}`)}" class="after:absolute after:inset-0">${esc(p.name)}</a></h3>
