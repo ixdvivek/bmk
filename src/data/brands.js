@@ -2,7 +2,7 @@
 // Brands and descriptions come from the shared catalogue data; filters are the
 // six category groups. BMK's own brands come first. Logos: real files where we
 // have them, otherwise a wordmark until BMK supplies them.
-import { brands as all, groups } from '../../wireframe/src/data.js';
+import { brands as all, groups } from '../../data/catalogue.js';
 
 // Brand logos in their original colours (Figma: UI Design › brands section).
 const logos = {

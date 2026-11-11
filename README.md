@@ -1,85 +1,99 @@
-# BMK Group — Home
+# BMK Group website: front-end reference build
 
-Implementation of the Figma frame **BMK Intl – Phitany › Home** (node `2:3`) with Vite, Tailwind CSS v4 and GSAP.
+This repository is the approved **design reference** for the BMK Group website (Phitany). It is a static Vite build, not the production app. The production front end is to be built in **Next.js** against a separate CMS/back end. Use this repo for exact markup, styles, motion and behaviour; use the developer handoff document for the content model, admin rules and back-end requirements.
+
+- **Live preview:** https://bmkbyphitany.vercel.app (also https://ixdvivek.github.io/bmk/)
+- **Handoff version:** tag `v1.0-handoff` (see Releases)
+- **Figma:** file `EDDo2rLxEFm1BakC92zCS6`, pages **Website v2 – Screens** (desktop 1440 / mobile 390) and **Website v2 – Components**
+- **Developer handoff document:** `BMK_Website_Developer_Handoff_v1.1.docx` (shared separately)
+
+## Run it
+
+Requires Node 20+.
 
 ```bash
 npm install
-npm run assets   # pull the real images/icons/logos from Figma (see below)
-npm run dev      # http://localhost:5173
-npm run build    # static output in dist/
+npm run dev       # http://localhost:5173/
+npm run build     # static site in dist/ (base path /bmk/ by default)
+npm run preview   # serve dist/ at http://localhost:4173/bmk/
 ```
 
-## Design assets
+Set `BASE_PATH=/` to build for a domain root (Vercel does this). `SITE_URL` sets the absolute URL used in the share-card meta tags.
 
-Icons, logos and patterns in `public/assets/` are the original Figma exports.
-Photos are served as right-sized WebP (`public/assets/images/*.webp`).
+## Pages
 
-`npm run assets` downloads everything in `scripts/figma-assets.json`. SVGs are
-saved as-is. Photo entries carry a `webp` setting and are resized and encoded
-on download (with sharp), so the output is ready to commit. Figma's links
-expire about 7 days after they're generated; if a download fails with 403/404,
-ask Claude to refresh the manifest.
+| URL | Page |
+| --- | --- |
+| `/` | Homepage |
+| `/about/` | About Us (dotted globe, company cards, brands, timeline) |
+| `/products/` | All products (listing) |
+| `/category/{group-or-category-id}/` | Category group or category (same listing) |
+| `/brand/{id}/` | Partner brand page (SEEKEN and TEAM have none: they link to their own sites) |
+| `/product/{slug}/` | Product detail |
+| `/search/?q=` | Search results (same listing) |
+| `/faq/`, `/contact/` | FAQ, Contact Us |
+| `/privacy/`, `/cookies/`, `/terms/` | Legal pages (one template, placeholder wording) |
+| anything else | 404 |
+
+Every page except the homepage is rendered by one small client-side app (`catalogue/`). The build copies its HTML shell into each route folder, so every URL works on a static host.
 
 ## Structure
 
 ```
-index.html                 all markup, Tailwind classes, data-* animation hooks
-src/styles.css             tokens (@theme), components, map pins, milestone states
-src/main.js                boots modules in top-to-bottom order (pins measure correctly)
-src/modules/
-  smooth.js                Lenis smooth scroll, synced to the GSAP ticker
-  nav.js                   glass navbar: hide on scroll down, mobile menu, anchor scrolling
-  hero.js                  pinned hero, scroll-scrubbed video, intro timeline, counter
-  map.js                   canvas dot map, cursor-reactive dots, pins + location card
-  brands.js                brand cards, Flip-animated category filter, carousel arrows
-  timeline.js              pinned horizontal timeline + progress thumb + active card
-  reveals.js               declarative reveals (data-split, data-reveal, …)
-src/data/
-  map-dots.json            7,664 dot centres extracted from the Figma map layers
-  locations.js             map entities (pin x/y in % of the map frame)
-  brands.js                brand cards + filter categories
-public/video/              hero video, re-encoded for scrubbing (see below)
+index.html                    homepage markup (Tailwind classes, data-* animation hooks)
+src/
+  main.js                     homepage boot (Lenis, GSAP modules, overlays)
+  styles.css                  design tokens (@theme), shared components, overlays — used by every page
+  modules/                    homepage behaviour: hero, map, brands, timeline, reveals, nav,
+                              search.js + overlays.js (search panel, mega menu, enquiry popup)
+  data/                       homepage data: map dots, locations, brand cards, milestones, globe dots
+catalogue/
+  index.html                  shell for every non-home page
+  catalogue.css               catalogue page styles
+  src/
+    main.js                   router (History API), page fade, reveals
+    chrome.js                 navbar, mega menu (both designs), search, mobile menu, footer, enquiry popup
+    listing.js                product listing: filters, sort, cards
+    product.js                product detail
+    pages.js                  About, FAQ, Contact
+    legal.js                  Privacy / Cookies / Terms
+    globe.js                  About "Who we are" globe (canvas + GSAP)
+    ui.js                     shared helpers: links, icons, product card, spec-row line clamp
+    media.js                  photography and per-brand styling (accent colours, menu images)
+data/
+  catalogue.js                catalogue content: groups, categories, spec templates, brands, products
+  company.js                  company content: companies, offices, FAQ, timeline, contact
+public/assets/                logos, brand logos, icons, patterns, photos (WebP)
+scripts/                      helpers: globe dots (npm run globe-dots), share card (npm run og)
+vite.config.js                multi-page build + route folders + share-card URL
 ```
 
-## Animation hooks
+## Data
 
-| Attribute | Effect |
-| --- | --- |
-| `data-split` | heading lines rise out of a mask (SplitText, re-splits on resize) |
-| `data-split-chars` | characters rise in sequence (footer tagline) |
-| `data-reveal="up"` | fade + rise on enter |
-| `data-reveal="clip"` | image wipes in, inner image settles from 1.25× |
-| `data-reveal-group` | direct children stagger in |
-| `data-parallax-img` | image drifts against the scroll |
+All catalogue and company content lives in `data/catalogue.js` and `data/company.js` as plain JS objects (sample content). They show the shape the CMS needs to provide; the handoff document maps each field to an admin field and its rules.
 
-Everything respects `prefers-reduced-motion`: no pinning, no scrubbing, poster
-image instead of video, all content visible immediately.
+## Review-only parts (do not ship)
 
-Don't put a CSS `transition` on `transform` for any element GSAP animates.
-ScrollTrigger re-measures on resize and will read a mid-transition value. Put
-hover motion on an inner element instead (see `.brand-card` / `.brand-inner`).
+- **Mega menu design switch.** Two designs exist: *categories* (default) and *brands only*. The client has not chosen yet.
+  - `?menu=preview` shows a small "Brands only" switch in the mega menu and mobile menu (remembered in the browser); `?menu=off` hides it.
+  - `?menu=brands` or `?menu=categories` opens a design directly.
+  - In production, ship only the chosen design (or make it a site setting).
+- **Forms do not send anything.** The enquiry popup and contact form show a success state only. Wire them to the back end (see handoff doc, Enquiry management).
+- Social links in the footer point to `#`, and the Contact map is a placeholder image until the Google Maps embeds are supplied.
 
 ## Hero video
 
-The source (`Camera_Macro_1920x1080.mp4`, 5.9s, 24fps) is re-encoded with **a
-keyframe on every frame** so any scroll position decodes instantly:
+The homepage hero video is scrubbed by scroll, so it is encoded with a keyframe on every frame (files in `public/video/`, 1080p and 720p, H.264 + VP9, plus a poster):
 
 ```bash
-# desktop / mobile H.264
 ffmpeg -i in.mp4 -an -c:v libx264 -preset slow -crf 24 -g 1 -keyint_min 1 -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart hero-1080.mp4
-ffmpeg -i in.mp4 -an -vf scale=1280:-2 -c:v libx264 -preset slow -crf 26 -g 1 -keyint_min 1 -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart hero-720.mp4
-# VP9 fallback for browsers without H.264 (Chromium builds, some Linux Firefox)
 ffmpeg -i in.mp4 -an -c:v libvpx-vp9 -b:v 0 -crf 36 -g 1 -row-mt 1 hero-1080.webm
-ffmpeg -i in.mp4 -an -vf scale=1280:-2 -c:v libvpx-vp9 -b:v 0 -crf 38 -g 1 -row-mt 1 hero-720.webm
-# poster
-ffmpeg -i in.mp4 -frames:v 1 -q:v 3 hero-poster.jpg
 ```
 
-The file is fetched into memory as a Blob, so seeks never wait on network range
-requests. Phones get the 720p file.
+## Motion notes
 
-## Content still to confirm
-
-- `src/data/locations.js`: only the Kuala Lumpur entity is from the design. London, Dubai and Singapore copy is a placeholder.
-- `src/data/brands.js`: brand descriptions are the design's placeholder text, and the category assignments are guesses.
-- FAQ link and social URLs point to `#`. Enquiry buttons open `mailto:info@bmkintl.com` with a subject line.
+- GSAP (ScrollTrigger, SplitText, Flip, Draggable, InertiaPlugin) and Lenis (homepage only).
+- Everything respects `prefers-reduced-motion`.
+- Don't put a CSS `transition` on `transform` for elements GSAP animates; put hover motion on an inner element.
+- Avoid `vw` for full-width sizing (it includes the Windows scrollbar); use container units or `%`.
+- Test single-fold sections at 1536×730 and 1366×640 as well as 1440×900.

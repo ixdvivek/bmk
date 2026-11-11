@@ -1,4 +1,4 @@
-// Company content for the wireframe (v2).
+// Company content used by every page (the CMS replaces it).
 // Source: the client's document "BMK_WEBSITE_INFO_21.10.2026" (shared 22 Oct 2026),
 // with the agency's decisions of 22 Oct (24 years, latest phone number, PIN 682021,
 // "-Dr" dropped from the Malaysian entity name). Anything the document doesn't
@@ -42,7 +42,7 @@ export const values = [
 
 // ── Group companies ──────────────────────────────────────────────────────────
 // Six countries, eight entities. Map pins are per country (x / y = % of the
-// world map frame, rough positions for the wireframe; the design sets them).
+// world map frame, rough positions; the design sets them).
 // Phone and email per office are not in the document → null.
 export const countries = [
   { id: 'uae', name: 'United Arab Emirates', short: 'UAE', city: 'Dubai', region: 'Middle East', x: 60.4, y: 47.1 },

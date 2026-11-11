@@ -1,6 +1,6 @@
-// About Us, FAQ and Contact Us — homepage styles, wireframe structure and copy.
-import { intro, mission, vision, values, contact, countries, entities, entitiesIn, milestones, enquiryTypes, faqTopics, faqs } from '../../wireframe/src/content.js';
-import { inHouseBrands, partnerBrands } from '../../wireframe/src/data.js';
+// About Us, FAQ and Contact Us — homepage styles; copy from data/company.js.
+import { intro, mission, vision, values, contact, countries, entities, entitiesIn, milestones, enquiryTypes, faqTopics, faqs } from '../../data/company.js';
+import { inHouseBrands, partnerBrands } from '../../data/catalogue.js';
 import { countryVisual } from '../../src/data/locations.js';
 import { milestoneVisual } from '../../src/data/milestones.js';
 import { A, BASE, HOME, esc, href, arrow, icon, crumbs, brandMark } from './ui.js';

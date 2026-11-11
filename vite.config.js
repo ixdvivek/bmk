@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-import { groups, categories, brands, products } from './wireframe/src/data.js';
+import { groups, categories, brands, products } from './data/catalogue.js';
 
 // Every page lives at the site root: / (homepage), /about/, /products/,
 // /brand/nikon/, /product/nikon-z8/ … The catalogue app (catalogue/index.html)
@@ -65,14 +65,11 @@ export default defineConfig(({ command, isPreview }) => ({
   base: command === 'build' || isPreview ? BASE : '/',
   plugins: [tailwindcss(), siteRoutes()],
   server: { host: true },
-  // Entry pages: the homepage, the catalogue app (copied to every route folder)
-  // and the wireframes (/wireframe/ = latest, /wireframe/v1/ = previous round)
+  // Entry pages: the homepage and the catalogue app (copied to every route folder)
   build: {
     rollupOptions: {
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
-        wireframe: resolve(import.meta.dirname, 'wireframe/index.html'),
-        wireframeV1: resolve(import.meta.dirname, 'wireframe/v1/index.html'),
         catalogue: resolve(import.meta.dirname, 'catalogue/index.html'),
       },
     },

@@ -107,7 +107,7 @@ function swap() {
 }
 
 /** Links to other pages of this app navigate client-side (instant, with the
- *  fade); the homepage, the wireframes and other sites load normally. */
+ *  fade); the homepage and other sites load normally. */
 const APP = /^(products|search|category|brand|product|about|faq|contact|terms|privacy|cookies)(\/|$)/;
 const isAppLink = (a) => {
   if (a.target || a.hasAttribute('download') || a.origin !== location.origin) return false;

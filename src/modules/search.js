@@ -1,7 +1,7 @@
 // Homepage search: the same panel as the other pages (popular searches and
 // categories, live product / brand / category matches), opening under the
 // navbar. Results link to the site's pages; Enter opens the search page.
-import { groups, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../wireframe/src/data.js';
+import { groups, searchProducts, searchBrands, searchCategories, brandOf, categoryOf } from '../../data/catalogue.js';
 import { mediaOf } from '../../catalogue/src/media.js';
 
 const BASE = import.meta.env.BASE_URL;
